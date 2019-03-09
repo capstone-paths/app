@@ -1,0 +1,8 @@
+{
+  "name": "paths-server",
+  "version": "1.0.0",
+  "description": "Server for learning paths app",
+  "main": "index.js",
+  "repository": "https://github.com/capstone-paths/app",
+  "license": "MIT"
+}
