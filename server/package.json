@@ -4,5 +4,12 @@
   "description": "Server for learning paths app",
   "main": "index.js",
   "repository": "https://github.com/capstone-paths/app",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.3",
+    "express": "^4.16.4"
+  }
 }
