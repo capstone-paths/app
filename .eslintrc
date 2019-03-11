@@ -1,0 +1,8 @@
+{
+    "rules": {
+        "no-plusplus": "off"
+    },
+    "extends": [
+        "airbnb-base"
+    ]
+}
