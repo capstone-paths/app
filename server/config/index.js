@@ -1,10 +1,12 @@
 /**
  * config/index.js
- * Sets up ports and MongoDB URIs for local / test modes
- * TODO: 
+ * Sets up ports and database
+ * TODO:
  * setting NODE_ENV is a Heroku thing
  * check if AWS also works like this
  */
+require('./neo4j');
+
 const env = process.env.NODE_ENV || 'development';
 
 if (env === 'development') {
