@@ -26,14 +26,14 @@ app.get('*', (req, res) => {
 // Catch-all error handlers
 // Do not print stack trace in production
 if (process.env.NODE_ENV !== 'production') {
-  app.use((err, req, res, next) => {
+  app.use((err, req, res) => {
     console.log(err.stack);
     res.status(err.status || 500);
     res.json(err);
   });
 }
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.status || 500);
   res.json({ err });
 });
@@ -43,4 +43,4 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-module.exports = { app }
+module.exports = { app };

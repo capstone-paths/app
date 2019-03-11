@@ -1,0 +1,19 @@
+{
+  "name": "learning-paths",
+  "version": "1.0.0",
+  "description": "learning paths global yarn file",
+  "main": "server/index.js",
+  "repository": "https://github.com/capstone-paths/app.git",
+  "author": "alexerhardt <alex.erhardt.es@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:server": "node server/index.js"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb": "^17.1.0"
+  },
+  "dependencies": {
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
