@@ -1,6 +1,5 @@
 require('dotenv').config();
 require('./config/index.js');
-require('./config/neo4j');
 
 const path = require('path');
 const express = require('express');
