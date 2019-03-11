@@ -1,9 +1,13 @@
+require('dotenv').config();
 require('./config/index.js');
+require('./config/neo4j');
 
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+
+const courses = require('./routes/courses');
 
 const app = express();
 
@@ -17,6 +21,9 @@ app.use(bodyParser.json());
 // Serve static pages from public
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
+
+// Plugin routers
+app.use('/graphs/courses', courses);
 
 // TODO: Point to proper index
 app.get('*', (req, res) => {
