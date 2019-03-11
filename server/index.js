@@ -5,6 +5,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const logger = require('./config/winston');
 
 const courses = require('./routes/courses');
 
@@ -29,24 +30,16 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-// Catch-all error handlers
-// Do not print stack trace in production
-if (process.env.NODE_ENV !== 'production') {
-  app.use((err, req, res) => {
-    console.log(err.stack);
-    res.status(err.status || 500);
-    res.json(err);
-  });
-}
-
+// Catch-all error handler
 app.use((err, req, res) => {
+  logger.error(err.stack);
   res.status(err.status || 500);
   res.json({ err });
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  logger.info(`Server listening on port ${port}`);
 });
 
 module.exports = { app };
