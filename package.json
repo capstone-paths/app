@@ -10,7 +10,7 @@
     "start:server": "node server/index.js"
   },
   "devDependencies": {
-    "eslint": "^5.15.1",
+    "eslint": "5.12.0",
     "eslint-config-airbnb": "^17.1.0"
   },
   "dependencies": {
