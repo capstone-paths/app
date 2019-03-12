@@ -5,6 +5,7 @@ import {
   Segment,
   Form,
   Checkbox,
+  Button,
 } from 'semantic-ui-react';
 
 const rigorMap = {
@@ -27,43 +28,58 @@ class ControlsBox extends Component {
   render() {
     const { rigor, level } = this.state;
     return (
-      <div>
-        <Form.Input
-          label={`Rigor: ${rigorMap[rigor]}`}
-          min={1}
-          max={3}
-          name='rigor'
-          onChange={this.handleChange}
-          step={1}
-          type='range'
-          value={rigor}
-        />
+      <Grid divided='vertically'>
+        <Grid.Row>
+          <Grid.Column>
+            <h3>Controls</h3>
+          </Grid.Column>
+        </Grid.Row>
 
-        <Form.Input
-          label={`Level: ${levelMap[level]}`}
-          min={1}
-          max={3}
-          name='level'
-          onChange={this.handleChange}
-          step={1}
-          type='range'
-          value={level}
-        />
+        <Grid.Row columns={1}>
+          <Grid.Column>
+            <Form.Input
+              label={`Rigor: ${rigorMap[rigor]}`}
+              min={1}
+              max={3}
+              name='rigor'
+              onChange={this.handleChange}
+              step={1}
+              type='range'
+              value={rigor}
+            />
 
-        <Checkbox 
-          toggle
-          label={'Include paid'}
-        />
+            <Form.Input
+              label={`Level: ${levelMap[level]}`}
+              min={1}
+              max={3}
+              name='level'
+              onChange={this.handleChange}
+              step={1}
+              type='range'
+              value={level}
+            />
 
-      </div>
+            <Checkbox 
+              toggle
+              label={'Include paid'}
+            />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row columns={1} >
+          <Grid.Column>
+            <Button primary fluid style={{"margin-bottom": "10px"}}>Follow</Button>
+            <Button color="orange" fluid>Get Another One</Button>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     )
   }
 }
 
 const ResultsPane = () => (
   <Grid columns={2}>
-    <Grid.Column width={5} >
-      <Segment>
+    <Grid.Column width={5} > <Segment>
         <ControlsBox />
       </Segment>
     </Grid.Column>
