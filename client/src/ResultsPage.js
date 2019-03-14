@@ -6,7 +6,12 @@ import {
   Form,
   Checkbox,
   Button,
+  Menu,
+  Icon,
+  Header,
+  Input,
 } from 'semantic-ui-react';
+import styled from 'styled-components';
 
 const rigorMap = {
   1: "Easy",
@@ -37,39 +42,48 @@ class ControlsBox extends Component {
 
         <Grid.Row columns={1}>
           <Grid.Column>
-            <Form.Input
-              label={`Rigor: ${rigorMap[rigor]}`}
-              min={1}
-              max={3}
-              name='rigor'
-              onChange={this.handleChange}
-              step={1}
-              type='range'
-              value={rigor}
-            />
+            <Form style={{'padding-left': '1.5rem', 'padding-right': '1.5rem'}}>
+              <Form.Input
+                label={`Rigor: ${rigorMap[rigor]}`}
+                min={1}
+                max={3}
+                name='rigor'
+                onChange={this.handleChange}
+                step={1}
+                type='range'
+                value={rigor}
+              />
 
-            <Form.Input
-              label={`Level: ${levelMap[level]}`}
-              min={1}
-              max={3}
-              name='level'
-              onChange={this.handleChange}
-              step={1}
-              type='range'
-              value={level}
-            />
+              <Form.Input
+                label={`Level: ${levelMap[level]}`}
+                min={1}
+                max={3}
+                name='level'
+                onChange={this.handleChange}
+                step={1}
+                type='range'
+                value={level}
+              />
 
-            <Checkbox 
-              toggle
-              label={'Include paid'}
-            />
+              <Checkbox 
+                toggle
+                label={'Include paid'}
+              />
+
+            </Form>
           </Grid.Column>
         </Grid.Row>
 
         <Grid.Row columns={1} >
           <Grid.Column>
-            <Button primary fluid style={{"margin-bottom": "10px"}}>Follow</Button>
-            <Button color="orange" fluid>Get Another One</Button>
+            <Button primary fluid style={{"margin-bottom": "10px"}}>
+              <Icon name="thumbs up" />
+              Follow
+            </Button>
+            <Button color="orange" fluid>
+              <Icon name="refresh" />
+              Get Another One
+            </Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -84,7 +98,7 @@ const ResultsPane = () => (
       </Segment>
     </Grid.Column>
     <Grid.Column width={11} >
-      <Segment>Column 2</Segment>
+      <Segment>The graph would go here</Segment>
     </Grid.Column>
   </Grid>
 
@@ -95,16 +109,60 @@ const panes = [
   { menuItem: 'Our Users Recommend', render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane> },
 ];
 
+const StyledHeader = styled(Grid)`
+  &&& {
+    margin-top: 0;
+  }
+`;
+
+const NavBar = () => (
+  <StyledHeader columns={1} verticalAlign='middle'>
+    <Grid.Row color='teal'>
+      <Grid.Column verticalAlign='middle'>
+        <Menu secondary size="huge" inverted>
+          <Menu.Item>
+            <Header as='h2' inverted>
+              <Icon name='graduation cap' size='large'></Icon>
+              <Header.Content>lernt.io</Header.Content>
+            </Header>
+          </Menu.Item>
+          <Menu.Item>
+            Pathfinder
+          </Menu.Item>
+          <Menu.Item>
+            About
+          </Menu.Item>
+          <Menu.Item>
+            Blog
+          </Menu.Item>
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Input placeholder='Search...'></Input>
+            </Menu.Item>
+            <Menu.Item>
+              <Icon name="user circle"></Icon>
+              Sign In
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+      </Grid.Column>
+    </Grid.Row>
+  </StyledHeader>
+);
+
 const ResultsPage = () => {
   return (
-    <Grid columns={1}>
-        <Grid.Column width={16} >
-          <Tab
-            menu={{ fluid: true, widths: 2 }}
-            panes={panes}
-          />
-        </Grid.Column>
-    </Grid>
+    <div>
+      <NavBar/>
+      <Grid columns={1} style={{'width': '90%', 'margin-left': 'auto', 'margin-right': 'auto'}}>
+          <Grid.Column width={16} >
+            <Tab
+              menu={{ color: 'blue', fluid: true, widths: 2 }}
+              panes={panes}
+            />
+          </Grid.Column>
+      </Grid>
+    </div>
   );
 };
 
