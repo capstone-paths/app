@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const logger = require('./config/winston');
 
-const courses = require('./routes/courses');
 
 const app = express();
 
@@ -22,12 +21,11 @@ app.use(bodyParser.json());
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
-// Plugin routers
-app.use('/graphs/courses', courses);
 
 // TODO: Point to proper index
 app.get('*', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+  // res.sendFile(path.join(publicPath, 'index.html'));
+  res.send("hello");
 });
 
 // Catch-all error handler
