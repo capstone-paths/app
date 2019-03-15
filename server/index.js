@@ -35,7 +35,7 @@ app.use((err, req, res) => {
   res.json({ err });
 });
 
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   logger.info(`Server listening on port ${port}`);
 });
