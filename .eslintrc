@@ -1,6 +1,7 @@
 {
     "rules": {
-        "no-plusplus": "off"
+        "no-plusplus": "off",
+        "linebreak-style": "off"
     },
     "extends": [
         "airbnb-base"
