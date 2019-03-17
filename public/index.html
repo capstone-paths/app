@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <style>
+        
+            @keyframes fall-into-stack{
+                from{
+                    transform:  perspective(500px) translateZ(-200px);
+                }to{
+                    transform:  perspective(500px) translateZ(-1000px);
+                }
+            }
+            @keyframes fall-into-stack-no-loop{
+                from{
+                    transform:  perspective(500px) translateZ(-200px);
+                }to{
+                    transform:  perspective(500px) translateZ(-1000px);
+                }
+            }
+            .fall-into-stack{
+                display:none;
+            }
+            .fall-into-stack-no-loop{
+                animation: fall-into-stack 5s forwards cubic-bezier(0.310, 0.440, 0.445, 1.650);
+                position: absolute;
+            }
+
+            .end{
+                font-size: 5em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="end fall-into-stack" style="float:left">
+                <pre>H E L L O   I N D E X . H T M L</pre>
+        </div><br><br><br>
+        <div class="end fall-into-stack"  style="float:left">
+                <pre>H E L L O   I N D E X . H T M L</pre>
+        </div>
+        <script>
+            function repeat(){
+            var stacks = [...(document.getElementsByClassName("fall-into-stack"))]
+            
+            stacks.forEach(s => {
+                var fis = s.cloneNode(true)
+                fis.className = fis.className.replace("fall-into-stack","fall-into-stack-no-loop");
+                fis.style.display = 'block'
+                s.parentNode.insertBefore(fis, s.nextSibling);
+            });
+            }
+            repeat();
+            setInterval(repeat, 6000);
+        </script>
+    </body>
+</html>
