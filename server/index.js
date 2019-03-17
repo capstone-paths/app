@@ -25,7 +25,7 @@ app.use(express.static(publicPath));
 // TODO: Point to proper index
 app.get('*', (req, res) => {
   // res.sendFile(path.join(publicPath, 'index.html'));
-  res.send("hello");
+  res.send('hello');
 });
 
 // Catch-all error handler

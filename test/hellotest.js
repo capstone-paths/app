@@ -1,7 +1,10 @@
-var expect = require("chai").expect;
+const { expect } = require('chai');
+const mocha = require('mocha');
 
-describe("Hello Test", function() {
-    it("can run", function() {
-        expect(true).to.equal(true);
-    });
+const { describe, it } = mocha;
+
+describe('Hello Test', () => {
+  it('can run', () => {
+    expect(true).to.equal(true);
+  });
 });

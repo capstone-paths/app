@@ -22,7 +22,11 @@
   },
   "dependencies": {
     "chai": "^4.2.0",
+    "compression": "^1.7.3",
+    "dotenv": "^7.0.0",
     "eslint-plugin-import": "^2.16.0",
-    "mocha": "^6.0.2"
+    "express": "^4.16.4",
+    "mocha": "^6.0.2",
+    "winston": "^3.2.1"
   }
 }
