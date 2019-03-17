@@ -7,6 +7,7 @@
   "author": "alexerhardt <alex.erhardt.es@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "./node_modules/.bin/eslint **/*.js",
     "prestart": "cd server && npm install",
     "start": "node server/index.js",
     "start:server": "node server/index.js",
