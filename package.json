@@ -8,8 +8,9 @@
   "license": "MIT",
   "scripts": {
     "prestart": "cd server && npm install",
-    "start": "node server/index.js",	  
-    "start:server": "node server/index.js"
+    "start": "node server/index.js",
+    "start:server": "node server/index.js",
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "engines": {
     "node": "10.15.3"
@@ -19,6 +20,8 @@
     "eslint-config-airbnb": "^17.1.0"
   },
   "dependencies": {
-    "eslint-plugin-import": "^2.16.0"
+    "chai": "^4.2.0",
+    "eslint-plugin-import": "^2.16.0",
+    "mocha": "^6.0.2"
   }
 }
