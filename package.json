@@ -11,6 +11,7 @@
     "prestart": "cd server && npm install",
     "start": "node server/index.js",
     "start:server": "node server/index.js",
+    "install:all": "npm install && cd server && npm install",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "engines": {
