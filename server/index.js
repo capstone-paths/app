@@ -25,7 +25,6 @@ app.use(express.static(publicPath));
 // TODO: Point to proper index
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
-  // res.send('hello');
 });
 
 // Catch-all error handler
@@ -35,8 +34,9 @@ app.use((err, req, res) => {
   res.json({ err });
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
+// Needs to be 8081 due to ElasticBeanstal nginx default config
+const port = 8081;
+app.listen(8081, () => {
   logger.info(`Server listening on port ${port}`);
 });
 
