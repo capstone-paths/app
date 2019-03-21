@@ -4,7 +4,6 @@ import org.neo4j.graphdb.*;
 import org.neo4j.logging.Log;
 import org.neo4j.procedure.Context;
 import org.neo4j.procedure.*;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -48,14 +47,15 @@ public class CoursePath
         return Stream.of(new GraphResult(nodes, relationships));
     }
 
-    /**
-     *
-     */
+    // TODO: Consolidate nodes, rels, visited in a single class
+    // TODO: Consolidate all the graph props into a single class - check APOC for reference
     private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Node curNode,
                                        String courseWeightPropName, String courseLabelName, String courseCategoryPropName,
                                        String prereqWeightPropName, String prereqLabelName,
                                        Double threshold)
     {
+        // TODO: Add node at end it makes more sense
+        // For the special start case, add at start in caller
         nodes.add(curNode);
 
         Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(prereqLabelName)).iterator();
@@ -68,18 +68,12 @@ public class CoursePath
         // get node id
         // create array of nodes
         long id = curNode.getId();
-        HashMap<String, NodeWithWeight> nextNodes = new HashMap<>();
+        HashMap<String, CandidateCourse> nextNodes = new HashMap<>();
         Relationship rel = null;
         Node candidate = null;
         PrereqInfo prereqInfo = null;
 
         while (relsIt.hasNext()) {
-            // get relationship
-            // get node at the other end
-            // add node to visited set
-            // if relationship passes the threshold && (category doesn't exist || is category max)
-                // add relationship to results
-                // add node to nodes to be processed
             rel = relsIt.next();
             candidate = rel.getOtherNode(curNode);
             if (visited.contains(candidate.getId())) {
@@ -93,19 +87,35 @@ public class CoursePath
             }
 
             if (shouldAddToNextNodes(nextNodes, prereqInfo, threshold)) {
-
+                nextNodes.put(prereqInfo.getCategory(),
+                              new CandidateCourse(candidate, rel, prereqInfo.getRecommendationsCoefficient()));
             }
-
-
         }
+
+        for (CandidateCourse course : nextNodes.values()) {
+            rels.add(course.getRelationship());
+            findCoursePathPrivate(nodes, rels, visited, course.getNode(),
+                                  courseWeightPropName, courseLabelName, courseCategoryPropName,
+                                  prereqWeightPropName, prereqLabelName,
+                                  threshold);
+        }
+
+
 
         // process next nodes;
     }
 
-    private boolean shouldAddToNextNodes(HashMap<String, Node> nextNodes, PrereqInfo info, Double threshold)
+    private boolean shouldAddToNextNodes(HashMap<String, CandidateCourse> nextNodes, PrereqInfo info, Double threshold)
     {
+        // The proportion of people that recommend the course as a prereq
+        double recommendCoefficient = info.getRecommendationsCoefficient();
 
+        if (recommendCoefficient < threshold) {
+            return false;
+        }
 
+        CandidateCourse currentBest = nextNodes.get(info.getCategory());
+        return currentBest == null || currentBest.getRecommendationCoefficient() < recommendCoefficient;
     }
 
     /**
@@ -182,18 +192,40 @@ public class CoursePath
         {
             return numberOfCourseRecommendations;
         }
+
+        public double getRecommendationsCoefficient()
+        {
+            return (double) numberOfPreReqs / (double) numberOfCourseRecommendations;
+        }
     }
 
 
-    private class NodeWithWeight
+    private class CandidateCourse
     {
         public Node node;
-        public Double weight;
+        private Relationship rel;
+        public Double recommendationCoefficient;
 
-        public NodeWithWeight(Node node, Double weight)
+        public CandidateCourse(Node node, Relationship rel, Double recommendationCoefficient)
         {
             this.node = node;
-            this.weight = weight;
+            this.rel = rel;
+            this.recommendationCoefficient = recommendationCoefficient;
+        }
+
+        public Node getNode()
+        {
+            return node;
+        }
+
+        public Relationship getRelationship()
+        {
+            return rel;
+        }
+
+        public Double getRecommendationCoefficient()
+        {
+            return recommendationCoefficient;
         }
     }
 }
