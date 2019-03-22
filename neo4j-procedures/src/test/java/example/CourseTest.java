@@ -18,29 +18,63 @@ public class CourseTest
     @Rule
     public Neo4jRule neo4j = new Neo4jRule().withProcedure( CoursePath.class );
 
+
+//    @Test
+//    public void shouldReturnSingleNode() throws Throwable
+//    {
+//        try(Driver driver = GraphDatabase.driver( neo4j.boltURI(), Config.build()
+//                                .withEncryptionLevel( Config.EncryptionLevel.NONE ).toConfig() );
+//            Session session = driver.session() )
+//        {
+//            URL url = this.getClass().getResource("small-test-000");
+//            String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
+//
+//            String nodeId = session.run(init).single().get(0).get("nodeId").asString();
+//
+//
+//            String query = "MATCH (c: Course) WHERE c.name='Machine Learning' "
+//                        +  "CALL example.findCoursePath(c, 'recommendations', 'Course', 'Category', "
+//                        +  "'recommendations', 'REQUIRED_BY', 0) "
+//                        +  "YIELD nodes, relationships "
+//                        +  "RETURN nodes";
+//
+//            List<Record> result = session.run(query).list();
+//            Value val = result.get(0).get(0);
+//
+//            assertThat( val.get(0).get("nodeId").asString(), equalTo(nodeId) );
+//        }
+//    }
+
     @Test
-    public void shouldReturnSingleNode() throws Throwable
+    public void shouldReturnTwoNodesAndOneLink() throws Throwable
     {
         try(Driver driver = GraphDatabase.driver( neo4j.boltURI(), Config.build()
-                                .withEncryptionLevel( Config.EncryptionLevel.NONE ).toConfig() );
+                .withEncryptionLevel( Config.EncryptionLevel.NONE ).toConfig() );
             Session session = driver.session() )
         {
-            URL url = this.getClass().getResource("small-test-000");
+            URL url = this.getClass().getResource("small-test-001");
             String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
 
-            String nodeId = session.run(init).single().get(0).get("nodeId").asString();
-
+            session.run(init);
 
             String query = "MATCH (c: Course) WHERE c.name='Machine Learning' "
-                        +  "CALL example.findCoursePath(c, 'recommendations', 'Course', 'Category', "
-                        +  "'recommendations', 'REQUIRED_BY', 0) "
-                        +  "YIELD nodes, relationships "
-                        +  "RETURN nodes";
+                    +  "CALL example.findCoursePath(c, 'recommendations', 'course', 'category', "
+                    +  "'recommendations', 'REQUIRED_BY', 0) "
+                    +  "YIELD nodes, relationships "
+                    +  "RETURN nodes, relationships";
 
-            List<Record> result = session.run(query).list();
-            Value val = result.get(0).get(0);
+            StatementResult sr = session.run(query);
+            List<String> keys = sr.keys();
+            List<Record> recs = sr.list();
+            Record record = recs.get(0);
+            Value nodes = record.get("nodes");
+            Value rels = record.get("relationships");
 
-            assertThat( val.get(0).get("nodeId").asString(), equalTo(nodeId) );
+            System.out.println("End of test 2");
+
+//            assertThat( val.get(0).get("nodeId").asString(), equalTo(nodeId) );
         }
     }
+
+
 }

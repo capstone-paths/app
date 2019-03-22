@@ -40,7 +40,10 @@ public class CoursePath
         List<Relationship> relationships = new ArrayList<Relationship>();
         Set<Long> visited = new HashSet<>();
 
-        findCoursePathPrivate(nodes, relationships, visited, (Node) startNode,
+        Node first = (Node) startNode;
+        visited.add(first.getId());
+
+        findCoursePathPrivate(nodes, relationships, visited, first,
                               courseWeightPropName, courseLabelName, courseCategoryPropName,
                               prereqWeightPropName, prereqLabelName, threshold);
 
@@ -147,19 +150,19 @@ public class CoursePath
             }
 
             Object nodeRecommendations = node.getProperty(courseWeightPropName);
-            if (!(nodeRecommendations instanceof Integer)) {
+            if (!(nodeRecommendations instanceof Long)) {
                 log.debug("Node recommendations property is not an Integer but a: " + nodeCategory.getClass());
                 return null;
             }
 
             Object relRecommendations = rel.getProperty(prereqWeightPropName);
-            if (!(relRecommendations instanceof Integer)) {
+            if (!(relRecommendations instanceof Long)) {
                 log.debug("Relationship recommendations property is not an Integer but a: "
                             + prereqWeightPropName.getClass());
                 return null;
             }
 
-            return new PrereqInfo((String) nodeCategory, (Integer) relRecommendations, (Integer) nodeRecommendations);
+            return new PrereqInfo((String) nodeCategory, (Long) relRecommendations, (Long) nodeRecommendations);
         }
         catch (NotFoundException e) {
             log.debug("Graph object property not found: " + e.getMessage());
@@ -170,10 +173,10 @@ public class CoursePath
     private class PrereqInfo
     {
         private String category;
-        private Integer numberOfPreReqs;
-        private Integer numberOfCourseRecommendations;
+        private Long numberOfPreReqs;
+        private Long numberOfCourseRecommendations;
 
-        public PrereqInfo(String category, Integer numberOfPreReqs, Integer numberOfCourseRecommendations) {
+        public PrereqInfo(String category, Long numberOfPreReqs, Long numberOfCourseRecommendations) {
             this.category = category;
             this.numberOfPreReqs = numberOfPreReqs;
             this.numberOfCourseRecommendations = numberOfCourseRecommendations;
@@ -184,12 +187,12 @@ public class CoursePath
             return category;
         }
 
-        public Integer getNumberOfPreReqs()
+        public Long getNumberOfPreReqs()
         {
             return numberOfPreReqs;
         }
 
-        public Integer getNumberOfCourseRecommendations()
+        public Long getNumberOfCourseRecommendations()
         {
             return numberOfCourseRecommendations;
         }
