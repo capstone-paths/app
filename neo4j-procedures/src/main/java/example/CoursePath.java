@@ -55,6 +55,7 @@ public class CoursePath
                                        Double threshold)
     {
         // TODO: Add node at end it makes more sense
+        // ADD START TO VISITED!!!
         // For the special start case, add at start in caller
         nodes.add(curNode);
 
@@ -81,7 +82,7 @@ public class CoursePath
             }
 
             visited.add(candidate.getId());
-            prereqInfo = prereqInfoFromGraph(candidate, courseCategoryPropName, courseWeightPropName, rel, prereqWeightPropName);
+            prereqInfo = prereqInfoFromGraph(curNode, courseCategoryPropName, courseWeightPropName, rel, prereqWeightPropName);
             if (prereqInfo == null) {
                 continue;
             }
