@@ -62,7 +62,8 @@ public class CoursePath
         // For the special start case, add at start in caller
         nodes.add(curNode);
 
-        Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(prereqLabelName)).iterator();
+        Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(prereqLabelName),
+                                                                 Direction.INCOMING).iterator();
 
         if (!relsIt.hasNext()) {
             return;

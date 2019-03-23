@@ -7,7 +7,8 @@ import org.neo4j.harness.junit.Neo4jRule;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -78,11 +79,31 @@ public class CourseTest
         Value nodes = record.get("nodes");
         Value rels = record.get("relationships");
 
-        assertEquals(nodes.size(), 2);
-        assertEquals(rels.size(), 1);
+        assertEquals(2, nodes.size());
+        assertEquals(1, rels.size());
 
         String[] expected = {
                 "Algorithms -> Machine Learning"
+        };
+
+        courseAndPrereqTester(nodes, rels, expected);
+    }
+
+    @Test
+    public void shouldHandleThreeNodeCycle() throws Throwable
+    {
+        setDBInitStateFromFile("small-test-002");
+
+        Record record = session.run(baseWorkingQuery).list().get(0);
+        Value nodes = record.get("nodes");
+        Value rels = record.get("relationships");
+
+        assertEquals(3, nodes.size());
+        assertEquals(2, rels.size());
+
+        String[] expected = {
+                "Algorithms -> Machine Learning",
+                "Probability -> Algorithms"
         };
 
         courseAndPrereqTester(nodes, rels, expected);
@@ -113,7 +134,8 @@ public class CourseTest
         }
 
         for (String tuple : expected) {
-            assertThat(list, contains(tuple));
+            assertTrue(list.contains(tuple));
+//            assertThat(list, containsInAnyOrder(tuple));
         }
     }
 }
