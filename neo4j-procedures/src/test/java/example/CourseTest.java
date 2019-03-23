@@ -48,6 +48,11 @@ public class CourseTest
         driver.close();
     }
 
+    String baseWorkingQuery = "MATCH (c: Course) WHERE c.name='Machine Learning' "
+                           +  "CALL example.findCoursePath(c, 'recommendations', 'course', 'category', "
+                           +  "'recommendations', 'REQUIRED_BY', 0) "
+                           +  "YIELD nodes, relationships "
+                           +  "RETURN nodes, relationships";
 
     @Test
     public void shouldReturnSingleNode() throws Throwable
@@ -57,13 +62,7 @@ public class CourseTest
 
         Long nodeId = session.run(init).single().get(0).asNode().id();
 
-        String query = "MATCH (c: Course) WHERE c.name='Machine Learning' "
-                +  "CALL example.findCoursePath(c, 'recommendations', 'Course', 'Category', "
-                +  "'recommendations', 'REQUIRED_BY', 0) "
-                +  "YIELD nodes, relationships "
-                +  "RETURN nodes";
-
-        List<Record> result = session.run(query).list();
+        List<Record> result = session.run(baseWorkingQuery).list();
         Value val = result.get(0).get(0);
 
         assertThat( val.get(0).asNode().id(), equalTo(nodeId) );
@@ -75,13 +74,7 @@ public class CourseTest
     {
         setDBInitStateFromFile("small-test-001");
 
-        String query = "MATCH (c: Course) WHERE c.name='Machine Learning' "
-                +  "CALL example.findCoursePath(c, 'recommendations', 'course', 'category', "
-                +  "'recommendations', 'REQUIRED_BY', 0) "
-                +  "YIELD nodes, relationships "
-                +  "RETURN nodes, relationships";
-
-        Record record = session.run(query).list().get(0);
+        Record record = session.run(baseWorkingQuery).list().get(0);
         Value nodes = record.get("nodes");
         Value rels = record.get("relationships");
 
