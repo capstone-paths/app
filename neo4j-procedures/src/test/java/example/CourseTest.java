@@ -3,15 +3,23 @@ package example;
 import org.junit.Rule;
 import org.junit.Test;
 import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.types.Node;
 import org.neo4j.harness.junit.Neo4jRule;
+import org.neo4j.register.Register;
 
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CourseTest
 {
@@ -70,9 +78,33 @@ public class CourseTest
             Value nodes = record.get("nodes");
             Value rels = record.get("relationships");
 
-            System.out.println("End of test 2");
+            assertEquals(nodes.size(), 2);
+            assertEquals(rels.size(), 1);
 
-//            assertThat( val.get(0).get("nodeId").asString(), equalTo(nodeId) );
+            HashMap<Long, String> map = new HashMap<>();
+            for(Value course : nodes.values()) {
+                Long id = course.asNode().id();
+                map.put(id, course.get("name").asString());
+            }
+
+            Value sample = rels.get(0);
+
+            ArrayList<String> list = new ArrayList<>();
+            for (Value prereq : rels.values()) {
+                String startCourseName = map.get(prereq.asRelationship().startNodeId());
+                String endCourseName = map.get(prereq.asRelationship().endNodeId());
+                list.add(startCourseName + " -> " + endCourseName);
+            }
+
+            String[] expected = {
+                    "Algorithms -> Machine Learning"
+            };
+
+            for (String tuple : expected) {
+                assertThat(list, contains(tuple));
+            }
+
+            System.out.println("End of test 2");
         }
     }
 
