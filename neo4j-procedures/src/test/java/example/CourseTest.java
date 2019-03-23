@@ -18,16 +18,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class CourseTest
 {
-    @Rule
-    public Neo4jRule neo4j = new Neo4jRule().withProcedure( CoursePath.class );
-
     // Shut up the server logger, it produces a lot of noise
     private final static Logger COM_SUN_JERSEY_LOGGER = Logger.getLogger( "com.sun.jersey" );
     static {
         COM_SUN_JERSEY_LOGGER.setLevel( Level.SEVERE );
     }
+
+    @Rule
+    public Neo4jRule neo4j = new Neo4jRule().withProcedure( CoursePath.class );
 
     private Driver driver;
     private Session session;
@@ -36,7 +37,8 @@ public class CourseTest
     public void setUp() {
         driver = GraphDatabase.driver( neo4j.boltURI(), Config.build()
                 .withLogging(Logging.console(Level.SEVERE))
-                .withEncryptionLevel(Config.EncryptionLevel.NONE ).toConfig());
+                .withEncryptionLevel(Config.EncryptionLevel.NONE)
+                .toConfig());
         session = driver.session();
     }
 
@@ -67,12 +69,11 @@ public class CourseTest
         assertThat( val.get(0).asNode().id(), equalTo(nodeId) );
     }
 
+
     @Test
     public void shouldReturnTwoNodesAndOneLink() throws Throwable
     {
-        URL url = this.getClass().getResource("small-test-001");
-        String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
-        session.run(init);
+        setDBInitStateFromFile("small-test-001");
 
         String query = "MATCH (c: Course) WHERE c.name='Machine Learning' "
                 +  "CALL example.findCoursePath(c, 'recommendations', 'course', 'category', "
@@ -87,13 +88,21 @@ public class CourseTest
         assertEquals(nodes.size(), 2);
         assertEquals(rels.size(), 1);
 
-
         String[] expected = {
                 "Algorithms -> Machine Learning"
         };
 
         courseAndPrereqTester(nodes, rels, expected);
     }
+
+
+    private void setDBInitStateFromFile(String filename) throws Throwable
+    {
+        URL url = this.getClass().getResource(filename);
+        String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
+        session.run(init);
+    }
+
 
     private void courseAndPrereqTester(Value courseNodes, Value prereqNodes, String[] expected)
     {
