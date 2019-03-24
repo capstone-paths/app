@@ -12,5 +12,5 @@ deploy:
     secure: "Rgciws4hbyb2Yzs3ssm8j51hBj2lWGIdZWp64ybLIwJ4WOR/AKaNEyD6bNIXcHsUPtRSKK0nwQ6ADI6qPBmefr7yaTn3cf1RNtqoIqPors967xum3xcJVJ4TDN6I0VUAX1K0eKzSOlqgs1XrhcyFWCMSZgms3WHpLuv62JUTmw7MCjz4zLgXfbuspsh0xnOGbC217BbgSTAaQmUZTvXwkdV/NpAIhXp1z5qP0LX2SNL1nGxvfKd4bA7tZXIvf0sbisAgq5oVAZjDBXX6WL1Mf1og//4IGhQuEF3fKYSwobqB6ygQPMm6ZPYA/Bd/wdm0/TQXHyhf713jnNMSwB4mqABWLqSoZBugjPVlUrSwo/6Iz2zzQnwqCKLq8QJPd0dtAQanMhvkR8862BhktjAhqmDACCBoMDd1/QUZ9bCo2Y3ZDJzZ4t2jaHaRHgyeBxBM9xPpgz1LIYTnMAZxtwP2iPNq0IVSwgZn0okybEZKL+EG5Sd89h6RQKpiGBLt7HqcTqeShDcaUCN1uumw09/EliubHgmux03V5Vje9qD3dl+CoDwA/98dBOwWr3Fqzu7JxTD2yleTDhU+RpR3kcYhLov229shpPBdjdtuk5PjMIgzJDaqS0IWbjMEzTxivTTBfFSWv3bP20gFiAI9+zRcipiWQVsvYCMJhQ5nqd7lrv0="
   region: "us-east-1"  
   app: "lernt"
-  env: "lern-prod"
-  bucket_name: "lernt"
+  env: "Lernt-Prod"
+  bucket_name: "elasticbeanstalk-us-east-1-963617016332"
