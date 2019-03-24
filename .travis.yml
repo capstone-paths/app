@@ -12,6 +12,7 @@ deploy:
   region: us-east-1
   app: lernt
   env: prod
+  bucket_name: elasticbeanstalk-us-east-1-963617016332
   on:
     repo: capstone-paths/app
     branch: master
