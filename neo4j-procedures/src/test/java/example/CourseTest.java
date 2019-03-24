@@ -50,10 +50,9 @@ public class CourseTest
     }
 
     String baseWorkingQuery = "MATCH (c: Course) WHERE c.name='Machine Learning' "
-                           +  "CALL example.findCoursePath(c, 'recommendations', 'course', 'category', "
-                           +  "'recommendations', 'REQUIRED_BY', 0) "
-                           +  "YIELD nodes, relationships "
-                           +  "RETURN nodes, relationships";
+            +  "CALL example.findCoursePath(c, 0, {}) "
+            +  "YIELD nodes, relationships "
+            +  "RETURN nodes, relationships";
 
     @Test
     public void shouldReturnSingleNode() throws Throwable
@@ -104,6 +103,28 @@ public class CourseTest
         String[] expected = {
                 "Algorithms -> Machine Learning",
                 "Probability -> Algorithms"
+        };
+
+        courseAndPrereqTester(nodes, rels, expected);
+    }
+
+
+    @Test
+    public void shouldHandleThreeNodesWithCommonPrereqs() throws Throwable
+    {
+        setDBInitStateFromFile("small-test-003");
+
+        Record record = session.run(baseWorkingQuery).list().get(0);
+        Value nodes = record.get("nodes");
+        Value rels = record.get("relationships");
+
+        assertEquals(3, nodes.size());
+        assertEquals(3, rels.size());
+
+        String[] expected = {
+                "Algorithms -> Machine Learning",
+                "Algorithms -> Probability",
+                "Probability -> Machine Learning"
         };
 
         courseAndPrereqTester(nodes, rels, expected);

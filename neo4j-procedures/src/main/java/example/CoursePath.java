@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 
 public class CoursePath
 {
+
+
     @Context
     public GraphDatabaseService db;
 
@@ -17,25 +19,23 @@ public class CoursePath
     public Log log;
 
     @Procedure(name = "example.findCoursePath", mode=Mode.SCHEMA)
-    public Stream<GraphResult> findCoursePath( @Name("startNode") Object startNode,
-                                               @Name("courseWeightPropName") String courseWeightPropName,
-                                               @Name("courseLabelName") String courseLabelName,
-                                               @Name("courseCategoryPropName") String courseCategoryPropName,
-                                               @Name("prereqWeightPropName") String prereqWeightPropName,
-                                               @Name("prereqLabelName") String prereqLabelName,
-                                               @Name("threshold") Double threshold)
+    public Stream<GraphResult> findCoursePath(@Name("startNode") Object startNode,
+                                              @Name("threshold") Double threshold,
+                                              @Name("config") Map<String, Object> config) throws Exception
     {
-        if (startNode == null) {
-            log.debug("findCoursePath: null input");
-            return Stream.empty();
-        }
-
-        // TODO: Need to throw here instead of returning empty
         if (!(startNode instanceof Node)) {
-            log.debug("findCoursePath: startNode is not a Node");
-            return Stream.empty();
+            log.debug("findCoursePath: startNode is not a Node.");
+            throw new Exception("startNode is not a Node.");
         }
 
+        ConfigObject configuration = new ConfigObject(config);
+
+        // Set up the config variables, ie the labels the algorithm looks for in path searching
+        // They are optional; if not provided, they default to these values
+
+        // Collections for Courses and Prereqs to return
+        // Plus a set to keep track of visited nodes
+        // TODO: Add as global or as own class
         List<Node> nodes = new ArrayList<Node>();
         List<Relationship> relationships = new ArrayList<Relationship>();
         Set<Long> visited = new HashSet<>();
@@ -43,84 +43,109 @@ public class CoursePath
         Node first = (Node) startNode;
         visited.add(first.getId());
 
-        findCoursePathPrivate(nodes, relationships, visited, first,
-                              courseWeightPropName, courseLabelName, courseCategoryPropName,
-                              prereqWeightPropName, prereqLabelName, threshold);
+        findCoursePathPrivate(nodes, relationships, visited, first, threshold, configuration);
 
         return Stream.of(new GraphResult(nodes, relationships));
     }
 
-    // TODO: Consolidate nodes, rels, visited in a single class
-    // TODO: Consolidate all the graph props into a single class - check APOC for reference
-    private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Node curNode,
-                                       String courseWeightPropName, String courseLabelName, String courseCategoryPropName,
-                                       String prereqWeightPropName, String prereqLabelName,
-                                       Double threshold)
+
+    private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Node curNode, Double threshold, ConfigObject config)
+            throws Exception
     {
         // TODO: Add node at end it makes more sense
-        // ADD START TO VISITED!!!
         // For the special start case, add at start in caller
         nodes.add(curNode);
 
-        Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(prereqLabelName),
-                                                                 Direction.INCOMING).iterator();
+        Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(config.getPrereqLabelName()),
+                Direction.INCOMING).iterator();
 
         if (!relsIt.hasNext()) {
             return;
         }
 
-
-        // get node id
-        // create array of nodes
-        long id = curNode.getId();
-        HashMap<String, CandidateCourse> nextNodes = new HashMap<>();
-        Relationship rel = null;
-        Node candidate = null;
-        PrereqInfo prereqInfo = null;
+        HashMap<String, Candidate> nextNodes = new HashMap<>();
+        Relationship prereq = null;
+        Candidate candidate = null;
 
         while (relsIt.hasNext()) {
-            rel = relsIt.next();
-            candidate = rel.getOtherNode(curNode);
-            if (visited.contains(candidate.getId())) {
+            prereq = relsIt.next();
+            candidate = new Candidate(curNode, prereq, prereq.getOtherNode(curNode), config);
+
+            rels.add(prereq);
+            if (visited.contains(candidate.getCandidateId())) {
                 continue;
             }
 
-            visited.add(candidate.getId());
-            prereqInfo = prereqInfoFromGraph(curNode, courseCategoryPropName, courseWeightPropName, rel, prereqWeightPropName);
-            if (prereqInfo == null) {
-                continue;
-            }
+            visited.add(candidate.getCandidateId());
 
-            if (shouldAddToNextNodes(nextNodes, prereqInfo, threshold)) {
-                nextNodes.put(prereqInfo.getCategory(),
-                              new CandidateCourse(candidate, rel, prereqInfo.getRecommendationsCoefficient()));
+            if (shouldAddToNextNodes(nextNodes, candidate, threshold)) {
+                nextNodes.put(candidate.getCandidateCategory(), candidate);
             }
         }
 
-        for (CandidateCourse course : nextNodes.values()) {
-            rels.add(course.getRelationship());
-            findCoursePathPrivate(nodes, rels, visited, course.getNode(),
-                                  courseWeightPropName, courseLabelName, courseCategoryPropName,
-                                  prereqWeightPropName, prereqLabelName,
-                                  threshold);
+        for (Candidate course : nextNodes.values()) {
+            findCoursePathPrivate(nodes, rels, visited, course.getCandidateCourse(), threshold, config);
         }
-
-
-
-        // process next nodes;
     }
 
-    private boolean shouldAddToNextNodes(HashMap<String, CandidateCourse> nextNodes, PrereqInfo info, Double threshold)
+
+    // TODO: Add to Candidate - it belongs there
+    private boolean shouldAddToNextNodes(HashMap<String, Candidate> nextNodes, Candidate candidate, Double threshold)
+            throws Exception
     {
         // The proportion of people that recommend the course as a prereq
-        double recommendCoefficient = info.getRecommendationsCoefficient();
+        double recommendCoefficient = candidate.getRecommendationsCoefficient();
 
         if (recommendCoefficient < threshold) {
             return false;
         }
 
-        CandidateCourse currentBest = nextNodes.get(info.getCategory());
-        return currentBest == null || currentBest.getRecommendationCoefficient() < recommendCoefficient;
+        Candidate currentBest = nextNodes.get(candidate.getCandidateCategory());
+        return currentBest == null || currentBest.getRecommendationsCoefficient() < recommendCoefficient;
+    }
+
+
+    // TODO: Do away with this, I'd rather have it as a global
+    private class ConfigObject
+    {
+        private String courseWeightPropName;
+        private String courseLabelName;
+        private String courseCategoryPropName;
+        private String prereqWeightPropName;
+        private String prereqLabelName;
+
+        public ConfigObject(Map<String, Object> config) {
+            this.courseWeightPropName = (String) config.getOrDefault("courseWeightPropName", "recommendations");
+            this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "category");
+            this.courseLabelName = (String) config.getOrDefault("courseLabelName", "Course");
+            this.prereqWeightPropName = (String) config.getOrDefault("prereqWeightPropName", "recommendations");
+            this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "REQUIRED_BY");
+        }
+
+        public String getCourseWeightPropName()
+        {
+            return courseWeightPropName;
+        }
+
+        public String getCourseLabelName()
+        {
+            return courseLabelName;
+        }
+
+        public String getCourseCategoryPropName()
+        {
+            return courseCategoryPropName;
+        }
+
+        public String getPrereqWeightPropName()
+        {
+            return prereqWeightPropName;
+        }
+
+        public String getPrereqLabelName()
+        {
+            return prereqLabelName;
+        }
     }
 
     /**
@@ -139,98 +164,78 @@ public class CoursePath
         }
     }
 
-    // TODO: Move PrereqInfo into own class and make this static
-    public PrereqInfo prereqInfoFromGraph(Node node, String courseCategoryPropName, String courseWeightPropName,
-                                          Relationship rel, String prereqWeightPropName)
+
+    private class Candidate
     {
-        try {
-            Object nodeCategory = node.getProperty(courseCategoryPropName);
-            if (!(nodeCategory instanceof String)) {
-                log.debug("Node course category property is not an String but a: " + nodeCategory.getClass());
-                return null;
+        private Node currentCourse;
+        private Relationship prereqRel;
+        private Node candidateCourse;
+        private ConfigObject config;
+
+        public Candidate(Node currentCourse, Relationship prereqRel, Node candidateCourse, ConfigObject config)
+        {
+            this.currentCourse = currentCourse;
+            this.prereqRel = prereqRel;
+            this.candidateCourse = candidateCourse;
+            this.config = config;
+        }
+
+        public double getRecommendationsCoefficient() throws Exception
+        {
+            Object currentCourseRecommendations = currentCourse.getProperty(config.getCourseWeightPropName());
+            if (!(currentCourseRecommendations instanceof Long)) {
+                throw new Exception("Node recommendations property is not a Long");
             }
 
-            Object nodeRecommendations = node.getProperty(courseWeightPropName);
-            if (!(nodeRecommendations instanceof Long)) {
-                log.debug("Node recommendations property is not an Integer but a: " + nodeCategory.getClass());
-                return null;
+            Object prereqRecommendations = prereqRel.getProperty(config.getPrereqWeightPropName());
+            if (!(prereqRecommendations instanceof Long)) {
+                throw new Exception("Relationship recommendations property is not a Long");
             }
 
-            Object relRecommendations = rel.getProperty(prereqWeightPropName);
-            if (!(relRecommendations instanceof Long)) {
-                log.debug("Relationship recommendations property is not an Integer but a: "
-                            + prereqWeightPropName.getClass());
-                return null;
+            Long course = (Long) currentCourseRecommendations;
+            Long prereq = (Long) prereqRecommendations;
+
+
+            if (prereq < 0 || course < 0) {
+                throw new Exception("Data model error: negative recommendations: "
+                        + "prereq: " + prereq + " course: " + course);
             }
 
-            return new PrereqInfo((String) nodeCategory, (Long) relRecommendations, (Long) nodeRecommendations);
-        }
-        catch (NotFoundException e) {
-            log.debug("Graph object property not found: " + e.getMessage());
-            return null;
-        }
-    }
+            if (prereq > course) {
+                throw new Exception("Data model error: prereq recommendations larger than target course: "
+                        + "prereq: " + prereq + " course: " + course);
+            }
 
-    private class PrereqInfo
-    {
-        private String category;
-        private Long numberOfPreReqs;
-        private Long numberOfCourseRecommendations;
+            // Guard division by zero
+            // We are judging a course with no recommendations - should be caught by threshold
+            if (course == 0) {
+                return 0;
+            }
 
-        public PrereqInfo(String category, Long numberOfPreReqs, Long numberOfCourseRecommendations) {
-            this.category = category;
-            this.numberOfPreReqs = numberOfPreReqs;
-            this.numberOfCourseRecommendations = numberOfCourseRecommendations;
+            return (double) prereq / (double) course;
         }
 
-        public String getCategory()
+
+        public Long getCandidateId()
         {
-            return category;
+            return candidateCourse.getId();
         }
 
-        public Long getNumberOfPreReqs()
+
+        public String getCandidateCategory() throws Exception
         {
-            return numberOfPreReqs;
+            Object candidateCategory = candidateCourse.getProperty(config.getCourseCategoryPropName());
+            if (!(candidateCategory instanceof String)) {
+                throw new Exception("Node course category property is not an String");
+            }
+
+            return (String) candidateCategory;
         }
 
-        public Long getNumberOfCourseRecommendations()
+
+        public Node getCandidateCourse()
         {
-            return numberOfCourseRecommendations;
-        }
-
-        public double getRecommendationsCoefficient()
-        {
-            return (double) numberOfPreReqs / (double) numberOfCourseRecommendations;
-        }
-    }
-
-
-    private class CandidateCourse
-    {
-        public Node node;
-        private Relationship rel;
-        public Double recommendationCoefficient;
-
-        public CandidateCourse(Node node, Relationship rel, Double recommendationCoefficient)
-        {
-            this.node = node;
-            this.rel = rel;
-            this.recommendationCoefficient = recommendationCoefficient;
-        }
-
-        public Node getNode()
-        {
-            return node;
-        }
-
-        public Relationship getRelationship()
-        {
-            return rel;
-        }
-
-        public Double getRecommendationCoefficient()
-        {
-            return recommendationCoefficient;
+            return candidateCourse;
         }
     }
 }
