@@ -13,4 +13,4 @@ deploy:
   region: "us-east-1"  
   app: "lernt"
   env: "lern-prod"
-  bucket_name: "lernt-S3-bucket"
+  bucket_name: "lernt"
