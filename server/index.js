@@ -16,15 +16,14 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Serve static pages from public
-const publicPath = path.join(__dirname, '..', 'public');
+// Serve static content from React app build 
+const publicPath = path.join(__dirname, '..', 'client/build');
 app.use(express.static(publicPath));
-
-
-// TODO: Point to proper index
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
+
+app.get('/api/hello', (req, res) => res.send("hello"));
 
 // Catch-all error handler
 app.use((err, req, res) => {
