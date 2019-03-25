@@ -10,8 +10,6 @@ import java.util.stream.Stream;
 
 public class CoursePath
 {
-
-
     @Context
     public GraphDatabaseService db;
 
@@ -52,12 +50,10 @@ public class CoursePath
     private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Node curNode, Double threshold, ConfigObject config)
             throws Exception
     {
-        // TODO: Add node at end it makes more sense
-        // For the special start case, add at start in caller
         nodes.add(curNode);
 
         Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(config.getPrereqLabelName()),
-                Direction.INCOMING).iterator();
+                                                                 Direction.INCOMING).iterator();
 
         if (!relsIt.hasNext()) {
             return;
@@ -70,83 +66,31 @@ public class CoursePath
         while (relsIt.hasNext()) {
             prereq = relsIt.next();
             candidate = new Candidate(curNode, prereq, prereq.getOtherNode(curNode), config);
+            String cur = curNode.getProperty("name").toString();
+            String can = candidate.getCandidateCourse().getProperty("name").toString();
 
-            rels.add(prereq);
+            // if node has been visited we don't add it
+            // prereq is only added if node hasn't been visited
+            // this helps break cycles but affects the model's fidelity
             if (visited.contains(candidate.getCandidateId())) {
                 continue;
             }
+            rels.add(prereq);
 
             visited.add(candidate.getCandidateId());
 
-            if (shouldAddToNextNodes(nextNodes, candidate, threshold)) {
+            if (candidate.shouldAddToNextNodes(nextNodes, threshold)) {
                 nextNodes.put(candidate.getCandidateCategory(), candidate);
             }
         }
 
-        for (Candidate course : nextNodes.values()) {
-            findCoursePathPrivate(nodes, rels, visited, course.getCandidateCourse(), threshold, config);
+        for (Candidate toAdd : nextNodes.values()) {
+            findCoursePathPrivate(nodes, rels, visited, toAdd.getCandidateCourse(), threshold, config);
         }
     }
 
 
-    // TODO: Add to Candidate - it belongs there
-    private boolean shouldAddToNextNodes(HashMap<String, Candidate> nextNodes, Candidate candidate, Double threshold)
-            throws Exception
-    {
-        // The proportion of people that recommend the course as a prereq
-        double recommendCoefficient = candidate.getRecommendationsCoefficient();
 
-        if (recommendCoefficient < threshold) {
-            return false;
-        }
-
-        Candidate currentBest = nextNodes.get(candidate.getCandidateCategory());
-        return currentBest == null || currentBest.getRecommendationsCoefficient() < recommendCoefficient;
-    }
-
-
-    // TODO: Do away with this, I'd rather have it as a global
-    private class ConfigObject
-    {
-        private String courseWeightPropName;
-        private String courseLabelName;
-        private String courseCategoryPropName;
-        private String prereqWeightPropName;
-        private String prereqLabelName;
-
-        public ConfigObject(Map<String, Object> config) {
-            this.courseWeightPropName = (String) config.getOrDefault("courseWeightPropName", "recommendations");
-            this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "category");
-            this.courseLabelName = (String) config.getOrDefault("courseLabelName", "Course");
-            this.prereqWeightPropName = (String) config.getOrDefault("prereqWeightPropName", "recommendations");
-            this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "REQUIRED_BY");
-        }
-
-        public String getCourseWeightPropName()
-        {
-            return courseWeightPropName;
-        }
-
-        public String getCourseLabelName()
-        {
-            return courseLabelName;
-        }
-
-        public String getCourseCategoryPropName()
-        {
-            return courseCategoryPropName;
-        }
-
-        public String getPrereqWeightPropName()
-        {
-            return prereqWeightPropName;
-        }
-
-        public String getPrereqLabelName()
-        {
-            return prereqLabelName;
-        }
-    }
 
     /**
      * Class defining the result of our search
@@ -215,6 +159,21 @@ public class CoursePath
             return (double) prereq / (double) course;
         }
 
+        // TODO: Add to Candidate - it belongs there
+        public boolean shouldAddToNextNodes(HashMap<String, Candidate> nextNodes, Double threshold)
+                throws Exception
+        {
+            // The proportion of people that recommend the course as a prereq
+            double recommendCoefficient = this.getRecommendationsCoefficient();
+
+            if (recommendCoefficient < threshold) {
+                return false;
+            }
+
+            Candidate currentBest = nextNodes.get(this.getCandidateCategory());
+            return currentBest == null || currentBest.getRecommendationsCoefficient() < recommendCoefficient;
+        }
+
 
         public Long getCandidateId()
         {
@@ -232,6 +191,10 @@ public class CoursePath
             return (String) candidateCategory;
         }
 
+        public Relationship getPrereqRel()
+        {
+            return prereqRel;
+        }
 
         public Node getCandidateCourse()
         {

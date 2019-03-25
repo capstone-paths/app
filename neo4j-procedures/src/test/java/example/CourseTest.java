@@ -119,11 +119,10 @@ public class CourseTest
         Value rels = record.get("relationships");
 
         assertEquals(3, nodes.size());
-        assertEquals(3, rels.size());
+        assertEquals(2, rels.size());
 
         String[] expected = {
                 "Algorithms -> Machine Learning",
-                "Algorithms -> Probability",
                 "Probability -> Machine Learning"
         };
 
