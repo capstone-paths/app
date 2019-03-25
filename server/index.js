@@ -35,7 +35,7 @@ app.use((err, req, res) => {
 
 // Needs to be 8081 due to ElasticBeanstalk nginx default config
 const port = 8081;
-app.listen(8081, () => {
+app.listen(port, () => {
   logger.info(`Server listening on port ${port}`);
 });
 
