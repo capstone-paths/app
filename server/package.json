@@ -15,5 +15,6 @@
     "express": "^4.16.4",
     "neo4j-driver": "^1.7.3",
     "winston": "^3.2.1"
-  }
+  },
+  "proxy": "http://localhost:8081"
 }

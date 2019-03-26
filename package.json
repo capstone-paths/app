@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
-    "prestart": "cd server && npm install",
+    "prestart": "cd server && npm install && cd ../client && npm run build",
     "start": "node server/index.js",
     "start:server": "node server/index.js",
     "install:all": "npm install && cd server && npm install",
