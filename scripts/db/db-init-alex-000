@@ -39,8 +39,33 @@ CREATE
     (nand)-[:NEXT { seqId: 1 }]->(end1)
 
 // sequence 2
-CREATE ( beg2: SequenceStart { seqId: 2, name: 'Path to Compilers', rating: 4.77 } )
+CREATE ( beg2: SequenceStart { seqId: 2, name: 'Machine Learning for Non-Programmers', rating: 4.27 } )
 CREATE ( end2: SequenceEnd { seqId: 2 } )
+CREATE
+    (beg2)-[:NEXT { seqId: 2 }]->(math),
+    (beg2)-[:NEXT { seqId: 2 }]->(mit6),
+    (beg2)-[:NEXT { seqId: 2 }]->(prob),
+    (mit6)-[:NEXT { seqId: 2 }]->(salg),
+    (math)-[:NEXT { seqId: 2 }]->(stml),
+    (prob)-[:NEXT { seqId: 2 }]->(stml),
+    (salg)-[:NEXT { seqId: 2 }]->(stml),
+    (stml)-[:NEXT { seqId: 2 }]->(end2)
+
+// sequence 3
+CREATE ( beg3: SequenceStart { seqId: 3, name: 'Full Stack Web Dev with Python and React', rating: 4.57 } )
+CREATE ( end3: SequenceEnd { seqId: 3 } )
+CREATE
+    (beg3)-[:NEXT { seqId: 3 }]->(cs50),
+    (cs50)-[:NEXT { seqId: 3 }]->(palg),
+    (cs50)-[:NEXT { seqId: 3 }]->(wb50),
+    (cs50)-[:NEXT { seqId: 3 }]->(reac),
+    (reac)-[:NEXT { seqId: 3 }]->(rout),
+    (palg)-[:NEXT { seqId: 3 }]->(netw),
+    (netw)-[:NEXT { seqId: 3 }]->(end3),
+    (rout)-[:NEXT { seqId: 3 }]->(end3)
+    
+    
+    
 
 
 
