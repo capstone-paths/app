@@ -26,10 +26,9 @@ CREATE ( rout: Course { name: 'React Router', institution: 'Microsoft', category
 CREATE ( netw: Course { name: 'Networking for Web Development', institution: 'Google', category: 'Web Development', recommendations: 123 } )
 
 
-// start of sequence one
+// sequence 1
 CREATE ( beg1: SequenceStart { seqId: 1, name: 'Path to Compilers', rating: 4.77 } )
 CREATE ( end1: SequenceEnd { seqId: 1 } )
-
 CREATE
     (beg1)-[:NEXT { seqId: 1 }]->(cs50),
     (cs50)-[:NEXT { seqId: 1 }]->(palg),
@@ -38,6 +37,10 @@ CREATE
     (nand)-[:NEXT { seqId: 1 }]->(comp),
     (comp)-[:NEXT { seqId: 1 }]->(end1),
     (nand)-[:NEXT { seqId: 1 }]->(end1)
-    
+
+// sequence 2
+CREATE ( beg2: SequenceStart { seqId: 2, name: 'Path to Compilers', rating: 4.77 } )
+CREATE ( end2: SequenceEnd { seqId: 2 } )
+
 
 
