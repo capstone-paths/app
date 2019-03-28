@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const logger = require('./config/winston');
 
+// Import routers
+const learningPaths = require('./routes/learning-paths');
+
 const app = express();
 
 // Compress all responses
@@ -16,14 +19,15 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Serve static content from React app build 
+// Plug in routers
+app.use('/api/learning-paths', learningPaths);
+
+// Serve static content from React app build
 const publicPath = path.join(__dirname, '..', 'client/build');
 app.use(express.static(publicPath));
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
-
-app.get('/api/hello', (req, res) => res.send("hello"));
 
 // Catch-all error handler
 app.use((err, req, res) => {

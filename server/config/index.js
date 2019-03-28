@@ -1,16 +1,7 @@
 /**
  * config/index.js
- * Sets up ports and database
- * TODO:
- * setting NODE_ENV is a Heroku thing
- * check if AWS also works like this
+ * Configuration index.
+ * Anything you add here will be run on server startup, second only to reading
+ * environment variables from .env
  */
-// require('./neo4j');
-
-const env = process.env.NODE_ENV || 'development';
-
-if (env === 'development') {
-  process.env.PORT = 3000;
-} else if (env === 'test') {
-  process.env.PORT = 3000;
-}
+require('./neo4j');
