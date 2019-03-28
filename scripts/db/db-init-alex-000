@@ -36,7 +36,7 @@ CREATE
     (nand)-[:NEXT { seqId: 1 }]->(gtos),
     (nand)-[:NEXT { seqId: 1 }]->(comp),
     (comp)-[:NEXT { seqId: 1 }]->(end1),
-    (nand)-[:NEXT { seqId: 1 }]->(end1)
+    (gtos)-[:NEXT { seqId: 1 }]->(end1)
 
 // sequence 2
 CREATE ( beg2: SequenceStart { seqId: 2, name: 'Machine Learning for Non-Programmers', rating: 4.27 } )
