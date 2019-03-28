@@ -8,9 +8,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "cd server && npm run lint && cd ../client && npm run lint",
+    "prestart": "cd server && npm install && cd ../client && npm run build",
     "build": "npm install && cd server && npm install && cd ../client && npm install && npm run build",
     "start": "node server/index.js",
-    "start:server": "node server/index.js",
+    "start:server": "cd server && npm run start",
+    "watch:server": "cd server && npm run watch",
     "install:all": "npm install && cd server && npm install",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },

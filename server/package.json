@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
-    "start": "node index.js"
+    "start": "node index.js",
+    "watch": "nodemon index.js"
   },
   "dependencies": {
     "eslint": "5.12.0",
@@ -18,5 +19,8 @@
     "neo4j-driver": "^1.7.3",
     "winston": "^3.2.1"
   },
-  "proxy": "http://localhost:8081"
+  "proxy": "http://localhost:8081",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
 }
