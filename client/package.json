@@ -2,12 +2,18 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "devDependencies": {
+    "babel-eslint": "9.0.0",
+    "eslint-plugin-react": "^7.12.4"
+  },
   "dependencies": {
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "eslint-config-react-app": "3.0.8"
   },
   "scripts": {
+    "lint": "./node_modules/.bin/eslint \"**/*.js\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

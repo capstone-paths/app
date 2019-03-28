@@ -7,8 +7,8 @@
   "author": "alexerhardt <alex.erhardt.es@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint \"**/*.js\"",
-    "build": "cd server && npm install && cd ../client && npm install && npm run build",
+    "lint": "cd server && npm run lint && cd ../client && npm run lint",
+    "build": "npm install && cd server && npm install && cd ../client && npm install && npm run build",
     "start": "node server/index.js",
     "start:server": "node server/index.js",
     "install:all": "npm install && cd server && npm install",
@@ -17,15 +17,10 @@
   "engines": {
     "node": "10.15.3"
   },
-  "devDependencies": {
-    "eslint-config-airbnb": "^17.1.0"
-  },
   "dependencies": {
-    "eslint": "5.12.0",
     "chai": "^4.2.0",
     "compression": "^1.7.3",
     "dotenv": "^7.0.0",
-    "eslint-plugin-import": "^2.16.0",
     "express": "^4.16.4",
     "mocha": "^6.0.2",
     "winston": "^3.2.1"

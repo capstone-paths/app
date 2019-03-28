@@ -16,14 +16,14 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Serve static content from React app build 
+// Serve static content from React app build
 const publicPath = path.join(__dirname, '..', 'client/build');
 app.use(express.static(publicPath));
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.get('/api/hello', (req, res) => res.send("hello"));
+app.get('/api/hello', (req, res) => res.send('hello'));
 
 // Catch-all error handler
 app.use((err, req, res) => {
