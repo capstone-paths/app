@@ -1,0 +1,71 @@
+// db-init-alex-000
+// author: Alex Erhardt
+// creates a sample model with three tracks
+
+// 'recommendations' fields might not be part of the final model
+// I include them here for general testing, particularly in order to 
+// make use of the custom filtering algorithm
+// which relies on them
+
+// The template below is useful for creating multiple courses
+// CREATE ( xxxx: Course { name: 'x', institution: 'x', category: 'x', recommendations: x } )
+
+CREATE ( cs50: Course { name: 'CS50', institution: 'Harvard', category: 'Intro to CS', recommendations: 7458 } )
+CREATE ( mit6: Course { name: '6.001: Intro to CS', institution: 'MIT', category: 'Intro to CS', recommendations: 6544 } )
+CREATE ( salg: Course { name: 'Algorithms', institution: 'Stanford', category: 'Algorithms', recommendations: 5433 } )
+CREATE ( palg: Course { name: 'Algorithms', institution: 'Princeton', category: 'Algorithms', recommendations: 4322 } )
+CREATE ( nand: Course { name: 'NAND to Tetris', institution: 'Technion', category: 'Systems', recommendations: 2343 } )
+CREATE ( gtos: Course { name: 'Advanced OS', institution: 'Georgia Tech', category: 'Systems', recommendations: 1237 } )
+CREATE ( comp: Course { name: 'Compilers', institution: 'Stanford', category: 'Compilers', recommendations: 677 } )
+CREATE ( math: Course { name: 'Math for Machine Learning', institution: 'Imperial College', category: 'Mathematics', recommendations: 544 } )
+CREATE ( prob: Course { name: 'Data Science: Probability', institution: 'Harvard', category: 'Probability', recommendations: 755 } )
+CREATE ( stml: Course { name: 'Machine Learning', institution: 'Stanford', category: 'Machine Learning', recommendations: 9752 } )
+CREATE ( wb50: Course { name: 'CS50: Web Development', institution: 'Harvard', category: 'Web Development', recommendations: 2345 } )
+CREATE ( reac: Course { name: 'Intro to React', institution: 'Microsoft', category: 'React', recommendations: 2344 } )
+CREATE ( rout: Course { name: 'React Router', institution: 'Microsoft', category: 'React', recommendations: 743 } )
+CREATE ( netw: Course { name: 'Networking for Web Development', institution: 'Google', category: 'Web Development', recommendations: 123 } )
+
+
+// sequence 1
+CREATE ( beg1: SequenceStart { seqId: 1, name: 'Path to Compilers', rating: 4.77 } )
+CREATE ( end1: SequenceEnd { seqId: 1 } )
+CREATE
+    (beg1)-[:NEXT { seqId: 1 }]->(cs50),
+    (cs50)-[:NEXT { seqId: 1 }]->(palg),
+    (palg)-[:NEXT { seqId: 1 }]->(nand),
+    (nand)-[:NEXT { seqId: 1 }]->(gtos),
+    (nand)-[:NEXT { seqId: 1 }]->(comp),
+    (comp)-[:NEXT { seqId: 1 }]->(end1),
+    (nand)-[:NEXT { seqId: 1 }]->(end1)
+
+// sequence 2
+CREATE ( beg2: SequenceStart { seqId: 2, name: 'Machine Learning for Non-Programmers', rating: 4.27 } )
+CREATE ( end2: SequenceEnd { seqId: 2 } )
+CREATE
+    (beg2)-[:NEXT { seqId: 2 }]->(math),
+    (beg2)-[:NEXT { seqId: 2 }]->(mit6),
+    (beg2)-[:NEXT { seqId: 2 }]->(prob),
+    (mit6)-[:NEXT { seqId: 2 }]->(salg),
+    (math)-[:NEXT { seqId: 2 }]->(stml),
+    (prob)-[:NEXT { seqId: 2 }]->(stml),
+    (salg)-[:NEXT { seqId: 2 }]->(stml),
+    (stml)-[:NEXT { seqId: 2 }]->(end2)
+
+// sequence 3
+CREATE ( beg3: SequenceStart { seqId: 3, name: 'Full Stack Web Dev with Python and React', rating: 4.57 } )
+CREATE ( end3: SequenceEnd { seqId: 3 } )
+CREATE
+    (beg3)-[:NEXT { seqId: 3 }]->(cs50),
+    (cs50)-[:NEXT { seqId: 3 }]->(palg),
+    (cs50)-[:NEXT { seqId: 3 }]->(wb50),
+    (cs50)-[:NEXT { seqId: 3 }]->(reac),
+    (reac)-[:NEXT { seqId: 3 }]->(rout),
+    (palg)-[:NEXT { seqId: 3 }]->(netw),
+    (netw)-[:NEXT { seqId: 3 }]->(end3),
+    (rout)-[:NEXT { seqId: 3 }]->(end3)
+    
+    
+    
+
+
+
