@@ -3,7 +3,7 @@
 // creates a sample model with three tracks
 
 // 'recommendations' fields might not be part of the final model
-// I include them here for general testing, particlyarly in order to 
+// I include them here for general testing, particularly in order to 
 // make use of the custom filtering algorithm
 // which relies on them
 
