@@ -1,12 +1,11 @@
-# Learning Path Recommender
+# lernt.io
 ### Harvard Extension School - Software Engineering Capstone
 
 A web app to help self learners plan out their learning paths.
 
-## Setup Notes
+## Documentation
 
-Each part of the application is kept in different folders, ex, `server`, `client`, `scripts`, etc.
+[Environment setup](https://docs.google.com/document/d/1PdAWg9tZI4_gna2r74hM-WJMl2Va4PcaIpRKqQ4h8mQ)
 
-Each part of the application manages its own dependencies with `npm` (or another package manager if it's not Javascript)
+[API reference](https://docs.google.com/document/d/1WTbEQwVeO8AB-87J9IvnWtcJEHd4z_AcUurk9TgI_IU)
 
-At the root, we have a global `package.json` that can run scripts across the application and manages global dependencies. Please keep these global dependencies to a bare minimum in order to maximize decoupling. Global dependencies should most likely only be development tools such as linters, devops packages, etc. 
