@@ -1,5 +1,7 @@
-// TODO: Remove util
-const util = require('util');
+/**
+ * learning-paths
+ * Controller handling all learning-path requests
+ */
 const express = require('express');
 const driver = require('../config/neo4j');
 
@@ -15,30 +17,51 @@ router.get('/:id', (req, res, next) => {
   const query = `
     MATCH (start: SequenceStart {seqId: 1})
     MATCH ()-[rel :NEXT {seqId: 1}]->(c: Course)
-    RETURN start, collect(DISTINCT c), collect(DISTINCT rel) 
+    RETURN start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
   `;
-
 
   const session = driver.session();
   session
     .run(query)
     .then((results) => {
-      let [nodes, rels] = [[], []];
+      // Three basic blocks of our response
+      let startNode, courseNodes, rels;
 
       // Results contain an array of records, but we only expect one result
-      // Somewhat confusing, but it's how it works; references:
+      // Somewhat confusing, has to do with a design relying on Streams
+      // For now remember that the first result contains *everything*
       // https://neo4j.com/docs/driver-manual/1.7/cypher-values/#driver-result
       // https://neo4j.com/docs/api/javascript-driver/current/class/src/v1/result.js~Result.html
       let records = results.records[0];
 
-      let start = records.get("start");
+      // We represent the starting node as a distinct response object
+      // Alternatively, we could have a single nodes array grouping both 
+      // start nodes and course nodes, but we'd need to be aware of this in the client
+      // Getting certain fields such as id is a PITA in neo4j - clearly
+      // calls for an OGM, whether external or our own
+      let start = records.get('start');
       let { name, rating } = start.properties;
-      nodes[0] = { nodeId: start.identity.toNumber(), type: "start", name, rating };
+      startNode = { nodeId: start.identity.toNumber(), type: 'Start', name, rating };
 
-      res.json(nodes);
+      // We map course and relationship results to lists of types we can easily
+      // work with in the client
+      // Again, the jankiness of having to call toNumber() to extract a single
+      // Integer type field suggests we might need to use an OGM
+      courseNodes = records.get('courses').map((course) => {
+        let { name, institution } = course.properties;
+        return { nodeId: course.identity.toNumber(), type: 'Course', name, institution };
+      });
+
+      rels = records.get('rels').map((rel) => {
+        let { start, end } = rel;
+        return { start: start.toNumber(), end: end.toNumber() };
+      })
+
+      // We are done, return the results, up to the client to represent them :)
+      res.json({ data: { startNode, courseNodes, rels }});
     })
     .catch(next)
-    .then(() => session.close())
+    .then(() => session.close());
 });
 
 module.exports = router;
