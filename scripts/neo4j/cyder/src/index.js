@@ -2,15 +2,16 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const { Command, flags } = require('@oclif/command');
+const { cli } = require('cli-ux');
 
 class CyderCommand extends Command {
   async run() {
     const { flags } = this.parse(CyderCommand);
-    const { file, uri, user, pass } = this.processArgs(flags);
+    const { file, uri, user, pass } = await this.processArgs(flags);
     this.log(`file: ${file}, uri: ${uri}, user: ${user}, pass: ${pass}`);
   }
 
-  processArgs(flags) {
+  async processArgs(flags) {
     const file = flags.file || process.env.DEFAULT_FILE; 
     const uri = flags.uri || process.env.NEO4J_URI;
     const user = flags.user || process.env.NEO4J_USER;
@@ -28,25 +29,32 @@ class CyderCommand extends Command {
       this.exit(1);
     }
 
-    return { file, uri, user, pass };
+    if (flags.delete) {
+      const reply = await cli.prompt('This will wipe the database, are you sure? y/n');
+      if (reply !== 'y') {
+        this.exit(0);
+      }
+    }
+    const shouldDelete = flags.delete;
+
+    return { file, uri, user, pass, shouldDelete };
   }
 }
 
-CyderCommand.description = `Describe the command here
-...
-Extra documentation goes here
-`
+CyderCommand.description = `CYDER - CYpher DrivER
+A command-line utility to read Cypher queries into a Neo4j database instance.
+`;
 
 CyderCommand.flags = {
   // add --version flag to show CLI version
   version: flags.version({char: 'v'}),
   // add --help flag to show CLI version
   help: flags.help({char: 'h'}),
-  file: flags.string({ char: 'f', description: 'File with Cypher queries to read in'} ),
+  file: flags.string({ char: 'f', description: 'file with Cypher queries to read in'} ),
   uri: flags.string({ char: 'i', description: 'Neo4j URI' }),
   user: flags.string({ char: 'u', description: 'Neo4j user' }),
   password: flags.string({ char: 'p', description: 'Neo4j password' }),
-  delete: flags.boolean({ char: 'd', description: 'Deletes the datbase clean before reading the file in' }),
+  delete: flags.boolean({ char: 'd', description: 'deletes the database clean before reading the file in' }),
 }
 
 module.exports = CyderCommand;
