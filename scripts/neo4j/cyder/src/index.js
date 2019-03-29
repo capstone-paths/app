@@ -1,10 +1,13 @@
-const {Command, flags} = require('@oclif/command')
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+
+const { Command, flags } = require('@oclif/command');
 
 class CyderCommand extends Command {
   async run() {
-    const {flags} = this.parse(CyderCommand)
-    const name = flags.name || 'world'
-    this.log(`hello ${name} from ./src/index.js`)
+    const {flags} = this.parse(CyderCommand);
+    const name = flags.name || process.env.HELLO;
+    this.log(`hello ${name} from ./src/index.js`);
   }
 }
 
