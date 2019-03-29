@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const neo4j = require('neo4j-driver').v1;
@@ -9,7 +10,10 @@ class CyderCommand extends Command {
   async run() {
     const { flags } = this.parse(CyderCommand);
     const { file, uri, user, password, shouldDelete } = await this.processArgs(flags);
-    this.log(`file: ${file}, uri: ${uri}, user: ${user}, pass: ${password}, shouldDelete: ${shouldDelete}`);
+
+    // This will fail loudly if the file doesn't exist
+    const filePath = path.resolve(__dirname, '..', '..', 'cypher-queries', file);
+    const query = fs.readFileSync(filePath, 'utf8');
 
     const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
     const session = driver.session();
@@ -25,8 +29,19 @@ class CyderCommand extends Command {
         this.exit(1);
       }
     }
+    
+    try {
+      await session.run(query);
+    }
+    catch (e) {
+      session.close();
+      this.error('Query read failed: ' + e);
+      this.exit(1);
+    }
 
     session.close();
+    this.log('Query completed successfully!');
+    this.exit(0);
   }
 
   async processArgs(flags) {
