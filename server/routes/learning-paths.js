@@ -14,8 +14,10 @@ const router = express.Router();
  * @param  id (in-path, mandatory, id)
  */
 router.get('/:id', (req, res, next) => {
+  const id = req.params.id;
+
   const query = `
-    MATCH (start: SequenceStart {seqId: 1})
+    MATCH (start: SequenceStart {seqId: ${id}})
     MATCH ()-[rel :NEXT {seqId: 1}]->(c: Course)
     RETURN start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
   `;
@@ -24,6 +26,10 @@ router.get('/:id', (req, res, next) => {
   session
     .run(query)
     .then((results) => {
+      if (results.records.length === 0) {
+        res.status(404).send(`course id ${id} not found`);
+      }
+
       // Three basic blocks of our response
       let startNode, courseNodes, rels;
 
