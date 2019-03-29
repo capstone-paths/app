@@ -1,7 +1,10 @@
-require('dotenv').config();
+// Server .env is expected at server root 
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+
+// Additional config: database, etc.
 require('./config/index.js');
 
-const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
