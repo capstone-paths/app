@@ -1,0 +1,36 @@
+{
+  "name": "cyder",
+  "description": "A tool to execute Cypher queries from a file and into a Neo4j instance",
+  "version": "0.0.1",
+  "author": "alexerhardt @alexerhardt",
+  "bin": {
+    "cyder": "./bin/run"
+  },
+  "bugs": "https://github.com/alexerhardt/cyder/issues",
+  "dependencies": {
+    "@oclif/command": "^1.5.12",
+    "@oclif/config": "^1.12.12",
+    "@oclif/plugin-help": "^2.1.6"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/src"
+  ],
+  "homepage": "https://github.com/alexerhardt/cyder",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "oclif": {
+    "bin": "cyder"
+  },
+  "repository": "alexerhardt/cyder",
+  "scripts": {
+    "test": "echo NO TESTS"
+  }
+}
