@@ -37,7 +37,7 @@ You should now be able to run `cyder` from anywhere.
 
 #### OPTIONS
 ```
-  -d, --delete             wipes the database clean before reading the file in
+  -d, --delete             wipes the database clean before reading the file in (prompts for confirmation)
   -f, --file=file          file with Cypher queries to read in
   -h, --help               show CLI help
   -i, --uri=uri            Neo4j URI
