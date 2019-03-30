@@ -84,14 +84,14 @@ router.post('/', (req, res, next) => {
   // 3. create relationships between all nodes
 
   const body = {
-    authorID: 1,
+    authorID: 2,
     startNode: {
-      name: 'testSequence'
+      name: 'testSequence2'
     },
     rels: [
       { start: 1, end: 2 },
       { start: 1, end: 3 },
-      { start: 2, end: 3 }
+      { start: 2, end: 8000 }
     ]
   }
 
@@ -101,7 +101,7 @@ router.post('/', (req, res, next) => {
 
   const query = `
     MATCH (author: User { userID: ${authorID} } )
-    CREATE (start: StartNode { seqId: {seqId}, name: {seqName} } )
+    CREATE (start: SequenceStart { seqId: {seqId}, name: {seqName} } )
     CREATE (author)-[:CREATED]->(start)
     WITH author, start
     UNWIND {rels} AS rel
@@ -110,6 +110,12 @@ router.post('/', (req, res, next) => {
     CREATE (c1)-[:NEXT { seqId: {seqId} }]->(c2)
     RETURN author, start
   `;
+
+  // match the author
+    // if it doesn't exist, fail
+  // match the courses in the relationships
+   // if any of them dont' exist, fail
+  // execute the write
 
   const session = driver.session();
   session
