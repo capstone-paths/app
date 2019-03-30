@@ -5,7 +5,7 @@
  * @param {Array} relationships [{start: courseID, end: courseId}, ...]
  * @returns {Boolean}
  */
-exports.checkIfAllCoursesExist = (session, relationships) => {
+exports.checkIfAllCoursesExist = async (session, relationships) => {
   let courseSet = new Set();
   relationships.forEach(rel => {
     courseSet.add(rel.start);
@@ -19,6 +19,13 @@ exports.checkIfAllCoursesExist = (session, relationships) => {
     RETURN count(c) AS count
   `;
 
-  const res = session.run(query, { courseIDList });
+  const res = await session.run(query, { courseIDList });
   return res.get('count').toNumber() === courseIDList.length;
+};
+
+
+exports.createSequence = (session, sequenceInfo, relationships) => {
+  // create sequenceStart node from sequenceInfo
+  // create all relationships from relationships object
+  // return sequenceId, nodes created, relationships created
 };
