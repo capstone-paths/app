@@ -1,13 +1,10 @@
-/**
- * User
- * Builds a user from a Neo4j user Node
- */
-class User {
-  constructor(node) {
-    const { id, name } = node.properties;
-    this.id = id;
-    this.name = name;
-  }
-}
+const User = require('./neo4j/User');
 
-module.exports = User;
+exports.findById = async (session, userID) => {
+  const query = 'MATCH (user: User { id: userID }) RETURN user';
+  const result = await session.run(query, { userID });
+  if (result.length === 0) {
+    return undefined;
+  }
+  return new User(result.get('user'));
+};
