@@ -10,20 +10,27 @@
 // The template below is useful for creating multiple courses
 // CREATE ( xxxx: Course { name: 'x', institution: 'x', category: 'x', recommendations: x } )
 
-CREATE ( cs50: Course { name: 'CS50', institution: 'Harvard', category: 'Intro to CS', recommendations: 7458 } )
-CREATE ( mit6: Course { name: '6.001: Intro to CS', institution: 'MIT', category: 'Intro to CS', recommendations: 6544 } )
-CREATE ( salg: Course { name: 'Algorithms', institution: 'Stanford', category: 'Algorithms', recommendations: 5433 } )
-CREATE ( palg: Course { name: 'Algorithms', institution: 'Princeton', category: 'Algorithms', recommendations: 4322 } )
-CREATE ( nand: Course { name: 'NAND to Tetris', institution: 'Technion', category: 'Systems', recommendations: 2343 } )
-CREATE ( gtos: Course { name: 'Advanced OS', institution: 'Georgia Tech', category: 'Systems', recommendations: 1237 } )
-CREATE ( comp: Course { name: 'Compilers', institution: 'Stanford', category: 'Compilers', recommendations: 677 } )
-CREATE ( math: Course { name: 'Math for Machine Learning', institution: 'Imperial College', category: 'Mathematics', recommendations: 544 } )
-CREATE ( prob: Course { name: 'Data Science: Probability', institution: 'Harvard', category: 'Probability', recommendations: 755 } )
-CREATE ( stml: Course { name: 'Machine Learning', institution: 'Stanford', category: 'Machine Learning', recommendations: 9752 } )
-CREATE ( wb50: Course { name: 'CS50: Web Development', institution: 'Harvard', category: 'Web Development', recommendations: 2345 } )
-CREATE ( reac: Course { name: 'Intro to React', institution: 'Microsoft', category: 'React', recommendations: 2344 } )
-CREATE ( rout: Course { name: 'React Router', institution: 'Microsoft', category: 'React', recommendations: 743 } )
-CREATE ( netw: Course { name: 'Networking for Web Development', institution: 'Google', category: 'Web Development', recommendations: 123 } )
+CREATE ( cs50: Course { courseID: 0, name: 'CS50', institution: 'Harvard', category: 'Intro to CS', recommendations: 7458 } )
+CREATE ( mit6: Course { courseID: 1, name: '6.001: Intro to CS', institution: 'MIT', category: 'Intro to CS', recommendations: 6544 } )
+CREATE ( salg: Course { courseID: 2, name: 'Algorithms', institution: 'Stanford', category: 'Algorithms', recommendations: 5433 } )
+CREATE ( palg: Course { courseID: 3, name: 'Algorithms', institution: 'Princeton', category: 'Algorithms', recommendations: 4322 } )
+CREATE ( nand: Course { courseID: 4, name: 'NAND to Tetris', institution: 'Technion', category: 'Systems', recommendations: 2343 } )
+CREATE ( gtos: Course { courseID: 5, name: 'Advanced OS', institution: 'Georgia Tech', category: 'Systems', recommendations: 1237 } )
+CREATE ( comp: Course { courseID: 6, name: 'Compilers', institution: 'Stanford', category: 'Compilers', recommendations: 677 } )
+CREATE ( math: Course { courseID: 7, name: 'Math for Machine Learning', institution: 'Imperial College', category: 'Mathematics', recommendations: 544 } )
+CREATE ( prob: Course { courseID: 8, name: 'Data Science: Probability', institution: 'Harvard', category: 'Probability', recommendations: 755 } )
+CREATE ( stml: Course { courseID: 9, name: 'Machine Learning', institution: 'Stanford', category: 'Machine Learning', recommendations: 9752 } )
+CREATE ( wb50: Course { courseID: 10, name: 'CS50: Web Development', institution: 'Harvard', category: 'Web Development', recommendations: 2345 } )
+CREATE ( reac: Course { courseID: 11, name: 'Intro to React', institution: 'Microsoft', category: 'React', recommendations: 2344 } )
+CREATE ( rout: Course { courseID: 12, name: 'React Router', institution: 'Microsoft', category: 'React', recommendations: 743 } )
+CREATE ( netw: Course { courseID: 13, name: 'Networking for Web Development', institution: 'Google', category: 'Web Development', recommendations: 123 } )
+
+// create some test users
+CREATE ( u001: User { userID: 0, username: 'PJ' } )
+CREATE ( u002: User { userID: 1, username: 'Ajay' } )
+CREATE ( u003: User { userID: 2, username: 'Sam' } )
+CREATE ( u004: User { userID: 3, username: 'Jon' } )
+CREATE ( u005: User { userID: 4, username: 'Stephen' } )
 
 
 // sequence 1
@@ -37,6 +44,8 @@ CREATE
     (nand)-[:NEXT { seqId: 1 }]->(comp),
     (comp)-[:NEXT { seqId: 1 }]->(end1),
     (gtos)-[:NEXT { seqId: 1 }]->(end1)
+CREATE
+    (u001)-[:CREATED]->(beg1)
 
 // sequence 2
 CREATE ( beg2: SequenceStart { seqId: 2, name: 'Machine Learning for Non-Programmers', rating: 4.27 } )
@@ -50,6 +59,8 @@ CREATE
     (prob)-[:NEXT { seqId: 2 }]->(stml),
     (salg)-[:NEXT { seqId: 2 }]->(stml),
     (stml)-[:NEXT { seqId: 2 }]->(end2)
+CREATE
+    (u002)-[:CREATED]->(beg2)
 
 // sequence 3
 CREATE ( beg3: SequenceStart { seqId: 3, name: 'Full Stack Web Dev with Python and React', rating: 4.57 } )
@@ -63,6 +74,9 @@ CREATE
     (palg)-[:NEXT { seqId: 3 }]->(netw),
     (netw)-[:NEXT { seqId: 3 }]->(end3),
     (rout)-[:NEXT { seqId: 3 }]->(end3)
+CREATE
+    (u003)-[:CREATED]->(beg3)
+    
     
     
     

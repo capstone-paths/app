@@ -70,4 +70,32 @@ router.get('/:id', (req, res, next) => {
     .then(() => session.close());
 });
 
+
+/**
+ * @route    POST /api/learning-paths
+ * @access    Private
+ * @desc     Saves a learning path
+ * @param    data (in-body, mandatory, LearningPath)
+ */
+router.post('/', (req, res, next) => {
+  // 1. create sequence start node
+  // 2. create relationship between start node and user node
+  // 3. create relationships between all nodes
+
+  // const body = {
+  //   authorId: 1234,
+  //   startNode: {
+  //     name: 'sequenceName'
+  //   },
+  //   rels: [
+  //     { start: 1, end: 2 },
+  //     { start: 1, end: 3 },
+  //     { start: 2, end: 3 }
+  //   ]
+  // }
+
+
+});
+
+
 module.exports = router;
