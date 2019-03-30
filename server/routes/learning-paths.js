@@ -3,6 +3,7 @@
  * Controller handling all learning-path requests
  */
 const express = require('express');
+const uuid = require('uuid/v4');
 const driver = require('../config/neo4j');
 
 const router = express.Router();
@@ -82,19 +83,40 @@ router.post('/', (req, res, next) => {
   // 2. create relationship between start node and user node
   // 3. create relationships between all nodes
 
-  // const body = {
-  //   authorId: 1234,
-  //   startNode: {
-  //     name: 'sequenceName'
-  //   },
-  //   rels: [
-  //     { start: 1, end: 2 },
-  //     { start: 1, end: 3 },
-  //     { start: 2, end: 3 }
-  //   ]
-  // }
+  const body = {
+    authorID: 1,
+    startNode: {
+      name: 'testSequence'
+    },
+    rels: [
+      { start: 1, end: 2 },
+      { start: 1, end: 3 },
+      { start: 2, end: 3 }
+    ]
+  }
 
+  const { authorID, startNode, rels } = body;
 
+  const seqId = uuid().toString();
+
+  const query = `
+    MATCH (author: User { userID: ${authorID} } )
+    CREATE (start: StartNode { seqId: {seqId}, name: {seqName} } )
+    CREATE (author)-[:CREATED]->(start)
+    WITH author, start
+    UNWIND {rels} AS rel
+    MATCH (c1: Course) WHERE c1.courseID = rel.start
+    MATCH (c2: Course) WHERE c2.courseID = rel.end
+    CREATE (c1)-[:NEXT { seqId: {seqId} }]->(c2)
+    RETURN author, start
+  `;
+
+  const session = driver.session();
+  session
+    .run(query, { rels, seqId, seqName: startNode.name })
+    .then((results) => res.json(results))
+    .catch(next)
+    .then(session.close());
 });
 
 
