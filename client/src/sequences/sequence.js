@@ -137,7 +137,7 @@ export default class CouseNetworkVis extends Component {
           params.event = "[original event]";
           var node = this.getNodeAt(params.pointer.DOM);
           if(node !== undefined){
-              if(node == 100){
+              if(node === 100){
                 alert('get course suggestion');
             }
                       else{
