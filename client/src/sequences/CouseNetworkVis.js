@@ -8,8 +8,9 @@ import './CouseNetworkVis.css';
 export default class CouseNetworkVis extends Component {
     constructor(props) {
       super(props);
-      let api = new LerntApi();
-      api.getSequence(props.sequenceId)
+      this.api = new LerntApi();
+      this.sequenceId = props.sequenceId;
+      this.api.getSequence(props.sequenceId)
         .then((response) => {
           console.log(response)
           let nodes = response.data.data.courseNodes.map((course) => {
@@ -50,9 +51,17 @@ export default class CouseNetworkVis extends Component {
         var options = {
           manipulation: {
             enabled: true,
-            addNode: function(nodeData,callback) {
-              nodeData.label = 'hello world';
-              callback(nodeData);
+            addNode: (nodeData,callback) => {
+              this.api.getSequenceNodeRecommendation(this.sequenceId)
+              .then((response) => {
+                console.log(response);
+                let course = response.data.data.course;
+                nodeData.font =  { multi: "md", face: "arial", size:20 };
+                nodeData.color = {background:'white', border:'black'};
+                nodeData.id = course.nodeId;
+                nodeData.label =  "*" + course.name + "*\n" + course.institution;
+                callback(nodeData);
+              });
             }
 			    },
           layout: {
