@@ -17,9 +17,9 @@ router.get('/:id', (req, res, next) => {
   const id = req.params.id;
 
   const query = `
-    MATCH (start: SequenceStart {seqId: ${id}})
-    MATCH ()-[rel :NEXT {seqId: 1}]->(c: Course)
-    RETURN start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
+      MATCH (start: SequenceStart {seqId: ${id}})
+      MATCH ()-[rel :NEXT {seqId: 1}]->(c: Course)
+      RETURN start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
   `;
 
   const session = driver.session();
@@ -65,6 +65,38 @@ router.get('/:id', (req, res, next) => {
 
       // We are done, return the results, up to the client to represent them :)
       res.json({ data: { startNode, courseNodes, rels }});
+    })
+    .catch(next)
+    .then(() => session.close());
+});
+/**
+ * @route  GET /api/learning-paths/:id/recommendation
+ * @access Public
+ * @desc   Suggests a new node for the learning path
+ * @param  id (in-path, mandatory, id)
+ */
+router.get('/:id/recommendation', (req, res, next) => {
+  const id = req.params.id;
+
+  const query = `
+    MATCH (course) where course.institution is not null   RETURN course as course, rand() as r order by r limit 1
+  `;
+
+  const session = driver.session();
+  session
+    .run(query)
+    .then((results) => {
+      if (results.records.length === 0) {
+        res.status(404).send(`course id ${id} not found`);
+      }
+
+      let records = results.records[0];
+      let node = records.get('course');
+      let { name, institution } = node.properties;
+      let course =  { nodeId: node.identity.toNumber(), type: 'Course', name, institution };
+
+      // We are done, return the results, up to the client to represent them :)
+      res.json({ data: { course }});
     })
     .catch(next)
     .then(() => session.close());
