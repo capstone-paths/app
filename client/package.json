@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8081",
   "devDependencies": {
     "babel-eslint": "9.0.0",
     "eslint-plugin-react": "^7.12.4"
@@ -11,7 +12,8 @@
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8",
     "eslint-config-react-app": "3.0.8",
-    "vis": "4.21.0"
+    "vis": "4.21.0",
+    "axios": "0.18.0"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
