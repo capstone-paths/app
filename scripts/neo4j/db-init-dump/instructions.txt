@@ -1,0 +1,35 @@
+
+'data.dump' is a dump of the Neo4j database instance which has all scraped courses inserted as nodes and couple of researched sequences built in.
+
+In order to initialize the Neo4j graph database from the dump you will need to do the following,
+
+1. Find the location of,
+a) Your Neo4j installation and the bin folder within it. This 'bin' folder has neo4j-admin utility which is needed to load
+up the dump
+b) 'data.dump' is the name of the database dump and you will need the path to this file.
+
+2. From within in the Neo4j installation,
+a) check status of database,
+    ./bin/neo4j status.
+b) If database is running you need to stop it,
+    ./bin/neo4j stop
+
+3. Take a copy of your current 'graph.db' which is within your Neo4j installation , path within in the installation is 'data/databases'.
+I renamed 'graph.db' as 'graph_bk.db'
+
+4. Now run the load script,
+skeleton of the load script is as follows,
+./bin/neo4j-admin load --from=<archive-path> --database=<database>
+
+Example, The command I ran at my end -
+./bin/neo4j-admin load --from=/Users/ajaykliyara/Documents/Capstone/db_dump/data.dump  --database=graph.db
+
+
+5. Start the db,
+./bin/neo4j start
+
+6. Use 'http://localhost:7474/browser/' to access the database.
+
+7. Run the below query in the browser to view one of the sequence,
+
+match p=(n)-[r:NEXT*]->(m) where all(r in rels(p) where r.sequence_id="1") return p
