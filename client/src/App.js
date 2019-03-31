@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Nav from './nav/Nav';
 
-import CouseNetworkVis from './sequences/Sequence';
+import CouseNetworkVis from './sequences/CouseNetworkVis';
 
 class App extends Component {
   render() {
