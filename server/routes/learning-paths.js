@@ -8,6 +8,8 @@ const driver = require('../config/neo4j');
 
 const router = express.Router();
 
+const LearningPath = require('../models/learning-path');
+
 /**
  * @route  GET /api/learning-paths/:id
  * @access Public
@@ -84,45 +86,30 @@ router.post('/', (req, res, next) => {
   // 3. create relationships between all nodes
 
   const body = {
-    authorID: 2,
     startNode: {
-      name: 'testSequence2'
+      authorID: 3,
+      name: 'testSequence008'
     },
     rels: [
       { start: 1, end: 2 },
       { start: 1, end: 3 },
-      { start: 2, end: 8000 }
+      { start: 2, end: 4 }
     ]
   }
 
-  const { authorID, startNode, rels } = body;
-
-  const seqId = uuid().toString();
-
-  const query = `
-    MATCH (author: User { userID: ${authorID} } )
-    CREATE (start: SequenceStart { seqId: {seqId}, name: {seqName} } )
-    CREATE (author)-[:CREATED]->(start)
-    WITH author, start
-    UNWIND {rels} AS rel
-    MATCH (c1: Course) WHERE c1.courseID = rel.start
-    MATCH (c2: Course) WHERE c2.courseID = rel.end
-    CREATE (c1)-[:NEXT { seqId: {seqId} }]->(c2)
-    RETURN author, start
-  `;
-
-  // match the author
-    // if it doesn't exist, fail
-  // match the courses in the relationships
-   // if any of them dont' exist, fail
-  // execute the write
-
+  const { startNode, rels } = body;
   const session = driver.session();
-  session
-    .run(query, { rels, seqId, seqName: startNode.name })
-    .then((results) => res.json(results))
-    .catch(next)
-    .then(session.close());
+
+  LearningPath
+    .createLearningPath(session, startNode, rels)
+    .catch(e => console.log(e));
+
+  // try {
+  //   LearningPath.createLearningPath(session, startNode, rels);
+  // }
+  // catch(e) {
+  //   next(e);
+  // }
 });
 
 
