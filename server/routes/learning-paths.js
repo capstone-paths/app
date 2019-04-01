@@ -41,20 +41,12 @@ router.get('/:id', (req, res, next) => {
  * @param    data (in-body, mandatory, LearningPath)
  */
 router.post('/', (req, res, next) => {
-  const data = {
-    authorID: 3,
-    pathStartData: {
-      name: 'testSequence012'
-    },
-    relationships: [
-      { start: 1, end: 2 },
-      { start: 1, end: 3 },
-      { start: 2, end: 4 }
-    ]
+  const { data } = req.body;
+  if (!data) {
+    res.status(400);
   }
 
   const session = driver.session();
-
   const lp = new LearningPath(data);
 
   lp
