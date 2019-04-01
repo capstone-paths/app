@@ -12,6 +12,8 @@ class LearningPath {
   }
 
   async save(session) {
+    console.log('LearningPath.save()');
+
     const { authorID, pathStartData, relationships } = this;
 
     const user = await User.findById(session, authorID);
@@ -19,7 +21,7 @@ class LearningPath {
       throw new ValidationError(`User does not exist: ${authorID}`);
     }
 
-    await checkIfAllCoursesExist(relationships);
+    await checkIfAllCoursesExist(session, relationships);
 
     const pathStart = new PathStart(pathStartData);
     await pathStart.validate();

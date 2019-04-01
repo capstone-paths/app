@@ -6,11 +6,16 @@ class User {
   }
 
   static async findById(session, userID) {
-    const query = 'MATCH (user: User { id: userID }) RETURN user';
-    const result = await session.run(query, { userID });
-    if (result.length === 0) {
+    const query = 'MATCH (user: User { userID: {userID} }) RETURN user';
+    // TODO: Think of an abstraction layer to get properties easily
+    // This is going to get tiring quickly
+    const results = await session.run(query, { userID });
+    const records = results.records;
+    if (records.length === 0) {
       return undefined;
     }
-    return new User(result.get('user'));
+    return new User(records[0].get('user'));
   }
 }
+
+module.exports = User;

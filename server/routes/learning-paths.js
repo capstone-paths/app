@@ -8,7 +8,7 @@ const driver = require('../config/neo4j');
 
 const router = express.Router();
 
-const LearningPath = require('../models/learning-path');
+const LearningPath = require('../models/LearningPath');
 
 /**
  * @route  GET /api/learning-paths/:id
@@ -81,24 +81,26 @@ router.get('/:id', (req, res, next) => {
  * @param    data (in-body, mandatory, LearningPath)
  */
 router.post('/', (req, res, next) => {
-  const body = {
+  const data = {
+    authorID: 3,
     startNode: {
-      authorID: 3,
-      name: 'testSequence008'
+      name: 'testSequence012'
     },
-    rels: [
+    relationships: [
       { start: 1, end: 2 },
       { start: 1, end: 3 },
       { start: 2, end: 4 }
     ]
   }
 
-  const { startNode, rels } = body;
   const session = driver.session();
 
-  LearningPath
-    .createLearningPath(session, startNode, rels)
-    .catch(e => console.log(e));
+  const lp = new LearningPath(data);
+
+  lp
+    .save(session)
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 
