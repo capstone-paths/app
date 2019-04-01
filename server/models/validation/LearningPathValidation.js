@@ -20,13 +20,14 @@ const checkIfAllCoursesExist = async (session, relationships) => {
 
   let query = `
     UNWIND {courseIDList} AS courseID
-    MATCH (c: Course { courseID: {courseID} })
+    MATCH (c: Course { courseID: courseID })
     WITH collect(c.courseID) AS hits
     RETURN [x in {courseIDList} WHERE not(x in hits)] as missing
   `;
 
   const res = await session.run(query, { courseIDList });
-  let missing = res.get('missing');
+  const records = res.records;
+  let missing = records[0].get('missing');
   if (missing.length > 0) {
     let ids = missing.map(item => item.toNumber());
     throw new ValidationError(`Some course IDs do not exist: ${ids}`);

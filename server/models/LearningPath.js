@@ -33,7 +33,7 @@ class LearningPath {
       SET start = {pathStartData}
       CREATE (author)-[:CREATED]->(start)
       WITH author, start
-      UNWIND {rels} AS rel
+      UNWIND {relationships} AS rel
       MATCH (c1: Course) WHERE c1.courseID = rel.start
       MATCH (c2: Course) WHERE c2.courseID = rel.end
       CREATE (c1)-[:NEXT { pathID: {pathID} }]->(c2)

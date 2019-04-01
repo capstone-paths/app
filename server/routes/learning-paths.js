@@ -83,7 +83,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const data = {
     authorID: 3,
-    startNode: {
+    pathStartData: {
       name: 'testSequence012'
     },
     relationships: [
