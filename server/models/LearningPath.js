@@ -11,6 +11,11 @@ class LearningPath {
     this.relationships = relationships;
   }
 
+
+  /**
+   * Saves a LearningPath to the database
+   * @param {Session} session 
+   */
   async save(session) {
     const { authorID, pathStartData, relationships } = this;
 
@@ -43,6 +48,12 @@ class LearningPath {
     return this;
   }
 
+
+  /**
+   * Finds a sequence by id
+   * @param {Session} session 
+   * @param {Integer} id 
+   */
   static async findById(session, id) {
     const query = `
       MATCH (start: SequenceStart { seqId: toInteger($id) })
@@ -56,6 +67,9 @@ class LearningPath {
       return undefined;
     }
 
+
+    // TODO: Create a generic serialization layer that does this
+    // It should be able to pull it from a schema and do it for any object
     let startNode, courseNodes, rels;
 
     let records = results.records[0];
@@ -79,6 +93,7 @@ class LearningPath {
     return { authorID, startNode, courseNodes, rels };
   }
 
+  // TODO: Need to think about this
   toJSON() {
     const { authorID, pathStartData, relationships } = this;
     return { authorID, pathStartData, relationships };
