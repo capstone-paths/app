@@ -81,10 +81,6 @@ router.get('/:id', (req, res, next) => {
  * @param    data (in-body, mandatory, LearningPath)
  */
 router.post('/', (req, res, next) => {
-  // 1. create sequence start node
-  // 2. create relationship between start node and user node
-  // 3. create relationships between all nodes
-
   const body = {
     startNode: {
       authorID: 3,
@@ -103,13 +99,6 @@ router.post('/', (req, res, next) => {
   LearningPath
     .createLearningPath(session, startNode, rels)
     .catch(e => console.log(e));
-
-  // try {
-  //   LearningPath.createLearningPath(session, startNode, rels);
-  // }
-  // catch(e) {
-  //   next(e);
-  // }
 });
 
 
