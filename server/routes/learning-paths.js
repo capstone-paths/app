@@ -63,7 +63,7 @@ router.get('/:id', (req, res, next) => {
       // We are done, return the results, up to the client to represent them :)
       res.json({
          data: {
-             sequence,
+             sequence: sequenceData,
              courseNodes, 
              rels 
             }

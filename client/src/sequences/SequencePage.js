@@ -1,11 +1,33 @@
 import React, { Component } from 'react';
-
-import CouseNetworkVis from './sequences/CourseNetworkVis/CouseNetworkVis';
+import LerntApi from '../LerntApi'
+import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
 
 class SequencePage extends Component {
-  render() {
+    constructor(props) {
+        super(props);
+        this.state = {loaded: false};
+        this.api = new LerntApi();
+        this.api.getSequence(props.sequenceId)
+        .then((response) => {
+            console.log(response.data.data)
+            this.setState({loaded:true, data: response.data.data})
+        });
+    }
+    render() {
+        let vis;
+        if(this.state.loaded){
+            vis = <CouseNetworkVis sequenceId={1}></CouseNetworkVis>
+        } else{
+            vis = <div>loading</div>
+        }
     return (
-        <CouseNetworkVis sequenceId={1}></CouseNetworkVis>
+        <div>
+            test
+            <h1>{this.state.loaded ? this.state.data.sequence.sequence_name : '' }</h1>
+            <h3>{this.state.loaded ? this.state.data.sequence.author : '' }</h3>
+
+            {vis}
+        </div>
     );
   }
 }
