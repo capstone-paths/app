@@ -7,6 +7,9 @@ const driver = require('../config/neo4j');
 
 const router = express.Router();
 
+const LearningPath = require('../models/LearningPath');
+
+
 /**
  * @route  GET /api/learning-paths/:id
  * @access Public
@@ -14,64 +17,45 @@ const router = express.Router();
  * @param  id (in-path, mandatory, id)
  */
 router.get('/:id', (req, res, next) => {
-  const id = req.params.id;
-
-  const query = `
-  MATCH (s: Sequence {sequence_id: "1"})
-  MATCH ()-[rel :NEXT {sequence_id: "1"}]->(c: Course)
-  RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).course_id,endNode(rel).course_id]) as rels
-  `;
+  if (!req.params.id) {
+    res.status(400);
+  }
 
   const session = driver.session();
-  session
-    .run(query)
-    .then((results) => {
-      if (results.records.length === 0) {
-        res.status(404).send(`course id ${id} not found`);
+  LearningPath
+    .findById(session, req.params.id)
+    .then((result) => {
+      if (!result) {
+        res.status(400);
       }
-
-      // Three basic blocks of our response
-      let courseNodes, rels;
-
-      // Results contain an array of records, but we only expect one result
-      // Somewhat confusing, has to do with a design relying on Streams
-      // For now remember that the first result contains *everything*
-      // https://neo4j.com/docs/driver-manual/1.7/cypher-values/#driver-result
-      // https://neo4j.com/docs/api/javascript-driver/current/class/src/v1/result.js~Result.html
-      let records = results.records[0];
-
-      // We represent the starting node as a distinct response object
-      // Alternatively, we could have a single nodes array grouping both 
-      // start nodes and course nodes, but we'd need to be aware of this in the client
-      // Getting certain fields such as id is a PITA in neo4j - clearly
-      // calls for an OGM, whether external or our own
-      let sequence = records.get('sequence');
-      let sequenceData = sequence.properties;
-
-      // We map course and relationship results to lists of types we can easily
-      // work with in the client
-      // Again, the jankiness of having to call toNumber() to extract a single
-      // Integer type field suggests we might need to use an OGM
-      courseNodes = records.get('courses').map((course) => {
-        return course.properties
-      });
-
-      rels = records.get('rels').map((rel) => {
-        return { start: rel[0], end: rel[1] };
-      })
-
-      // We are done, return the results, up to the client to represent them :)
-      res.json({
-         data: {
-             sequence: sequenceData,
-             courseNodes, 
-             rels 
-            }
-          });
+      res.json(result);
     })
     .catch(next)
-    .then(() => session.close());
 });
+
+
+/**
+ * @route    POST /api/learning-paths
+ * @access   Private
+ * @desc     Saves a learning path
+ * @param    data (in-body, mandatory, LearningPath)
+ */
+router.post('/', (req, res, next) => {
+  const { data } = req.body;
+  if (!data) {
+    res.status(400);
+  }
+
+  const session = driver.session();
+  const lp = new LearningPath(data);
+
+  lp
+    .save(session)
+    .then(response => res.json(response))
+    .catch(next);
+});
+
+
 /**
  * @route  GET /api/learning-paths/:id/recommendation
  * @access Public
@@ -102,6 +86,6 @@ router.get('/:id/recommendation', (req, res, next) => {
     })
     .catch(next)
     .then(() => session.close());
-});
+  });
 
 module.exports = router;
