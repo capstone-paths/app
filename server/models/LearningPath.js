@@ -12,8 +12,6 @@ class LearningPath {
   }
 
   async save(session) {
-    console.log('LearningPath.save()');
-
     const { authorID, pathStartData, relationships } = this;
 
     const user = await User.findById(session, authorID);
@@ -45,9 +43,37 @@ class LearningPath {
     return this;
   }
 
-  // static
-  static async findById(id) {
-    // run cypher query
+  static async findById(session, id) {
+    const query = `
+      MATCH (start: SequenceStart {seqId: {seqId}})
+      MATCH ()-[rel :NEXT {seqId: {seqId}]->(c: Course)
+      MATCH (author: User)-[:CREATED]->(start)
+      RETURN author, start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
+    `;
+
+    const results = session.run(query, {seqId: id});
+
+    let startNode, courseNodes, rels;
+
+    let records = results.records[0];
+
+    let authorID = records.get('author')[0].properties.userID;
+
+    let start = records.get('start');
+    let { name, rating } = start.properties;
+    startNode = { nodeId: start.identity.toNumber(), type: 'Start', name, rating };
+
+    courseNodes = records.get('courses').map((course) => {
+      let { name, institution } = course.properties;
+      return { nodeId: course.identity.toNumber(), type: 'Course', name, institution };
+    });
+
+    rels = records.get('rels').map((rel) => {
+      let { start, end } = rel;
+      return { start: start.toNumber(), end: end.toNumber() };
+    });
+
+    return { authorID, startNode, courseNodes, rels };
   }
 
   toJSON() {
