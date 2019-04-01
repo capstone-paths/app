@@ -2,7 +2,7 @@ import vis from 'vis';
 import 'vis/dist/vis-network.min.css';
 
 import React, { Component } from 'react';
-import LerntApi from '../LerntApi'
+import LerntApi from '../../LerntApi'
 import './CouseNetworkVis.css';
 
 export default class CouseNetworkVis extends Component {
@@ -17,8 +17,8 @@ export default class CouseNetworkVis extends Component {
             return {
                 font: { multi: "md", face: "arial", size:20 },
                 color: {background:'white', border:'black'},
-                id: course.nodeId,
-                label: "*" + course.name + "*\n" + course.institution,
+                id: course.course_id,
+                label: "*" + course.Title + "*\n" + course.Partner,
               };
           })
           let edges = response.data.data.rels.map((rel) =>{
@@ -58,14 +58,17 @@ export default class CouseNetworkVis extends Component {
                 let course = response.data.data.course;
                 nodeData.font =  { multi: "md", face: "arial", size:20 };
                 nodeData.color = {background:'white', border:'black'};
-                nodeData.id = course.nodeId;
-                nodeData.label =  "*" + course.name + "*\n" + course.institution;
+                nodeData.id = course.course_id;
+                nodeData.label =  "*" + course.Title + "*\n" + course.Partner;
                 callback(nodeData);
               });
             }
 			    },
           layout: {
             randomSeed: 2,
+            hierarchical: {
+              direction: "LR"
+             }
           },
     
           nodes: {
@@ -76,7 +79,7 @@ export default class CouseNetworkVis extends Component {
             }
           },
           edges: {
-            length: 235
+            length: 335
           },
           interaction:{hover:true}
 			    

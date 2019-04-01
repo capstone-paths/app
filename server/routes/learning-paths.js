@@ -17,9 +17,9 @@ router.get('/:id', (req, res, next) => {
   const id = req.params.id;
 
   const query = `
-      MATCH (start: SequenceStart {seqId: ${id}})
-      MATCH ()-[rel :NEXT {seqId: 1}]->(c: Course)
-      RETURN start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
+  MATCH (s: Sequence {sequence_id: "1"})
+  MATCH ()-[rel :NEXT {sequence_id: "1"}]->(c: Course)
+  RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).course_id,endNode(rel).course_id]) as rels
   `;
 
   const session = driver.session();
@@ -31,7 +31,7 @@ router.get('/:id', (req, res, next) => {
       }
 
       // Three basic blocks of our response
-      let startNode, courseNodes, rels;
+      let courseNodes, rels;
 
       // Results contain an array of records, but we only expect one result
       // Somewhat confusing, has to do with a design relying on Streams
@@ -45,26 +45,29 @@ router.get('/:id', (req, res, next) => {
       // start nodes and course nodes, but we'd need to be aware of this in the client
       // Getting certain fields such as id is a PITA in neo4j - clearly
       // calls for an OGM, whether external or our own
-      let start = records.get('start');
-      let { name, rating } = start.properties;
-      startNode = { nodeId: start.identity.toNumber(), type: 'Start', name, rating };
+      let sequence = records.get('sequence');
+      let sequenceData = sequence.properties;
 
       // We map course and relationship results to lists of types we can easily
       // work with in the client
       // Again, the jankiness of having to call toNumber() to extract a single
       // Integer type field suggests we might need to use an OGM
       courseNodes = records.get('courses').map((course) => {
-        let { name, institution } = course.properties;
-        return { nodeId: course.identity.toNumber(), type: 'Course', name, institution };
+        return course.properties
       });
 
       rels = records.get('rels').map((rel) => {
-        let { start, end } = rel;
-        return { start: start.toNumber(), end: end.toNumber() };
+        return { start: rel[0], end: rel[1] };
       })
 
       // We are done, return the results, up to the client to represent them :)
-      res.json({ data: { startNode, courseNodes, rels }});
+      res.json({
+         data: {
+             sequence,
+             courseNodes, 
+             rels 
+            }
+          });
     })
     .catch(next)
     .then(() => session.close());
@@ -79,7 +82,7 @@ router.get('/:id/recommendation', (req, res, next) => {
   const id = req.params.id;
 
   const query = `
-    MATCH (course) where course.institution is not null   RETURN course as course, rand() as r order by r limit 1
+    MATCH (c: Course) RETURN c as course, rand() as r order by r limit 1
   `;
 
   const session = driver.session();
@@ -92,11 +95,10 @@ router.get('/:id/recommendation', (req, res, next) => {
 
       let records = results.records[0];
       let node = records.get('course');
-      let { name, institution } = node.properties;
-      let course =  { nodeId: node.identity.toNumber(), type: 'Course', name, institution };
+      let courseData = node.properties;
 
       // We are done, return the results, up to the client to represent them :)
-      res.json({ data: { course }});
+      res.json({ data: { course: courseData }});
     })
     .catch(next)
     .then(() => session.close());
