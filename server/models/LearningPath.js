@@ -45,19 +45,22 @@ class LearningPath {
 
   static async findById(session, id) {
     const query = `
-      MATCH (start: SequenceStart {seqId: {seqId}})
-      MATCH ()-[rel :NEXT {seqId: {seqId}]->(c: Course)
+      MATCH (start: SequenceStart { seqId: toInteger($id) })
+      MATCH ()-[rel :NEXT { seqId: toInteger($id) }]->(c: Course)
       MATCH (author: User)-[:CREATED]->(start)
       RETURN author, start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
     `;
 
-    const results = session.run(query, {seqId: id});
+    const results = await session.run(query, { id });
+    if (results.records.length === 0) {
+      return undefined;
+    }
 
     let startNode, courseNodes, rels;
 
     let records = results.records[0];
 
-    let authorID = records.get('author')[0].properties.userID;
+    let authorID = records.get('author').properties.userID.toNumber();
 
     let start = records.get('start');
     let { name, rating } = start.properties;
