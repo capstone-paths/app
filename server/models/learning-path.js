@@ -2,7 +2,6 @@ const uuid = require('uuid/v4');
 const Joi  = require('joi');
 
 const User = require('./User');
-const LPStartSchema = require('./schema/LPStartSchema');
 
 exports.createLearningPath = async (session, learningPathStartData, relationships) => {
   // Give the sequence an id

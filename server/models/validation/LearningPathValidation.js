@@ -1,21 +1,6 @@
 const Joi = require('joi');
 
-const LearningPathStartSchema = {
-  id: Joi.string().guid(),
-  name: Joi.string().alphanum().min(2).max(30).required()
-}
-
-/**
- * Validates whether the start node info is correct
- * @param {Object} learningPathStartData The data for the starting node 
- */
-const validateStartNode = async (learningPathStartData) => {
-  const schema = Joi.object().keys(LearningPathStartSchema);
-  const { error } = await Joi.validate(learningPathStartData, schema);
-  if (error) {
-    throw { status: 400, message: error };
-  }
-}
+const ValidationError = require('./ValidationError');
 
 /**
  * Checks if all courses in a given relationship exist
@@ -25,7 +10,7 @@ const validateStartNode = async (learningPathStartData) => {
  * @returns {Boolean}
  */
 const checkIfAllCoursesExist = async (session, relationships) => {
-  console.log('check if all courses');
+  console.log('checkIfAllCoursesExist');
   let courseSet = new Set();
   relationships.forEach(rel => {
     courseSet.add(rel.start);
@@ -35,12 +20,17 @@ const checkIfAllCoursesExist = async (session, relationships) => {
 
   let query = `
     UNWIND {courseIDList} AS courseID
-    MATCH (c: Course { id: {courseID} })
-    RETURN count(c) AS count
+    MATCH (c: Course { courseID: {courseID} })
+    WITH collect(c.courseID) AS hits
+    RETURN [x in {courseIDList} WHERE not(x in hits)] as missing
   `;
 
   const res = await session.run(query, { courseIDList });
-  return res.get('count').toNumber() === courseIDList.length;
+  let missing = res.get('missing');
+  if (missing.length > 0) {
+    let ids = missing.map(item => item.toNumber());
+    throw new ValidationError(`Some course IDs do not exist: ${ids}`);
+  }
 };
 
-module.exports = { validateStartNode, checkIfAllCoursesExist };
+module.exports = { checkIfAllCoursesExist };
