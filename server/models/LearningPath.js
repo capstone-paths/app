@@ -69,7 +69,7 @@ class LearningPath {
 
     // TODO: Create a generic serialization layer that does this
     // It should be able to pull it from a schema and do it for any object
-    let startNode, courseNodes, rels;
+    let courseNodes, rels;
 
     let records = results.records[0];
 
@@ -88,6 +88,33 @@ class LearningPath {
       sequence: sequenceData,
       courseNodes, 
       rels 
+    };
+  }
+
+    /**
+   * Finds a sequence by id
+   * @param {Session} session 
+   * @param {Integer} id 
+   */
+  static async findAll(session, id) {
+    const query = `
+      MATCH (s: Sequence)
+      RETURN s as sequence
+    `;
+
+    const results = await session.run(query, { id });
+    if (results.records.length === 0) {
+      return undefined;
+    }
+
+    let records = results.records[0];
+
+    let sequenceData = records.get('sequence').map((sequence) => {
+      return sequence.properties
+    });
+    
+    return { 
+      sequences: sequenceData
     };
   }
 
