@@ -3,10 +3,8 @@
  * Controller handling all learning-path requests
  */
 const express = require('express');
-const driver = require('../config/neo4j');
-
+const utils = require('../utils');
 const router = express.Router();
-
 const LearningPath = require('../models/LearningPath');
 
 
@@ -21,7 +19,7 @@ router.get('/:id', (req, res, next) => {
     res.status(400);
   }
 
-  const session = driver.session();
+  const session = utils.getDBSession(req);
   LearningPath
     .findById(session, req.params.id)
     .then((result) => {
@@ -46,7 +44,7 @@ router.post('/', (req, res, next) => {
     res.status(400);
   }
 
-  const session = driver.session();
+  const session = utils.getDBSession(req);
   const lp = new LearningPath(data);
 
   lp
@@ -69,7 +67,7 @@ router.get('/:id/recommendation', (req, res, next) => {
     MATCH (c: Course) RETURN c as course, rand() as r order by r limit 1
   `;
 
-  const session = driver.session();
+  const session = utils.getDBSession(req);
   session
     .run(query)
     .then((results) => {
