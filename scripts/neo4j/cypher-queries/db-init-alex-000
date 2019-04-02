@@ -34,46 +34,46 @@ CREATE ( u005: User { userID: 4, username: 'Stephen' } )
 
 
 // sequence 1
-CREATE ( beg1: SequenceStart { seqId: 1, name: 'Path to Compilers', rating: 4.77 } )
-CREATE ( end1: SequenceEnd { seqId: 1 } )
+CREATE ( beg1: PathStart { seqID: 1, name: 'Path to Compilers', rating: 4.77 } )
+CREATE ( end1: PathEnd { seqID: 1 } )
 CREATE
-    (beg1)-[:NEXT { seqId: 1 }]->(cs50),
-    (cs50)-[:NEXT { seqId: 1 }]->(palg),
-    (palg)-[:NEXT { seqId: 1 }]->(nand),
-    (nand)-[:NEXT { seqId: 1 }]->(gtos),
-    (nand)-[:NEXT { seqId: 1 }]->(comp),
-    (comp)-[:NEXT { seqId: 1 }]->(end1),
-    (gtos)-[:NEXT { seqId: 1 }]->(end1)
+    (beg1)-[:NEXT { seqID: 1 }]->(cs50),
+    (cs50)-[:NEXT { seqID: 1 }]->(palg),
+    (palg)-[:NEXT { seqID: 1 }]->(nand),
+    (nand)-[:NEXT { seqID: 1 }]->(gtos),
+    (nand)-[:NEXT { seqID: 1 }]->(comp),
+    (comp)-[:NEXT { seqID: 1 }]->(end1),
+    (gtos)-[:NEXT { seqID: 1 }]->(end1)
 CREATE
     (u001)-[:CREATED]->(beg1)
 
 // sequence 2
-CREATE ( beg2: SequenceStart { seqId: 2, name: 'Machine Learning for Non-Programmers', rating: 4.27 } )
-CREATE ( end2: SequenceEnd { seqId: 2 } )
+CREATE ( beg2: PathStart { seqID: 2, name: 'Machine Learning for Non-Programmers', rating: 4.27 } )
+CREATE ( end2: PathEnd { seqID: 2 } )
 CREATE
-    (beg2)-[:NEXT { seqId: 2 }]->(math),
-    (beg2)-[:NEXT { seqId: 2 }]->(mit6),
-    (beg2)-[:NEXT { seqId: 2 }]->(prob),
-    (mit6)-[:NEXT { seqId: 2 }]->(salg),
-    (math)-[:NEXT { seqId: 2 }]->(stml),
-    (prob)-[:NEXT { seqId: 2 }]->(stml),
-    (salg)-[:NEXT { seqId: 2 }]->(stml),
-    (stml)-[:NEXT { seqId: 2 }]->(end2)
+    (beg2)-[:NEXT { seqID: 2 }]->(math),
+    (beg2)-[:NEXT { seqID: 2 }]->(mit6),
+    (beg2)-[:NEXT { seqID: 2 }]->(prob),
+    (mit6)-[:NEXT { seqID: 2 }]->(salg),
+    (math)-[:NEXT { seqID: 2 }]->(stml),
+    (prob)-[:NEXT { seqID: 2 }]->(stml),
+    (salg)-[:NEXT { seqID: 2 }]->(stml),
+    (stml)-[:NEXT { seqID: 2 }]->(end2)
 CREATE
     (u002)-[:CREATED]->(beg2)
 
 // sequence 3
-CREATE ( beg3: SequenceStart { seqId: 3, name: 'Full Stack Web Dev with Python and React', rating: 4.57 } )
-CREATE ( end3: SequenceEnd { seqId: 3 } )
+CREATE ( beg3: PathStart { seqID: 3, name: 'Full Stack Web Dev with Python and React', rating: 4.57 } )
+CREATE ( end3: PathEnd { seqID: 3 } )
 CREATE
-    (beg3)-[:NEXT { seqId: 3 }]->(cs50),
-    (cs50)-[:NEXT { seqId: 3 }]->(palg),
-    (cs50)-[:NEXT { seqId: 3 }]->(wb50),
-    (cs50)-[:NEXT { seqId: 3 }]->(reac),
-    (reac)-[:NEXT { seqId: 3 }]->(rout),
-    (palg)-[:NEXT { seqId: 3 }]->(netw),
-    (netw)-[:NEXT { seqId: 3 }]->(end3),
-    (rout)-[:NEXT { seqId: 3 }]->(end3)
+    (beg3)-[:NEXT { seqID: 3 }]->(cs50),
+    (cs50)-[:NEXT { seqID: 3 }]->(palg),
+    (cs50)-[:NEXT { seqID: 3 }]->(wb50),
+    (cs50)-[:NEXT { seqID: 3 }]->(reac),
+    (reac)-[:NEXT { seqID: 3 }]->(rout),
+    (palg)-[:NEXT { seqID: 3 }]->(netw),
+    (netw)-[:NEXT { seqID: 3 }]->(end3),
+    (rout)-[:NEXT { seqID: 3 }]->(end3)
 CREATE
     (u003)-[:CREATED]->(beg3)
     
