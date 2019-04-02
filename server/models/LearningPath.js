@@ -56,10 +56,9 @@ class LearningPath {
    */
   static async findById(session, id) {
     const query = `
-      MATCH (start: SequenceStart { seqId: toInteger($id) })
-      MATCH ()-[rel :NEXT { seqId: toInteger($id) }]->(c: Course)
-      MATCH (author: User)-[:CREATED]->(start)
-      RETURN author, start, collect(DISTINCT c) AS courses, collect(DISTINCT rel) as rels
+      MATCH (s: Sequence {sequence_id: $id})
+      MATCH ()-[rel :NEXT {sequence_id: $id}]->(c: Course)
+      RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).course_id,endNode(rel).course_id]) as rels
     `;
 
     const results = await session.run(query, { id });
@@ -74,23 +73,22 @@ class LearningPath {
 
     let records = results.records[0];
 
-    let authorID = records.get('author').properties.userID.toNumber();
-
-    let start = records.get('start');
-    let { name, rating } = start.properties;
-    startNode = { nodeId: start.identity.toNumber(), type: 'Start', name, rating };
+    let sequence = records.get('sequence');
+    let sequenceData = sequence.properties;
 
     courseNodes = records.get('courses').map((course) => {
-      let { name, institution } = course.properties;
-      return { nodeId: course.identity.toNumber(), type: 'Course', name, institution };
+      return course.properties
     });
 
     rels = records.get('rels').map((rel) => {
-      let { start, end } = rel;
-      return { start: start.toNumber(), end: end.toNumber() };
+      return { start: rel[0], end: rel[1] };
     });
 
-    return { authorID, startNode, courseNodes, rels };
+    return { 
+      sequence: sequenceData,
+      courseNodes, 
+      rels 
+    };
   }
 
   // TODO: Need to think about this

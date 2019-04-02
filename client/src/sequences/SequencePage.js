@@ -9,8 +9,8 @@ class SequencePage extends Component {
         this.api = new LerntApi();
         this.api.getSequence(props.sequenceId)
         .then((response) => {
-            console.log(response.data.data)
-            this.setState({loaded:true, data: response.data.data})
+            console.log(response.data)
+            this.setState({loaded:true, data: response.data})
         });
     }
     render() {

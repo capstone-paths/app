@@ -13,7 +13,7 @@ export default class CouseNetworkVis extends Component {
       this.api.getSequence(props.sequenceId)
         .then((response) => {
           console.log(response)
-          let nodes = response.data.data.courseNodes.map((course) => {
+          let nodes = response.data.courseNodes.map((course) => {
             return {
                 font: { multi: "md", face: "arial", size:20 },
                 color: {background:'white', border:'black'},
@@ -21,7 +21,7 @@ export default class CouseNetworkVis extends Component {
                 label: "*" + course.Title + "*\n" + course.Partner,
               };
           })
-          let edges = response.data.data.rels.map((rel) =>{
+          let edges = response.data.rels.map((rel) =>{
             return {
                     from: rel.start,
                     to: rel.end,
