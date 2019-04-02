@@ -9,6 +9,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const logger = require('./config/winston');
+const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
+
 
 // Import routers
 const learningPaths = require('./routes/learning-paths');
@@ -21,6 +23,8 @@ app.use(compression());
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(neo4jSessionCleanup);
+
 
 // Plug in routers
 app.use('/api/learning-paths', learningPaths);
