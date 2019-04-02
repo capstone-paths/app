@@ -61,9 +61,6 @@ class LearningPath {
       RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).course_id,endNode(rel).course_id]) as rels
     `;
 
-
-    console.log('find user by id: ', id, session);
-
     const results = await session.run(query, { id });
     if (results.records.length === 0) {
       return undefined;
