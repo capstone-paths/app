@@ -7,7 +7,7 @@ class SequencePage extends Component {
         super(props);
         this.state = {loaded: false};
         this.api = new LerntApi();
-        this.api.getSequence(props.sequenceId)
+        this.api.getSequence(props.match.params.sequenceId)
         .then((response) => {
             console.log(response.data)
             this.setState({loaded:true, data: response.data})
@@ -22,7 +22,6 @@ class SequencePage extends Component {
         }
     return (
         <div>
-            test
             <h1>{this.state.loaded ? this.state.data.sequence.sequence_name : '' }</h1>
             <h3>{this.state.loaded ? this.state.data.sequence.author : '' }</h3>
 
