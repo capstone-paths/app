@@ -3,7 +3,6 @@ from neo4j import GraphDatabase
 #import hashlib
 import uuid
 from datetime import datetime
-from urllib.parse import quote # library to escape urls
 import import_params #get database parameters - database host, user name, pwd etc
 
 #.env file needs to be in current director of the following format
@@ -97,7 +96,7 @@ with open('./moocdata.json') as json_file:
         modCourse['cost']     = parse_cost(course['Cost'])      # cost
         modCourse['duration'] = parse_duration(course['Duration'])      # course duration
         modCourse['subject']  = course['Subject'].strip()      # subject
-        modCourse['url']      = quote(course['URL'].strip(), safe='')  # escape url
+        modCourse['url']      = course['URL'].strip()  # escape url
         modCourse['provider']  = course['Provider'].strip()      # provider
         modCourse['language']  = course['Language'].strip()      # language
         modCourse['startDate'] = parse_date(course['Start Date'])      # course start date
