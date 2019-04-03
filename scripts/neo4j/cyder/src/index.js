@@ -2,56 +2,78 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const neo4j = require('neo4j-driver').v1;
+const { PythonShell } = require('python-shell');
 
 const { Command, flags } = require('@oclif/command');
 const { cli } = require('cli-ux');
 
+const pyScriptPath = path.resolve('..', 'db-init-dump', 'python-scripts', 'course_loader.py');
+
 class CyderCommand extends Command {
   async run() {
     const { flags } = this.parse(CyderCommand);
-    const { file, uri, user, password, shouldDelete } = await this.processArgs(flags);
+    const { file, uri, user, password, shouldReset } = await this.processArgs(flags);
 
     // This will fail loudly if the file doesn't exist
-    const filePath = path.resolve(__dirname, '..', '..', 'cypher-queries', file);
-    const query = fs.readFileSync(filePath, 'utf8');
+    if (file) {
+      const filePath = path.resolve(__dirname, '..', '..', 'cypher-queries', file);
+      const query = fs.readFileSync(filePath, 'utf8');
+    }
 
     const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
     const session = driver.session();
 
-    if (shouldDelete) {
-      this.log('Wiping the database...');
+    if (shouldReset) {
+      this.log('Resetting the database...');
       try {
         await session.run('MATCH (n) DETACH DELETE n');
+        // PythonShell.run(pyScriptPath, null, (error) => {
+        //   if (error) throw error;
+        //   session.close();
+        //   this.log('Database courses reset');
+        // });
+        console.log('pythonPath', pyScriptPath);
+        const { spawn } = require('child_process');
+        const pyScript = spawn('python', [pyScriptPath]);
+        pyScript.stderr.on('data', (data) => {
+          throw new Error(data);
+        });
+
+        this.log("Done!");
+        session.close();
       }
       catch (e) {
         session.close();
-        this.error('Deletion failed: ' + e);
+        this.error('Resetting failed: ' + e);
         this.exit(1);
       }
     }
-    
-    try {
-      await session.run(query);
-    }
-    catch (e) {
-      session.close();
-      this.error('Query read failed: ' + e);
-      this.exit(1);
-    }
+    else {
+      try {
+        await session.run(query);
+      }
+      catch (e) {
+        session.close();
+        this.error('Query read failed: ' + e);
+        this.exit(1);
+      }
 
-    session.close();
-    this.log('Query completed successfully!');
-    this.exit(0);
+      session.close();
+      this.log('Query completed successfully!');
+      this.exit(0);
+      }
+    
   }
 
   async processArgs(flags) {
-    const file = flags.file || process.env.DEFAULT_FILE; 
+    let file = flags.file; 
     const uri = flags.uri || process.env.NEO4J_URI;
     const user = flags.user || process.env.NEO4J_USER;
     const password = flags.password || process.env.NEO4J_PASSWORD;
+    const reset = flags.reset;
 
     let missing = [];
-    if (!file) missing.push('file');
+    if (!file && !reset) missing.push('file');
     if (!uri) missing.push('URI');
     if (!user) missing.push('user');
     if (!password) missing.push('password');
@@ -62,15 +84,15 @@ class CyderCommand extends Command {
       this.exit(1);
     }
 
-    if (flags.delete) {
-      const reply = await cli.prompt('This will wipe the database, are you sure? y/n');
+    if (reset) {
+      const reply = await cli.prompt('This will wipe the database and set it to the default init state, are you sure? y/n');
       if (reply !== 'y') {
         this.exit(0);
       }
     }
-    const shouldDelete = flags.delete;
+    const shouldReset = flags.reset;
 
-    return { file, uri, user, password, shouldDelete };
+    return { file, uri, user, password, shouldReset };
   }
 }
 
@@ -87,7 +109,7 @@ CyderCommand.flags = {
   uri: flags.string({ char: 'i', description: 'Neo4j URI' }),
   user: flags.string({ char: 'u', description: 'Neo4j user' }),
   password: flags.string({ char: 'p', description: 'Neo4j password' }),
-  delete: flags.boolean({ char: 'd', description: 'deletes the database clean before reading the file in' }),
+  reset: flags.boolean({ char: 'r', description: 'resets the database to the initial state'})
 }
 
 module.exports = CyderCommand;
