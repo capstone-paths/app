@@ -1,7 +1,9 @@
 
 'data.dump' is a dump of the Neo4j database instance which has all scraped courses inserted as nodes and couple of researched sequences built in.
+'data_course_only.dump' - contains scrapped courses only with relationships to Institution and Subject
 
-In order to initialize the Neo4j graph database from the dump you will need to do the following,
+In order to initialize the Neo4j graph database from the dump you will need to do the following, instructions are for loading
+'data.dump' the same can be followed for other .dump files.
 
 1. Find the location of,
 a) Your Neo4j installation and the bin folder within it. This 'bin' folder has neo4j-admin utility which is needed to load
