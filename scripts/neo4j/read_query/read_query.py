@@ -5,7 +5,7 @@ import import_params
 
 filename = sys.argv[1]
 cur = os.path.dirname(os.path.abspath(__file__))
-joined = os.path.join(cur, "../cypher-queries" + "/" + filename)
+joined = os.path.join(cur, "../cypher_queries" + "/" + filename)
 path = os.path.normpath(joined)
 
 with open(path, 'r') as file:
