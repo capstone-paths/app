@@ -12,6 +12,9 @@ CREATE ( u003: User { userID: 2, username: 'Sam' } )
 CREATE ( u004: User { userID: 3, username: 'Jon' } )
 CREATE ( u005: User { userID: 4, username: 'Stephen' } )
 
+// This is a trick to separate commands
+WITH count(*) as dummy
+
 // Use this pattern for substituion
 // OPTIONAL MATCH (xxxx: Course) WHERE toLower(x.name) CONTAINS 'x'
 
@@ -31,6 +34,8 @@ MATCH (test: Course) WHERE toLower(test.name) CONTAINS 'software testing' AND to
 MATCH (secu: Course) WHERE toLower(secu.name) CONTAINS 'software security'
 MATCH (mobi: Course) WHERE toLower(mobi.name) CONTAINS 'multiplatform mobile app development with react'
 
+MATCH (sam: User { username: 'Sam' })
+
 // Sam Sequence #1 Relationships
 MERGE (st01: PathStart { pathID: 1, name: "Sam Chao's Front End Development" })-[:BELONGS_TO {trackID: 1}]->(tr01: Track { trackID: 1, name: 'Front End Development' })
 MERGE (st01)-[:NEXT {pathID: 1}]->(pfjs)
@@ -44,6 +49,7 @@ MERGE (feui)-[:NEXT {pathID: 1}]->(reac)
 MERGE (feui)-[:NEXT {pathID: 1}]->(reac)
 MERGE (reac)-[:NEXT {pathID: 1}]->(mobi)
 MERGE (mobi)-[:NEXT {pathID: 1}]->(tr01)
+MERGE (sam)-[:CREATED]->(st01)
 
 // Sam Sequence #2 Relationships
 MERGE (st02: PathStart { pathID: 2, name: "Sam Chao's Full Stack Development" })-[:BELONGS_TO {trackID: 2}]->(tr02: Track { trackID: 2, name: 'Full Stack Development' })
@@ -63,14 +69,4 @@ MERGE (mong)-[:NEXT {pathID: 2}]->(ssdv)
 MERGE (ssdv)-[:NEXT {pathID: 2}]->(test)
 MERGE (test)-[:NEXT {pathID: 2}]->(secu)
 MERGE (secu)-[:NEXT {pathID: 2}]->(tr02)
-
-
-// This trick is to separate Neo4j commands
-WITH COUNT(*) AS separation
-
-
-
-    
-
-MATCH (xxxx: Course) WHERE toLower(x.name) CONTAINS 'x'
-    (x)-[:NEXT {pathID: x}]->(x)
+MERGE (sam)-[:CREATED]->(st02)
