@@ -3,6 +3,7 @@ from neo4j import GraphDatabase
 #import hashlib
 import uuid
 from datetime import datetime
+from urllib.parse import quote # library to escape urls
 import import_params #get database parameters - database host, user name, pwd etc
 
 #.env file needs to be in current director of the following format
@@ -40,12 +41,10 @@ def parse_effort(effort_desc):
     effort = { "lower": 0,
                "upper": 0
              }
-
     if (len(effort_list) == 2): # if range of effort available
         effort['lower'], effort['upper'] = effort_list
     elif (len(effort_list) == 1):
         effort['lower'] = effort['upper'] = effort_list[0]
-
     return effort
     '''
 
@@ -96,7 +95,7 @@ with open('./moocdata.json') as json_file:
         modCourse['cost']     = parse_cost(course['Cost'])      # cost
         modCourse['duration'] = parse_duration(course['Duration'])      # course duration
         modCourse['subject']  = course['Subject'].strip()      # subject
-        modCourse['url']      = course['URL'].strip()  # escape url
+        modCourse['url']      = quote(course['URL'].strip(), safe='')  # escape url
         modCourse['provider']  = course['Provider'].strip()      # provider
         modCourse['language']  = course['Language'].strip()      # language
         modCourse['startDate'] = parse_date(course['Start Date'])      # course start date
