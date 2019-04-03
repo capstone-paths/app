@@ -2,9 +2,12 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const neo4j = require('neo4j-driver').v1;
+const { PythonShell } = require('python-shell');
 
 const { Command, flags } = require('@oclif/command');
 const { cli } = require('cli-ux');
+
+const pyScriptPath = path.resolve('..', 'db-init-dump', 'python-scripts', 'course_loader.py');
 
 class CyderCommand extends Command {
   async run() {
@@ -24,11 +27,20 @@ class CyderCommand extends Command {
       this.log('Resetting the database...');
       try {
         await session.run('MATCH (n) DETACH DELETE n');
-        PythonShell.run(pyScriptPath, null, (error) => {
-          if (error) throw error;
-          session.close();
-          this.log('Database courses reset');
+        // PythonShell.run(pyScriptPath, null, (error) => {
+        //   if (error) throw error;
+        //   session.close();
+        //   this.log('Database courses reset');
+        // });
+        console.log('pythonPath', pyScriptPath);
+        const { spawn } = require('child_process');
+        const pyScript = spawn('python', [pyScriptPath]);
+        pyScript.stderr.on('data', (data) => {
+          throw new Error(data);
         });
+
+        this.log("Done!");
+        session.close();
       }
       catch (e) {
         session.close();
