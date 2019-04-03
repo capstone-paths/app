@@ -24,7 +24,6 @@ class CyderCommand extends Command {
       this.log('Resetting the database...');
       try {
         await session.run('MATCH (n) DETACH DELETE n');
-        console.log('pyScriptPath', pyScriptPath);
         PythonShell.run(pyScriptPath, null, (error) => {
           if (error) throw error;
           session.close();

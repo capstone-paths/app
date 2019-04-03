@@ -36,6 +36,7 @@
   },
   "repository": "alexerhardt/cyder",
   "scripts": {
-    "test": "echo NO TESTS"
+    "test": "echo NO TESTS",
+    "postinstall": "cd ../db-init-dump/python-scripts && ./course_loader_install.sh"
   }
 }
