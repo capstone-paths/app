@@ -58,7 +58,7 @@ class LearningPath {
     const query = `
       MATCH (s: PathStart {pathID: $id})
       MATCH ()-[rel :NEXT {pathID: $id}]->(c: Course)
-      RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).course_id,endNode(rel).course_id]) as rels
+      RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).courseID, endNode(rel).courseID]) as rels
     `;
 
     const results = await session.run(query, { id });

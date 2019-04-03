@@ -28,3 +28,6 @@ node_modules/
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .vscode/launch.json
+
+# Python caches
+__pycache__/

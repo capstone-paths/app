@@ -29,7 +29,6 @@ const checkIfAllCoursesExist = async (session, relationships) => {
   const records = res.records;
   let missing = records[0].get('missing');
   if (missing.length > 0) {
-    let ids = missing.map(item => item.toNumber());
     throw new ValidationError(`Some course IDs do not exist: ${ids}`);
   }
 };
