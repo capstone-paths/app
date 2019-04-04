@@ -63,7 +63,6 @@ export default class CouseNetworkVis extends Component {
       });
     this.api.getCourses().then((response) => {
       var courses = response.data.courses;
-      courses = courses.map(course => {return course.name});
       var state = this.state != null ? this.state : {};
       state.courses = courses;
       this.setState(state);
@@ -82,15 +81,31 @@ export default class CouseNetworkVis extends Component {
       manipulation: {
         enabled: true,
         addNode: (nodeData, callback) => {
-          this.api.getSequenceNodeRecommendation(this.sequenceId)
-            .then((response) => {
-              let course = response.data.data.course;
+          var input = document.getElementById("awesomplete");
+          input.addEventListener('awesomplete-selectcomplete',
+            e => {
+              let course = e.text.value;
               nodeData.font = { multi: "md", face: "arial" };
               nodeData.color = { background: 'white', border: 'black' };
               nodeData.id = course.courseID;
               nodeData.label = "*" + course.name + "*\n" + course.institution;
+              //todo something better
+              nodeData.level = 5;
               callback(nodeData);
-            });
+            },
+            false);
+
+          // this.api.getSequenceNodeRecommendation(this.sequenceId)
+          //   .then((response) => {
+          //     let course = response.data.data.course;
+          //     nodeData.font = { multi: "md", face: "arial" };
+          //     nodeData.color = { background: 'white', border: 'black' };
+          //     nodeData.id = course.courseID;
+          //     nodeData.label = "*" + course.name + "*\n" + course.institution;
+          //     console.log(nodeData);
+
+          //     callback(nodeData);
+          //   });
         }
       },
       layout: {
@@ -117,8 +132,10 @@ export default class CouseNetworkVis extends Component {
     if (this.state.courses != null) {
       var input = document.getElementById("awesomplete");
       new Awesomplete(input, {
-        list: this.state.courses
+        list: this.state.courses.map(course => { return { "label": course.name, "value": course } })
       });
+      input.addEventListener('awesomplete-selectcomplete', function (e) { console.log(e); }, false);
+
     }
   }
   render() {
