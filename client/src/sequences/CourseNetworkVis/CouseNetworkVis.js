@@ -74,6 +74,7 @@ export default class CouseNetworkVis extends Component {
         enabled: true,
         addNode: (nodeData, callback) => {
           var input = document.getElementById("awesomplete");
+          //TODO figure out a better way to get value from child component 
           input.addEventListener('awesomplete-selectcomplete',
             e => {
               let course = e.text.value;
@@ -81,7 +82,7 @@ export default class CouseNetworkVis extends Component {
               nodeData.color = { background: 'white', border: 'black' };
               nodeData.id = course.courseID;
               nodeData.label = "*" + course.name + "*\n" + course.institution;
-              //todo something better
+              //todo something better. The new nodes shouldn't always be level 5
               nodeData.level = 5;
               callback(nodeData);
             },
@@ -110,7 +111,7 @@ export default class CouseNetworkVis extends Component {
   }
   render() {
     return <div>
-      <AddCourseModal />
+      <AddCourseModal/>
       <div id="course-sequence" className="course-sequence"></div>
     </div>;
   }
