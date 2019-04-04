@@ -36,7 +36,7 @@ class LoginForm extends Component {
               </Segment>
             </Form>
             <Message>
-              Are you a new Lerner? <a href='#'>Enroll</a>
+              Are you a new Lerner? Enroll
             </Message>
           </Grid.Column>
         </Grid>
