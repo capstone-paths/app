@@ -28,6 +28,7 @@ export default class CouseNetworkVis extends Component {
             input.addEventListener('awesomplete-selectcomplete', function (e) { console.log(e); }, false);
         }
     }
+    render() {
         return <div>
             <input id="awesomplete" />
         </div>;
