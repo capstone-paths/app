@@ -5,6 +5,18 @@ import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import './CouseNetworkVis.css';
 
+function findLevel(nodeId,edges) {
+  var edge = edges.filter(edge => {return edge.to === nodeId}).pop();
+  if(edge.from == null){
+    return 1;
+  }else{
+    edges = edges.filter(e => {
+      return e.from !== edge.from && e.to !== edge.to;
+    });
+    return 1 + findLevel(edge.from, edges);
+  }
+}
+
 export default class CouseNetworkVis extends Component {
     constructor(props) {
       super(props);
@@ -12,10 +24,9 @@ export default class CouseNetworkVis extends Component {
       this.sequenceId = props.sequenceId;
       this.api.getSequence(props.sequenceId)
         .then((response) => {
-          console.log(response)
-          let nodes = response.data.courseNodes.map((course) => {
+          var nodes = response.data.courseNodes.map((course) => {
             return {
-                font: { multi: "md", face: "arial", size:20 },
+                font: { multi: "md", face: "arial"},
                 color: {background:'white', border:'black'},
                 id: course.courseID,
                 label: "*" + course.name + "*\n" + course.institution,
@@ -31,19 +42,31 @@ export default class CouseNetworkVis extends Component {
                     }
                   };
           });
-          console.log(edges)
+          //created object contained all nodes indexed by id
+          let nodesById = {};
+          nodes.forEach(node => {
+            nodesById[node.id] = node; 
+          });
+
+          nodes = nodes.map((node) => {
+            // node.level = Math.round(Math.random()*5);
+            node.level = findLevel(node.id, edges);
+            return node;
+          });
+
           this.setState({
               nodes: nodes,
               edges: edges
-          })
+          });
      });
       this.sequenceId = props.sequenceId;
     }
+    
     componentDidUpdate(prevProps, prevState, snapshot){
         var nodes = new vis.DataSet(this.state.nodes);
         var edges = new vis.DataSet(this.state.edges);
         var container = document.getElementById("course-sequence");
-        console.log(edges);
+
         var data = {
           nodes: nodes,
           edges: edges
@@ -54,9 +77,8 @@ export default class CouseNetworkVis extends Component {
             addNode: (nodeData,callback) => {
               this.api.getSequenceNodeRecommendation(this.sequenceId)
               .then((response) => {
-                console.log(response);
                 let course = response.data.data.course;
-                nodeData.font =  { multi: "md", face: "arial", size:20 };
+                nodeData.font =  { multi: "md", face: "arial" };
                 nodeData.color = {background:'white', border:'black'};
                 nodeData.id = course.courseID;
                 nodeData.label =  "*" + course.name + "*\n" + course.institution;
@@ -81,7 +103,7 @@ export default class CouseNetworkVis extends Component {
           edges: {
             length: 335
           },
-          interaction:{hover:true}
+          // interaction:{hover:true}
 			    
         };
         new vis.Network(container, data, options);

@@ -16,7 +16,7 @@ class SequencePage extends Component {
     render() {
         let vis;
         if(this.state.loaded){
-            vis = <CouseNetworkVis sequenceId={1}></CouseNetworkVis>
+            vis = <CouseNetworkVis sequenceId={this.props.match.params.sequenceId}></CouseNetworkVis>
         } else{
             vis = <div>loading</div>
         }
