@@ -1,12 +1,10 @@
 import vis from 'vis';
 import 'vis/dist/vis-network.min.css';
 
-import Awesomplete from 'awesomplete';
-import 'awesomplete/awesomplete.css';
-
 import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import './CouseNetworkVis.css';
+import AddCourseModal from '../AddCourseModal/AddCourseModal'
 
 function findLevel(nodeId, edges) {
   var edge = edges.filter(edge => { return edge.to === nodeId }).pop();
@@ -61,12 +59,6 @@ export default class CouseNetworkVis extends Component {
         state.edges = edges;
         this.setState(state);
       });
-    this.api.getCourses().then((response) => {
-      var courses = response.data.courses;
-      var state = this.state != null ? this.state : {};
-      state.courses = courses;
-      this.setState(state);
-    });
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
     var nodes = new vis.DataSet(this.state.nodes);
@@ -94,18 +86,6 @@ export default class CouseNetworkVis extends Component {
               callback(nodeData);
             },
             false);
-
-          // this.api.getSequenceNodeRecommendation(this.sequenceId)
-          //   .then((response) => {
-          //     let course = response.data.data.course;
-          //     nodeData.font = { multi: "md", face: "arial" };
-          //     nodeData.color = { background: 'white', border: 'black' };
-          //     nodeData.id = course.courseID;
-          //     nodeData.label = "*" + course.name + "*\n" + course.institution;
-          //     console.log(nodeData);
-
-          //     callback(nodeData);
-          //   });
         }
       },
       layout: {
@@ -125,22 +105,12 @@ export default class CouseNetworkVis extends Component {
       edges: {
         length: 335
       },
-      // interaction:{hover:true}
-
     };
     new vis.Network(container, data, options);
-    if (this.state.courses != null) {
-      var input = document.getElementById("awesomplete");
-      new Awesomplete(input, {
-        list: this.state.courses.map(course => { return { "label": course.name, "value": course } })
-      });
-      input.addEventListener('awesomplete-selectcomplete', function (e) { console.log(e); }, false);
-
-    }
   }
   render() {
     return <div>
-      <input id="awesomplete" />
+      <AddCourseModal />
       <div id="course-sequence" className="course-sequence"></div>
     </div>;
   }
