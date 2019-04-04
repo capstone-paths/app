@@ -48,7 +48,6 @@ class Profile extends Component {
                             <Label>Java</Label> <Label>C</Label>
                             <br></br>
                             <Header as='h3'>Experinece With</Header>
-                            <br></br>
                             <Label>Web Development</Label>
                         </Card.Content>
                     </Card>
