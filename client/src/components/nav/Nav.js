@@ -22,11 +22,10 @@ export default class Nav extends Component {
         </Menu.Item>
         <Menu.Item as={ Link } to="/profile"> Profile</Menu.Item>
 
-        <Dropdown item simple text="Learning Paths">
+        <Dropdown item simple text="Browse Offerings">
           <Dropdown.Menu>
-          <Dropdown.Header>Sam Chao's</Dropdown.Header>
-            <Dropdown.Item as={ Link } to="/learning-path/1">Front End Developer</Dropdown.Item>
-            <Dropdown.Item as={ Link } to="/learning-path/2">Full Stack Developer</Dropdown.Item>
+            <Dropdown.Item as={ Link } >Course Search</Dropdown.Item>
+            <Dropdown.Item as={ Link } >Sequence Search</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <Menu.Menu position='right'>
