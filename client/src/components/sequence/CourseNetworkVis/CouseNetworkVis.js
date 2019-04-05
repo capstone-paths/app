@@ -2,9 +2,8 @@ import vis from 'vis';
 import 'vis/dist/vis-network.min.css';
 
 import React, { Component } from 'react';
-import LerntApi from '../../LerntApi'
+import LerntApi from '../../../LerntApi'
 import './CouseNetworkVis.css';
-import AddCourseModal from '../AddCourseModal/AddCourseModal'
 
 function findLevel(nodeId, edges) {
   var edge = edges.filter(edge => { return edge.to === nodeId }).pop();
@@ -21,7 +20,7 @@ function findLevel(nodeId, edges) {
 export default class CouseNetworkVis extends Component {
   constructor(props) {
     super(props);
-
+    this.onCourseSelect = props.onCourseSelect;
     this.api = new LerntApi();
     this.sequenceId = props.sequenceId;
     this.api.getSequence(props.sequenceId)
@@ -44,12 +43,6 @@ export default class CouseNetworkVis extends Component {
             }
           };
         });
-        //created object contained all nodes indexed by id
-        let nodesById = {};
-        nodes.forEach(node => {
-          nodesById[node.id] = node;
-        });
-
         nodes = nodes.map((node) => {
           node.level = findLevel(node.id, edges);
           return node;
@@ -107,11 +100,43 @@ export default class CouseNetworkVis extends Component {
         length: 335
       },
     };
-    new vis.Network(container, data, options);
+    var network = new vis.Network(container, data, options);
+    
+    //when a node is selected, communicate to parent page
+    network.on("selectNode", (params) => {
+      this.onCourseSelect({ selectedCourse: params.node });
+      this.selectedCourse = params.nodes[0];
+    });
+
+    var input = document.getElementById("awesomplete");
+    //TODO figure out a better way to get value from child component 
+    input.addEventListener('awesomplete-selectcomplete',
+      e => {
+        let course = e.text.value;
+        var nodeData = {};
+        nodeData.font = { multi: "md", face: "arial" };
+        nodeData.color = { background: 'white', border: 'black' };
+        nodeData.id = course.courseID;
+        nodeData.label = "*" + course.name + "*\n" + course.institution;
+
+        nodeData.level = data.nodes._data[this.selectedCourse].level + 1;
+        let edgeData = {
+          from: this.selectedCourse,
+          to: nodeData.id ,
+          arrows: "to",
+          color: {
+            color: "blue"
+          }
+        };
+        //todo something better. The new nodes shouldn't always be level 5
+        // nodeData.level = 5;
+        data.nodes.add(nodeData);
+        data.edges.add(edgeData);
+      },
+      false);
   }
   render() {
     return <div>
-      <AddCourseModal />
       <div id="course-sequence" className="course-sequence"></div>
     </div>;
   }

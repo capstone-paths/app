@@ -2,10 +2,10 @@ import Awesomplete from 'awesomplete';
 import 'awesomplete/awesomplete.css';
 
 import React, { Component } from 'react';
-import LerntApi from '../../LerntApi'
+import LerntApi from '../../../LerntApi'
 
 
-export default class CouseNetworkVis extends Component {
+export default class AddCourseSearch extends Component {
     constructor(props) {
         super(props);
         this.state = { loaded: false };
@@ -20,7 +20,7 @@ export default class CouseNetworkVis extends Component {
         });
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.courses != null) {
+        if (this.state.courses != null && this.state.init == null ) {
             var input = document.getElementById("awesomplete");
             new Awesomplete(input, {
                 list: this.state.courses.map(course => { return { "label": course.name, "value": course } }),
@@ -29,30 +29,14 @@ export default class CouseNetworkVis extends Component {
                     this.input.value = suggestion.label;
                 }
             });
-            input.addEventListener('awesomplete-selectcomplete', (e) => {
-                console.log(e);
-                var state = this.state;
-                state.selectedCourse = e.text.value;
-                this.setState(state);
-            }, false);
+            var state = this.state;
+            state.init = true;
+            this.setState(state);
         }
     }
     render() {
-        function CourseDetails(props) {
-            const selectedCourse = props.selectedCourse;
-            if (selectedCourse) {
-                return <div> <div><label>Course Title: </label>{selectedCourse.name}</div>
-                    <div><label>Subject: {selectedCourse.subject}</label></div>
-                    <div><label>Institution: {selectedCourse.institution}</label></div>
-                </div>;
-            } else {
-                return <div></div>
-            }
-        }
-
         return <div>
             <input id="awesomplete" />
-            <CourseDetails selectedCourse={this.state.selectedCourse} />
         </div>;
     }
 }

@@ -7,7 +7,7 @@ import Nav from './components/nav/Nav';
 import HomePage from './components/home/HomePage';
 import Profile from './components/profile/Profile';
 import LoginForm from './components/login/LoginForm';
-import SequencePage from './sequences/SequencePage';
+import SequencePage from './components/sequence/SequencePage';
 import { Container } from 'semantic-ui-react';
 
 class App extends Component {
