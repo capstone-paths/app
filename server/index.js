@@ -14,6 +14,7 @@ const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 
 // Import routers
 const learningPaths = require('./routes/learning-paths');
+const courses = require('./routes/courses');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(neo4jSessionCleanup);
 
 // Plug in routers
 app.use('/api/learning-paths', learningPaths);
+app.use('/api/courses', courses);
 
 // Serve static content from React app build
 const publicPath = path.join(__dirname, '..', 'client/build');
