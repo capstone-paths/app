@@ -10,12 +10,15 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileReader;
+import java.io.LineNumberReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -135,6 +138,55 @@ public class CourseTest
         URL url = this.getClass().getResource(filename);
         String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
         session.run(init);
+    }
+
+    /**
+     * Parses a relationship file line by line and creates the necessary relationships
+     * @param filename The file with the relationship data
+     */
+    private void createRelationships(String filename) throws Throwable
+    {
+
+        LineNumberReader lr = new LineNumberReader(new FileReader(filename));
+        String line;
+        String trimmed;
+        while ((line = lr.readLine()) != null)
+        {
+            if (line.isEmpty()) { continue; }
+
+            trimmed = line.trim();
+
+            if (line.startsWith("//")) { continue; }
+
+            String[] parts = line.split(", | ");
+            if (parts.length != 6) {
+                throw new Exception("Invalid line: " + trimmed);
+            }
+            createRelationships(line);
+        }
+
+    }
+
+    private void createRelationships(String[] parts) throws Throwable
+    {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("sourceLabel", parts[0]);
+        params.put("sourceID", parts[1]);
+        params.put("relLabel", parts[2]);
+        params.put("targetLabel", parts[3]);
+        params.put("targetID", parts[4]);
+
+        // https://stackoverflow.com/q/24274364/6854595
+        String query = "CREATE (#sourceLabel# {id: {sourceID})-[#relLabel#]->(#targetLabel# {id: {targetID}})";
+        for (String key: params.keySet()) {
+            query = query.replaceAll("#" + key + "#", String.valueOf(params.get(key)));
+        }
+
+        int reps = Integer.valueOf(parts[5]);
+
+        for (int i = 0; i < reps; i++) {
+            session.run(query, params);
+        }
     }
 
 
