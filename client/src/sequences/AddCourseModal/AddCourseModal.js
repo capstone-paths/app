@@ -29,10 +29,10 @@ export default class CouseNetworkVis extends Component {
                     this.input.value = suggestion.label;
                 }
             });
-            input.addEventListener('awesomplete-selectcomplete', (e) => { 
+            input.addEventListener('awesomplete-selectcomplete', (e) => {
                 console.log(e);
                 var state = this.state;
-                state.selectedCourse = e.text.value; 
+                state.selectedCourse = e.text.value;
                 this.setState(state);
             }, false);
         }
@@ -41,14 +41,14 @@ export default class CouseNetworkVis extends Component {
         function CourseDetails(props) {
             const selectedCourse = props.selectedCourse;
             if (selectedCourse) {
-              return   <div> <div><label>Course Title: </label>{selectedCourse.name}</div>
-              <div><label>Subject: {selectedCourse.subject}</label></div>
-              <div><label>Institution: {selectedCourse.institution}</label></div>
-              </div>;
-            }else{
+                return <div> <div><label>Course Title: </label>{selectedCourse.name}</div>
+                    <div><label>Subject: {selectedCourse.subject}</label></div>
+                    <div><label>Institution: {selectedCourse.institution}</label></div>
+                </div>;
+            } else {
                 return <div></div>
             }
-          }
+        }
 
         return <div>
             <input id="awesomplete" />

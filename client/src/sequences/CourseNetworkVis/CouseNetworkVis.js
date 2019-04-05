@@ -111,7 +111,7 @@ export default class CouseNetworkVis extends Component {
   }
   render() {
     return <div>
-      <AddCourseModal/>
+      <AddCourseModal />
       <div id="course-sequence" className="course-sequence"></div>
     </div>;
   }
