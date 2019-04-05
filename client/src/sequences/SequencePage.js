@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LerntApi from '../LerntApi'
 import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
+import { Icon } from 'semantic-ui-react'
 
 class SequencePage extends Component {
     constructor(props) {
@@ -18,10 +19,14 @@ class SequencePage extends Component {
         if(this.state.loaded){
             vis = <CouseNetworkVis sequenceId={this.props.match.params.sequenceId}></CouseNetworkVis>
         } else{
-            vis = <div>loading</div>
+            //This will block out the page, which sucks. Working on it. 
+            // vis =  <Dimmer active>
+            //             <Loader>Loading</Loader>
+            //         </Dimmer>
+            vis = <div>Loading ... <Icon loading name='spinner' /></div>
         }
     return (
-        <div>
+        <div style={{ fontSize: '2em'}}>
             <h1>{this.state.loaded ? this.state.data.sequence.sequence_name : '' }</h1>
             <h3>{this.state.loaded ? this.state.data.sequence.author : '' }</h3>
 
