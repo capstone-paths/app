@@ -83,7 +83,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-simple");
 
         int expectedNodes = 4;
-        int expectedRels = 3;
+        int expectedRels = 4;
 
         String[] expectedValues = {
                 "VirtualPathStart -> CS50x",
@@ -99,29 +99,72 @@ public class CourseTest
     @Test
     public void shouldHandleComplexCycles() throws Throwable
     {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-complex");
 
+        int expectedNodes = 7;
+        int expectedRels = 6;
+
+        String[] expectedValues = {
+                "VirtualPath -> Intro to Probability",
+                "Intro to Probability -> CS50x",
+                "CS50x -> Algorithms",
+                "Algorithms -> Machine Learning",
+                "Probabilistic Graphs -> Track: Machine Learning",
+                "Machine Learning -> Track: Machine Learning"
+        };
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+    @Test
+    public void shouldHandleMultiPathStarts() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-multi-path-start");
+
+        int expectedNodes = 5;
+        int expectedRels = 6;
+
+        String[] expectedValues = {
+                "VirtualPath -> CS50x",
+                "VirtualPath -> Algorithms",
+                "VirtualPath -> Machine Learning",
+                "CS50x -> Track: Machine Learning",
+                "Algorithms -> Track: Machine Learning",
+                "Machine Learning -> Track: Machine Learning"
+        };
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
 
 
     @Test
-    public void shouldHandleThreeNodesWithCommonPrereqs() throws Throwable
+    public void shouldNotRecommendCoursesUserHasTaken() throws Throwable
     {
-        setDBInitStateFromFile("small-test-003");
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-user");
 
-        Record record = session.run(baseWorkingQuery).list().get(0);
-        Value nodes = record.get("nodes");
-        Value rels = record.get("relationships");
+        List<Record> record = session.run(baseWorkingQuery).list();
+        assertEquals(record.size(), 0);
+    }
 
-        assertEquals(3, nodes.size());
-        assertEquals(2, rels.size());
+    @Test
+    public void shouldNotRecommendSimilarCourses() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-similar");
 
-        String[] expected = {
-                "Algorithms -> Machine Learning",
-                "Probability -> Machine Learning"
+        int expectedNodes = 2;
+        int expectedRels = 1;
+
+        String[] expectedValues = {
+                "Algorithms -> Track: Machine Learning"
         };
 
-        courseAndPrereqTester(nodes, rels, expected);
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
+
 
 
     private void setDBInitStateFromFile(String filename) throws Throwable
