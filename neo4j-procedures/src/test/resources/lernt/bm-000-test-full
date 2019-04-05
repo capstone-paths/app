@@ -1,0 +1,14 @@
+// tests a complex relationship state
+// uses the current algo slides as reference
+// https://docs.google.com/presentation/d/1aaQmi0YpvQQ2AKjpwzxaB_MHQD4JAHxD8ze13hp4pIA/edit#slide=id.g548274ea23_0_297
+
+:User 1, :COMPLETED, :Course 1, 1
+:Course 1, :NEXT, :Course 4, 855
+:Course 2, :NEXT, :Course 4, 433
+:Course 4, :NEXT, :Course 7, 900
+:Course 3, :NEXT, :Course 7, 733
+:Course 5, :NEXT, :Course 7, 655
+:Course 6, :NEXT, :Course 7, 130
+:Course 5, :NEXT, :Course 6, 420
+:Course 7, :NEXT, :Track 1, 200
+:Course 8, :NEXT, :Track 1, 10
