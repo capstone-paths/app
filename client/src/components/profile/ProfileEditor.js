@@ -38,9 +38,9 @@ const ProfileEditor = () => (
         <p>What do you do now and what do you want to do?</p> 
         <TextArea placeholder='Tell us more' />
         <p>I would describe my learning style as</p>
-        <Dropdown placeholder='Styles' fluid multiple selection options={styles} />
+        <Dropdown placeholder='None Selected' fluid multiple selection options={styles} />
         <p>I'm interested in...</p>
-        <Dropdown placeholder='Everything' fluid multiple selection options={options} />
+        <Dropdown placeholder='None Selected' fluid multiple selection options={options} />
         <p>I'm an expert at...</p>
         <Dropdown placeholder='None Selected' fluid multiple selection options={options} />
         <p>I'm proficient in...</p>
