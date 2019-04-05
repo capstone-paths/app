@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Icon,  Item, Label } from 'semantic-ui-react';
 
-  class SequenceList extends Component {
+class SequenceList extends Component {
     render() {
         const sequences = [{
             id: 1,
