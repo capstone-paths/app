@@ -17,8 +17,8 @@ export default class CouseNetworkVis extends Component {
             return {
                 font: { multi: "md", face: "arial", size:20 },
                 color: {background:'white', border:'black'},
-                id: course.course_id,
-                label: "*" + course.Title + "*\n" + course.Partner,
+                id: course.courseID,
+                label: "*" + course.name + "*\n" + course.institution,
               };
           })
           let edges = response.data.rels.map((rel) =>{
@@ -58,8 +58,8 @@ export default class CouseNetworkVis extends Component {
                 let course = response.data.data.course;
                 nodeData.font =  { multi: "md", face: "arial", size:20 };
                 nodeData.color = {background:'white', border:'black'};
-                nodeData.id = course.course_id;
-                nodeData.label =  "*" + course.Title + "*\n" + course.Partner;
+                nodeData.id = course.courseID;
+                nodeData.label =  "*" + course.name + "*\n" + course.institution;
                 callback(nodeData);
               });
             }

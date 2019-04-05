@@ -1,0 +1,73 @@
+// db-init-base-model
+
+// This represents the current base working model of Neo4
+// Please do not alter this file without checking with the team
+// -- things will very likely break in the server
+
+
+// Create some test users
+CREATE ( u001: User { userID: '0', username: 'PJ' } )
+CREATE ( u002: User { userID: '1', username: 'Ajay' } )
+CREATE ( u003: User { userID: '2', username: 'Sam' } )
+CREATE ( u004: User { userID: '3', username: 'Jon' } )
+CREATE ( u005: User { userID: '4', username: 'Stephen' } )
+
+
+// This is a trick to separate commands
+WITH count(*) as dummy
+
+// Use this pattern for substituion
+// OPTIONAL MATCH (xxxx: Course) WHERE toLower(x.name) CONTAINS 'x'
+
+// Sam Sequence #1 Courses
+MATCH (pfjs: Course) WHERE toLower(pfjs.name) CONTAINS 'programming foundations with javascript'
+MATCH (gitv: Course) WHERE toLower(gitv.name) CONTAINS 'version control with git' AND toLower(gitv.institution) CONTAINS 'atlassian'
+MATCH (acss: Course) WHERE toLower(acss.name) CONTAINS 'advanced css concepts'
+MATCH (pwjs: Course) WHERE toLower(pwjs.name) CONTAINS 'programming for the web with javascript'
+MATCH (feui: Course) WHERE toLower(feui.name) ENDS WITH 'front-end web ui frameworks and tools'
+MATCH (reac: Course) WHERE toLower(reac.name) CONTAINS 'front-end web development with react'
+
+// Sam Sequence #2 Courses
+MATCH (dbme: Course) WHERE toLower(dbme.name) CONTAINS 'database management essentials'
+MATCH (mong: Course) WHERE toLower(mong.name) ENDS WITH 'introduction to mongodb'
+MATCH (ssdv: Course) WHERE toLower(ssdv.name) CONTAINS 'server-side development with nodejs, express and mongodb'
+MATCH (test: Course) WHERE toLower(test.name) CONTAINS 'software testing' AND toLower(test.institution) CONTAINS 'utah'
+MATCH (secu: Course) WHERE toLower(secu.name) CONTAINS 'software security'
+MATCH (mobi: Course) WHERE toLower(mobi.name) CONTAINS 'multiplatform mobile app development with react'
+
+MATCH (sam: User { username: 'Sam' })
+
+// Sam Sequence #1 Relationships
+MERGE (st01: PathStart { pathID: '1', name: "Sam Chao's Front End Development" })-[:BELONGS_TO {trackID: '1'}]->(tr01: Track { trackID: '1', name: 'Front End Development' })
+MERGE (st01)-[:NEXT {pathID: '1'}]->(pfjs)
+MERGE (st01)-[:NEXT {pathID: '1'}]->(gitv)
+MERGE (pfjs)-[:NEXT {pathID: '1'}]->(acss)
+MERGE (pfjs)-[:NEXT {pathID: '1'}]->(pwjs)
+MERGE (gitv)-[:NEXT {pathID: '1'}]->(pwjs)
+MERGE (acss)-[:NEXT {pathID: '1'}]->(feui)
+MERGE (pwjs)-[:NEXT {pathID: '1'}]->(feui)
+MERGE (feui)-[:NEXT {pathID: '1'}]->(reac)
+MERGE (feui)-[:NEXT {pathID: '1'}]->(reac)
+MERGE (reac)-[:NEXT {pathID: '1'}]->(mobi)
+MERGE (mobi)-[:NEXT {pathID: '1'}]->(tr01)
+MERGE (sam)-[:CREATED]->(st01)
+
+// Sam Sequence #2 Relationships
+MERGE (st02: PathStart { pathID: '2', name: "Sam Chao's Full Stack Development" })-[:BELONGS_TO {trackID: '2'}]->(tr02: Track { trackID: '2', name: 'Full Stack Development' })
+MERGE (st02)-[:NEXT {pathID: '2'}]->(pfjs)
+MERGE (st02)-[:NEXT {pathID: '2'}]->(gitv)
+MERGE (pfjs)-[:NEXT {pathID: '2'}]->(acss)
+MERGE (pfjs)-[:NEXT {pathID: '2'}]->(pwjs)
+MERGE (gitv)-[:NEXT {pathID: '2'}]->(pwjs)
+MERGE (acss)-[:NEXT {pathID: '2'}]->(feui)
+MERGE (pwjs)-[:NEXT {pathID: '2'}]->(feui)
+MERGE (feui)-[:NEXT {pathID: '2'}]->(reac)
+MERGE (feui)-[:NEXT {pathID: '2'}]->(reac)
+MERGE (reac)-[:NEXT {pathID: '2'}]->(mobi)
+MERGE (mobi)-[:NEXT {pathID: '2'}]->(dbme)
+MERGE (dbme)-[:NEXT {pathID: '2'}]->(mong)
+MERGE (mong)-[:NEXT {pathID: '2'}]->(ssdv)
+MERGE (ssdv)-[:NEXT {pathID: '2'}]->(test)
+MERGE (test)-[:NEXT {pathID: '2'}]->(secu)
+MERGE (secu)-[:NEXT {pathID: '2'}]->(tr02)
+MERGE (sam)-[:CREATED]->(st02)
