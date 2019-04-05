@@ -40,13 +40,13 @@ const ProfileEditor = () => (
         <p>I would describe my learning style as</p>
         <Dropdown placeholder='Styles' fluid multiple selection options={styles} />
         <p>I'm interested in...</p>
-        <Dropdown placeholder='Interests' fluid multiple selection options={options} />
+        <Dropdown placeholder='Everything' fluid multiple selection options={options} />
         <p>I'm an expert at...</p>
-        <Dropdown placeholder='Expert' fluid multiple selection options={options} />
+        <Dropdown placeholder='None Selected' fluid multiple selection options={options} />
         <p>I'm proficient in...</p>
-        <Dropdown placeholder='Average' fluid multiple selection options={options} />
+        <Dropdown placeholder='None Selected' fluid multiple selection options={options} />
         <p>I have experience with...</p>
-        <Dropdown placeholder='Beginner' fluid multiple selection options={options} />
+        <Dropdown placeholder='None Selected' fluid multiple selection options={options} />
     </Form>
    </div>
 
