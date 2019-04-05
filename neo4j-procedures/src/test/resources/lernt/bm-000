@@ -11,6 +11,6 @@ CREATE (:Course { id: "6", name: "Probabilistic Graph Models", institution: "MIT
 CREATE (:Course { id: "7", name: "Machine Learning", institution: "Stanford", tags: ["machine learning core"], rating: 4.96 })
 CREATE (:Course { id: "8", name: "Machine Learning", institution: "Georgia Tech", tags: ["machine learning core"], rating: 4.74 })
 
-CREATE (:Track { id: "1", name: "Machine Learning" })
+CREATE (:Track { id: "1", name: "Track: Machine Learning" })
 
 CREATE (u01: User { id: "1", userName: "Alex" })

@@ -52,63 +52,54 @@ public class CourseTest
         driver.close();
     }
 
-    String baseWorkingQuery = "MATCH (c: Course) WHERE c.name='Machine Learning' "
-            +  "CALL lernt.findCoursePath(c, 0, {}) "
+    String baseWorkingQuery = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
+            +  "CALL lernt.findCoursePath(t, 0, {}) "
             +  "YIELD nodes, relationships "
             +  "RETURN nodes, relationships";
+
 
     @Test
     public void shouldReturnSingleNode() throws Throwable
     {
-        URL url = this.getClass().getResource("small-test-000");
-        String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-single-node");
 
-        Long nodeId = session.run(init).single().get(0).asNode().id();
+        int expectedNodes = 3;
+        int expectedRels = 2;
 
-        List<Record> result = session.run(baseWorkingQuery).list();
-        Value val = result.get(0).get(0);
+        String[] expectedValues = {
+                "VirtualPathStart -> CS50x",
+                "CS50x -> Track: Machine Learning"
+        };
 
-        assertThat( val.get(0).asNode().id(), equalTo(nodeId) );
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
 
 
     @Test
-    public void shouldReturnTwoNodesAndOneLink() throws Throwable
+    public void shouldHandleSimpleCycle() throws Throwable
     {
-        setDBInitStateFromFile("small-test-001");
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-simple");
 
-        Record record = session.run(baseWorkingQuery).list().get(0);
-        Value nodes = record.get("nodes");
-        Value rels = record.get("relationships");
+        int expectedNodes = 4;
+        int expectedRels = 3;
 
-        assertEquals(2, nodes.size());
-        assertEquals(1, rels.size());
-
-        String[] expected = {
-                "Algorithms -> Machine Learning"
+        String[] expectedValues = {
+                "VirtualPathStart -> CS50x",
+                "VirtualPathStart -> Algorithms",
+                "Algorithms -> Track: Machine Learning",
+                "CS50x -> Track: Machine Learning"
         };
 
-        courseAndPrereqTester(nodes, rels, expected);
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
 
+
     @Test
-    public void shouldHandleThreeNodeCycle() throws Throwable
+    public void shouldHandleComplexCycles() throws Throwable
     {
-        setDBInitStateFromFile("small-test-002");
 
-        Record record = session.run(baseWorkingQuery).list().get(0);
-        Value nodes = record.get("nodes");
-        Value rels = record.get("relationships");
-
-        assertEquals(3, nodes.size());
-        assertEquals(2, rels.size());
-
-        String[] expected = {
-                "Algorithms -> Machine Learning",
-                "Probability -> Algorithms"
-        };
-
-        courseAndPrereqTester(nodes, rels, expected);
     }
 
 
@@ -144,7 +135,7 @@ public class CourseTest
      * Parses a relationship file line by line and creates the necessary relationships
      * @param filename The file with the relationship data
      */
-    private void createRelationships(String filename) throws Throwable
+    private void processRelationshipsFile(String filename) throws Throwable
     {
 
         LineNumberReader lr = new LineNumberReader(new FileReader(filename));
@@ -190,24 +181,30 @@ public class CourseTest
     }
 
 
-    private void courseAndPrereqTester(Value courseNodes, Value prereqNodes, String[] expected)
+    private void courseAndPrereqTester(String query, int expectedNode, int expectedRels, String[] expectedValues)
     {
+        Record record = session.run(query).list().get(0);
+        Value nodes = record.get("nodes");
+        Value rels = record.get("relationships");
+
+        assertEquals(expectedNode, nodes.size());
+        assertEquals(expectedRels, rels.size());
+
         HashMap<Long, String> map = new HashMap<>();
-        for(Value course : courseNodes.values()) {
+        for(Value course : nodes.values()) {
             Long id = course.asNode().id();
             map.put(id, course.get("name").asString());
         }
 
         ArrayList<String> list = new ArrayList<>();
-        for (Value prereq : prereqNodes.values()) {
+        for (Value prereq : rels.values()) {
             String startCourseName = map.get(prereq.asRelationship().startNodeId());
             String endCourseName = map.get(prereq.asRelationship().endNodeId());
             list.add(startCourseName + " -> " + endCourseName);
         }
 
-        for (String tuple : expected) {
+        for (String tuple : expectedValues) {
             assertTrue(list.contains(tuple));
-//            assertThat(list, containsInAnyOrder(tuple));
         }
     }
 }
