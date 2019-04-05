@@ -2,14 +2,15 @@
 // ...
 // describes an initial model state, without learning paths
 
-CREATE (cs50: Course { courseID: "1", name: "CS50x", institution: "Harvard", subject: "Computer Science", tags: ["core cs", "core c"] })
-CREATE (:Course { courseID: "2", name: "MIT 6.001x", institution: "MIT", subject: "Computer Science", tags: ["core cs", "core python" })
-CREATE (:Course { courseID: "3", name: "Algorithms", institution: "Princeton", subject: "DS & Algorithms", tags: ["algorithms"] })
-CREATE (:Course { courseID: "4", name: "Algorithms", institution: "Stanford", subject: "DS & Algorithms", tags: ["algorithms"] })
-CREATE (:Course { courseID: "5", name: "Intro to Probability", institution: "MIT", subject: "Stats & Probability", tags: ["probability"] })
-CREATE (:Course { courseID: "6", name: "Probabilistic Graph Models", institution: "MIT", subject: "Artificial Intelligence", tags: ["probability", "probabilistic graphical models"] })
-CREATE (:Course { courseID: "7", name: "Machine Learning", institution: "Stanford", tags: ["machine learning core"] })
-CREATE (:Course { courseID: "8", name: "Machine Learning", institution: "Princeton", tags: ["machine learning core"] })
+CREATE (cs50: Course { id: "1", name: "CS50x", institution: "Harvard", subject: "Computer Science", tags: ["core cs", "core c"], rating: 4.88 })
+CREATE (:Course { id: "2", name: "MIT 6.001x", institution: "MIT", subject: "Computer Science", tags: ["core cs", "core python"], rating: 4.85 })
+CREATE (:Course { id: "3", name: "Algorithms", institution: "Princeton", subject: "DS & Algorithms", tags: ["algorithms"], rating: 4.88 })
+CREATE (:Course { id: "4", name: "Algorithms", institution: "Stanford", subject: "DS & Algorithms", tags: ["algorithms"], rating: 4.91 })
+CREATE (:Course { id: "5", name: "Intro to Probability", institution: "MIT", subject: "Stats & Probability", tags: ["probability"], rating: 4.93 })
+CREATE (:Course { id: "6", name: "Probabilistic Graph Models", institution: "MIT", subject: "Artificial Intelligence", tags: ["probability", "probabilistic graphical models"], rating: 4.55 })
+CREATE (:Course { id: "7", name: "Machine Learning", institution: "Stanford", tags: ["machine learning core"], rating: 4.96 })
+CREATE (:Course { id: "8", name: "Machine Learning", institution: "Georgia Tech", tags: ["machine learning core"], rating: 4.74 })
 
-CREATE (u01: User { userID: "1", userName: "Alex" })
-CREATE (u01)-[:COMPLETED]->(cs50)
+CREATE (:Track { id: "1", name: "Machine Learning" })
+
+CREATE (u01: User { id: "1", userName: "Alex" })
