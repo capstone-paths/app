@@ -11,6 +11,7 @@ import {
 import { Link } from 'react-router-dom';
 import SequenceList from '../collections/SequenceList';
 import ProfileEditor from './ProfileEditor';
+import CourseTable from '../collections/CourseTable';
 
 class Profile extends Component {
     state = {openModal:false}
@@ -73,6 +74,7 @@ class Profile extends Component {
                         <Card style={{ width: '100%', marginBottom: '2em'}} >
                             <Card.Content>
                                 <Card.Header>Current Courses</Card.Header> 
+                                <CourseTable/>
                             </Card.Content>
                             <Card.Content extra> 
                                 <Button color='yellow' fluid size='large' as={ Link } to="/profile">
