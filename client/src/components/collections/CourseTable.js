@@ -5,7 +5,7 @@ class CourseTable extends Component {
     render() {
         const courses = [{
             id: "6af67908-3910-4742-90cd-bede5fc1c0ff",
-            name: "Intro to Web Development",
+            name: "Machine Learning for Data Science and Analytics",
             completed: true,
             grants: ["html", "CSS", "Javascript"],
             requires: [],
@@ -14,7 +14,7 @@ class CourseTable extends Component {
         },
         {
             id: "5a7a1893-fd8d-4e3a-861a-25a85ce0f57c",
-            name: "Angular",
+            name: "iOS Persistence and Core Data",
             completed: false,
             grants: ["TypeScript", "Angular 2"],
             requires: ["JavaScript", "html"],
