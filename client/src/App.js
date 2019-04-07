@@ -9,6 +9,7 @@ import Profile from './components/profile/Profile';
 import LoginForm from './components/login/LoginForm';
 import SequencePage from './components/sequence/SequencePage';
 import { Container } from 'semantic-ui-react';
+import CoursePage from './components/course/CoursePage';
 
 class App extends Component {
   render() {
@@ -22,6 +23,8 @@ class App extends Component {
         <Route exact path="/login" component={LoginForm}/>
         <Route exact path="/profile" component={Profile}/>
         <Route path="/learning-path/:sequenceId" component={SequencePage}/>
+        <Route path="/course/:courseId" component={CoursePage}/>
+
         </Container>
       </div>
     );
