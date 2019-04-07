@@ -4,8 +4,8 @@ import {Checkbox,  Label, Rating, Table } from 'semantic-ui-react';
 class CourseTable extends Component {
     render() {
         const courses = [{
-            id: 1,
-            name: "Intro to Web Development",
+            id: "6af67908-3910-4742-90cd-bede5fc1c0ff",
+            name: "Machine Learning for Data Science and Analytics",
             completed: true,
             grants: ["html", "CSS", "Javascript"],
             requires: [],
@@ -13,15 +13,17 @@ class CourseTable extends Component {
             source:"Coursera"
         },
         {
-            id: 2,
-            name: "Angular",
+            id: "5a7a1893-fd8d-4e3a-861a-25a85ce0f57c",
+            name: "iOS Persistence and Core Data",
             completed: false,
             grants: ["TypeScript", "Angular 2"],
             requires: ["JavaScript", "html"],
             rating: 5,
             source:"Coursera"
         }];
-        
+        function getLink(id){
+            return '/course/'+id;
+        }
         return (
             <Table compact celled >
             <Table.Header>
@@ -41,7 +43,7 @@ class CourseTable extends Component {
                             <Table.Cell >
                             <Checkbox slider checked={value.completed}/>
                             </Table.Cell>
-                            <Table.Cell>{value.name}</Table.Cell>
+                            <Table.Cell><a href={getLink(value.id)}>{value.name}</a></Table.Cell>
                             <Table.Cell>{value.source}</Table.Cell>
                             <Table.Cell><Rating icon='star' defaultRating={value.rating} maxRating={5} disabled /> </Table.Cell>
                             <Table.Cell>{value.grants.map((value) => {

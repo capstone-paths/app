@@ -27,4 +27,28 @@ router.get('/', (req, res, next) => {
     .catch(next)
 });
 
+/**
+ * @route  GET /api/courses/:id
+ * @access Public
+ * @desc   Retrieves a course by id
+ * @param  id (in-path, mandatory, id)
+ */
+router.get('/:id', (req, res, next) => {
+  if (!req.params.id) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  Course
+    .findById(session, req.params.id)
+    .then((result) => {
+      if (!result) {
+        res.status(400);
+      }
+      res.json(result);
+    })
+    .catch(next)
+});
+
+
 module.exports = router;
