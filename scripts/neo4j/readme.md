@@ -9,7 +9,7 @@ Included in here are various scripts that would allow the user to initialize the
   sh init_database.sh
   ```
 
-  ![Default Steps](init_database_defaultPath.png)
+  ![Default Steps](scripts/init_database_defaultPath.png)
 
 ##### Interactively Build Sequences (Beta Version)
 
