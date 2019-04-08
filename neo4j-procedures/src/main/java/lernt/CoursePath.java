@@ -22,15 +22,10 @@ public class CoursePath
 
 
     @Procedure(name = "lernt.findCoursePath", mode=Mode.SCHEMA)
-    public Stream<GraphResult> findCoursePath(@Name("startNode") Object startNode,
+    public Stream<GraphResult> findCoursePath(@Name("startNode") Node startNode,
                                               @Name("threshold") Double threshold,
                                               @Name("config") Map<String, Object> config) throws Exception
     {
-        if (!(startNode instanceof Node)) {
-            log.debug("findCoursePath: startNode is not a Node.");
-            throw new Exception("startNode is not a Node.");
-        }
-
         ConfigObject configuration = new ConfigObject(config);
 
         // Collections for Courses and Prereqs to return
@@ -39,21 +34,38 @@ public class CoursePath
         List<Node> nodes = new ArrayList<Node>();
         List<Relationship> relationships = new ArrayList<Relationship>();
         Set<Long> visited = new HashSet<>();
+        Set<Node> heads = new HashSet<>();
 
-        Node first = (Node) startNode;
-        visited.add(first.getId());
+        visited.add(startNode.getId());
 
-        findCoursePathPrivate(nodes, relationships, visited, first, threshold, configuration);
+        findCoursePathPrivate(nodes, relationships, visited, heads, startNode, threshold, configuration);
+
+        // Nothing found
+        if (nodes.size() < 2) {
+            return Stream.empty();
+        }
+
+        // Create virtual node
+        // Create relationship between node and all nodes in the heads
+        VirtualNode head = new VirtualNode(-1, db);
+        head.addLabel(Label.label("VirtualPathStart"));
+        head.setProperty("name", "VirtualPathStart");
+        for (Node node : heads) {
+            VirtualRelationship rel = head.createRelationshipTo(node, RelationshipType.withName("NEXT"));
+            relationships.add(rel);
+        }
+        nodes.add(head);
 
         return Stream.of(new GraphResult(nodes, relationships));
     }
 
 
-    private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Node curNode,
-                                       Double threshold, ConfigObject config)
+    private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Set<Node> heads,
+                                       Node curNode, Double threshold, ConfigObject config)
             throws Exception
     {
         nodes.add(curNode);
+        heads.add(curNode);
 
         Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(config.getPrereqLabelName()),
                                                                  Direction.INCOMING).iterator();
@@ -69,6 +81,8 @@ public class CoursePath
         while (relsIt.hasNext()) {
             prereq = relsIt.next();
             candidate = new Candidate(curNode, prereq, prereq.getOtherNode(curNode), config);
+
+            // TODO: Debug, remove
             String cur = curNode.getProperty("name").toString();
             String can = candidate.getCandidateCourse().getProperty("name").toString();
 
@@ -87,8 +101,12 @@ public class CoursePath
             }
         }
 
+        if (nextNodes.size() > 0) {
+            heads.remove(curNode);
+        }
+
         for (Candidate toAdd : nextNodes.values()) {
-            findCoursePathPrivate(nodes, rels, visited, toAdd.getCandidateCourse(), threshold, config);
+            findCoursePathPrivate(nodes, rels, visited, heads, toAdd.getCandidateCourse(), threshold, config);
         }
     }
 

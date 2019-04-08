@@ -2,9 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba7137c7-b2ba-434a-8ceb-e2a4f53f81c1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-clockwise" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/lernt/VirtualNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/lernt/VirtualRelationship.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/alex.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/alex.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lernt/Candidate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/Candidate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lernt/ConfigObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/ConfigObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/lernt/CourseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/lernt/CourseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/lernt/bm--000-test-cycle-three-complex" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-three-complex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/example/small-test-000" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/example/small-test-001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/example/small-test-002" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/example/small-test-003" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,10 +58,11 @@
     <session id="-254193108">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -59,58 +72,73 @@
           <entry key="base-model-000-rels-000" value="390" />
           <entry key="base-model-000-rels-001" value="367" />
           <entry key="base-model-000-rels-002" value="453" />
-          <entry key="bm-000" value="84" />
+          <entry key="bm--000-test-cycle-three-complex" value="578" />
+          <entry key="bm-000" value="95" />
           <entry key="bm-000-multi-path-start" value="263" />
-          <entry key="bm-000-test-common-clockwise" value="348" />
+          <entry key="bm-000-test-common-a" value="10" />
+          <entry key="bm-000-test-common-b" value="33" />
+          <entry key="bm-000-test-common-clockwise" value="499" />
+          <entry key="bm-000-test-common-counter-clockwise" value="98" />
           <entry key="bm-000-test-cycle-complex" value="1242" />
+          <entry key="bm-000-test-cycle-four-devilish" value="1000" />
           <entry key="bm-000-test-cycle-simple" value="316" />
+          <entry key="bm-000-test-cycle-three-clockwise" value="479" />
+          <entry key="bm-000-test-cycle-three-counter" value="132" />
           <entry key="bm-000-test-full" value="565" />
           <entry key="bm-000-test-single-node" value="144" />
-          <entry key="java" value="30587" />
+          <entry key="java" value="36250" />
           <entry key="small-test-000" value="32" />
           <entry key="small-test-0011" value="21" />
           <entry key="small-test-002" value="60" />
           <entry key="small-test-003" value="1" />
           <entry key="small-test-a" value="545" />
-          <entry key="xml" value="37" />
+          <entry key="xml" value="48" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="30587" />
-          <entry key="PLAIN_TEXT" value="6937" />
-          <entry key="XML" value="37" />
+          <entry key="JAVA" value="36250" />
+          <entry key="PLAIN_TEXT" value="9429" />
+          <entry key="XML" value="48" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="adoc" value="1" />
           <entry key="base-model-000" value="1" />
           <entry key="base-model-000-rels" value="2" />
           <entry key="base-model-000-rels-001" value="1" />
           <entry key="base-model-000-rels-002" value="1" />
+          <entry key="bm--000-test-cycle-three-complex" value="1" />
           <entry key="bm-000" value="2" />
           <entry key="bm-000-multi-path-start" value="2" />
+          <entry key="bm-000-test-common-a" value="2" />
+          <entry key="bm-000-test-common-b" value="1" />
           <entry key="bm-000-test-common-clockwise" value="1" />
+          <entry key="bm-000-test-common-counter-clockwise" value="1" />
           <entry key="bm-000-test-cycle-complex" value="2" />
+          <entry key="bm-000-test-cycle-four-devilish" value="1" />
           <entry key="bm-000-test-cycle-simple" value="2" />
+          <entry key="bm-000-test-cycle-three-clockwise" value="1" />
+          <entry key="bm-000-test-cycle-three-counter" value="2" />
           <entry key="bm-000-test-full" value="3" />
-          <entry key="bm-000-test-single-node" value="3" />
-          <entry key="class" value="20" />
-          <entry key="java" value="21" />
+          <entry key="bm-000-test-single-node" value="4" />
+          <entry key="class" value="24" />
+          <entry key="java" value="37" />
           <entry key="small-test-000" value="2" />
           <entry key="small-test-0011" value="1" />
           <entry key="small-test-002" value="2" />
           <entry key="small-test-003" value="3" />
           <entry key="small-test-a" value="2" />
-          <entry key="xml" value="1" />
+          <entry key="xml" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="20" />
-          <entry key="JAVA" value="21" />
-          <entry key="PLAIN_TEXT" value="30" />
-          <entry key="XML" value="1" />
+          <entry key="CLASS" value="24" />
+          <entry key="JAVA" value="37" />
+          <entry key="PLAIN_TEXT" value="41" />
+          <entry key="XML" value="8" />
         </counts>
       </usages-collector>
     </session>
@@ -119,86 +147,64 @@
     <favorites_list name="procedure-template" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3332">
-                  <caret line="196" selection-start-line="196" selection-end-line="196" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                    <element signature="e#5040#5056#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="153">
-                  <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-complex">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="68">
-                  <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-full">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="102">
-                  <caret line="6" selection-start-line="6" selection-end-line="6" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-433">
-                  <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-simple">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="119">
-                  <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-clockwise">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="102">
-                  <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Candidate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1326">
+              <caret line="78" column="19" selection-start-line="78" selection-start-column="19" selection-end-line="78" selection-end-column="19" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4394">
+              <caret line="375" selection-start-line="375" selection-end-line="375" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/lernt/ConfigObject.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="25" column="83" selection-start-line="25" selection-start-column="83" selection-end-line="25" selection-end-column="83" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="372">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1035#1041#0" expanded="true" />
+                <element signature="e#1101#1115#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -217,6 +223,7 @@
       <find>userID</find>
       <find>userParts</find>
       <find>VirtualPath</find>
+      <find>Intro to Probability</find>
     </findStrings>
     <replaceStrings>
       <replace>curNode</replace>
@@ -229,7 +236,11 @@
       <replace>expectedNode</replace>
       <replace>expectedRels</replace>
       <replace>VirtualPathStart</replace>
+      <replace>Probability</replace>
     </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src/main/java/lernt</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -243,12 +254,10 @@
         <option value="$PROJECT_DIR$/src/test/resources/example/small-test-000" />
         <option value="$PROJECT_DIR$/src/test/resources/example/small-test-002" />
         <option value="$PROJECT_DIR$/src/test/resources/example/small-test-003" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/example/CourseTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/example/Candidate.java" />
         <option value="$PROJECT_DIR$/src/main/java/example/ConfigObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/example/CoursePath.java" />
-        <option value="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/base-model-000-rels" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/base-model-000" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/base-model-000-rels-000" />
@@ -257,11 +266,24 @@
         <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-simple" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-complex" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-single-node" />
-        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-multi-path-start" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-full" />
-        <option value="$PROJECT_DIR$/src/test/java/lernt/CourseTest.java" />
         <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-clockwise" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-counter-clockwise" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-b" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-a" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-three-clockwise" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-three-counter" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm--000-test-cycle-three-complex" />
+        <option value="$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-four-devilish" />
+        <option value="$PROJECT_DIR$/src/main/java/lernt/VirtualNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/lernt/VirtualRelationship.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/lernt/ConfigObject.java" />
+        <option value="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" />
+        <option value="$PROJECT_DIR$/src/main/java/lernt/Candidate.java" />
+        <option value="$PROJECT_DIR$/src/test/java/lernt/CourseTest.java" />
       </list>
     </option>
   </component>
@@ -361,19 +383,20 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554715665470" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554740361302" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources/lernt" />
+      <recent name="$PROJECT_DIR$/src/test/java/example" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/resources/example" />
       <recent name="$PROJECT_DIR$/src/test/resources" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/test/java/example" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -388,7 +411,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.Unnamed">
+  <component name="RunManager" selected="JUnit.Run All">
     <configuration name="CourseTest.shouldHandleThreeNodeCycle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="procedure-template" />
       <extension name="coverage">
@@ -406,7 +429,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Unnamed" type="JUnit" factoryName="JUnit">
+    <configuration name="CourseTest.shouldReturnSingleNode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="procedure-template" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="lernt.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="lernt" />
+      <option name="MAIN_CLASS_NAME" value="lernt.CourseTest" />
+      <option name="METHOD_NAME" value="shouldReturnSingleNode" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run All" type="JUnit" factoryName="JUnit">
       <module name="procedure-template" />
       <option name="PACKAGE_NAME" value="lernt" />
       <option name="MAIN_CLASS_NAME" value="lernt.CourseTest" />
@@ -427,11 +467,13 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.Unnamed" />
+      <item itemvalue="JUnit.Run All" />
       <item itemvalue="JUnit.CourseTest.shouldHandleThreeNodeCycle" />
+      <item itemvalue="JUnit.CourseTest.shouldReturnSingleNode" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.CourseTest.shouldReturnSingleNode" />
         <item itemvalue="JUnit.CourseTest.shouldHandleThreeNodeCycle" />
       </list>
     </recent_temporary>
@@ -445,50 +487,60 @@
       <updated>1553093210450</updated>
       <workItem from="1553093213699" duration="5428000" />
       <workItem from="1553107543863" duration="41079000" />
-      <workItem from="1554452278179" duration="19581000" />
+      <workItem from="1554452278179" duration="29284000" />
+      <workItem from="1554736719200" duration="3611000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="CourseTest_shouldHandleThreeNodeCycle - 2019.03.25 at 21h 47m 33s.xml">
-      <configuration name="CourseTest.shouldHandleThreeNodeCycle" configurationId="JUnit" />
+    <history-entry file="Run_All - 2019.04.08 at 17h 55m 23s.xml">
+      <configuration name="Run All" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleThreeNodeCycle - 2019.03.25 at 21h 49m 31s.xml">
-      <configuration name="CourseTest.shouldHandleThreeNodeCycle" configurationId="JUnit" />
+    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.08 at 17h 59m 38s.xml">
+      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleThreeNodeCycle - 2019.03.25 at 21h 53m 20s.xml">
-      <configuration name="CourseTest.shouldHandleThreeNodeCycle" configurationId="JUnit" />
+    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.08 at 18h 03m 41s.xml">
+      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleThreeNodeCycle - 2019.03.25 at 21h 53m 36s.xml">
-      <configuration name="CourseTest.shouldHandleThreeNodeCycle" configurationId="JUnit" />
+    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.08 at 18h 04m 34s.xml">
+      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Unnamed - 2019.03.25 at 21h 55m 45s.xml">
-      <configuration name="Unnamed" configurationId="JUnit" />
+    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.08 at 18h 08m 08s.xml">
+      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Unnamed - 2019.03.25 at 22h 02m 42s.xml">
-      <configuration name="Unnamed" configurationId="JUnit" />
+    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.08 at 18h 14m 45s.xml">
+      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Unnamed - 2019.03.25 at 22h 05m 37s.xml">
-      <configuration name="Unnamed" configurationId="JUnit" />
+    <history-entry file="Run_All - 2019.04.08 at 18h 17m 53s.xml">
+      <configuration name="Run All" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Unnamed - 2019.03.25 at 22h 08m 39s.xml">
-      <configuration name="Unnamed" configurationId="JUnit" />
+    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.08 at 18h 17m 53s.xml">
+      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Unnamed - 2019.03.25 at 22h 12m 08s.xml">
-      <configuration name="Unnamed" configurationId="JUnit" />
+    <history-entry file="Run_All - 2019.04.08 at 18h 18m 38s.xml">
+      <configuration name="Run All" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Unnamed - 2019.03.25 at 22h 23m 10s.xml">
-      <configuration name="Unnamed" configurationId="JUnit" />
+    <history-entry file="Run_All - 2019.04.08 at 18h 19m 14s.xml">
+      <configuration name="Run All" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73671000" />
+    <option name="totallyTimeSpent" value="86985000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49541286" visible="true" weight="0.20630373" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49541286" visible="true" weight="0.20916906" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -499,10 +551,10 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32881773" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32881773" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39901477" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39901477" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32881773" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.31896552" />
@@ -555,6 +607,9 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.adoc" />
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -568,9 +623,9 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java</url>
-          <line>55</line>
+          <line>40</line>
           <properties />
-          <option name="timeStamp" value="50" />
+          <option name="timeStamp" value="58" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -582,9 +637,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/example/Last.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/example/Join.java" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/example/LastTest.java" />
     <entry file="file://$PROJECT_DIR$/src/test/java/example/JoinTest.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-cypher/3.5.2/neo4j-cypher-3.5.2.jar!/org/neo4j/cypher/internal/compatibility/v3_5/ExceptionTranslationSupport$class.class">
       <provider selected="true" editor-type-id="text-editor">
@@ -656,20 +708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-kernel/3.5.2/neo4j-kernel-3.5.2.jar!/org/neo4j/kernel/impl/newapi/AllStoreHolder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="713" selection-start-line="713" selection-end-line="713" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-kernel/3.5.2/neo4j-kernel-3.5.2.jar!/org/neo4j/kernel/impl/proc/ReflectiveProcedureCompiler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="573" selection-start-line="573" selection-end-line="573" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/example/FullTextIndex.java" />
     <entry file="file://$PROJECT_DIR$/src/test/java/example/LegacyFullTextIndexTest.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
@@ -683,29 +721,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="60" column="16" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Candidate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="3" selection-start-column="3" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2778#2779#0" expanded="true" />
-            <element signature="e#2832#2833#0" expanded="true" />
-            <element signature="e#3281#3282#0" expanded="true" />
-            <element signature="e#3321#3322#0" expanded="true" />
-            <element signature="e#3312#3313#0" expanded="true" />
-            <element signature="e#3350#3351#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -723,34 +738,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/ConfigObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="54" column="3" selection-start-line="54" selection-start-column="3" selection-end-line="54" selection-end-column="3" />
-          <folding>
-            <element signature="e#1366#1367#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/small-test-003">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="56" selection-start-line="7" selection-start-column="56" selection-end-line="7" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-complex">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -782,10 +773,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-single-node">
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-simple">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
@@ -796,38 +787,219 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-complex">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3332">
-          <caret line="196" selection-start-line="196" selection-end-line="196" />
+        <state relative-caret-position="68">
+          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-a">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-b">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-three-clockwise">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-three-counter">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-three-complex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-four-devilish">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/VirtualRelationship.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5040#5056#0" expanded="true" />
+            <element signature="e#1250#1251#0" expanded="true" />
+            <element signature="e#1275#1276#0" expanded="true" />
+            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="e#1591#1592#0" expanded="true" />
+            <element signature="e#1637#1638#0" expanded="true" />
+            <element signature="e#1667#1668#0" expanded="true" />
+            <element signature="e#2003#2004#0" expanded="true" />
+            <element signature="e#2030#2031#0" expanded="true" />
+            <element signature="e#2108#2109#0" expanded="true" />
+            <element signature="e#2174#2175#0" expanded="true" />
+            <element signature="e#2242#2243#0" expanded="true" />
+            <element signature="e#2298#2299#0" expanded="true" />
+            <element signature="e#2356#2357#0" expanded="true" />
+            <element signature="e#2399#2400#0" expanded="true" />
+            <element signature="e#2456#2457#0" expanded="true" />
+            <element signature="e#2491#2492#0" expanded="true" />
+            <element signature="e#2702#2703#0" expanded="true" />
+            <element signature="e#2733#2734#0" expanded="true" />
+            <element signature="e#2793#2794#0" expanded="true" />
+            <element signature="e#2831#2832#0" expanded="true" />
+            <element signature="e#2894#2895#0" expanded="true" />
+            <element signature="e#2931#2932#0" expanded="true" />
+            <element signature="e#3216#3217#0" expanded="true" />
+            <element signature="e#3244#3245#0" expanded="true" />
+            <element signature="e#3438#3439#0" expanded="true" />
+            <element signature="e#3485#3486#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/VirtualNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1225">
+          <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/driver/neo4j-java-driver/1.7.2/neo4j-java-driver-1.7.2.jar!/org/neo4j/driver/v1/Statement.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/driver/neo4j-java-driver/1.7.2/neo4j-java-driver-1.7.2.jar!/org/neo4j/driver/internal/AbstractStatementRunner.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="e#2011#2012#0" expanded="true" />
+            <element signature="e#2074#2075#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/src.zip!/java/lang/Object.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dependency-reduced-pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2171" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.adoc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-733" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Candidate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1326">
+          <caret line="78" column="19" selection-start-line="78" selection-start-column="19" selection-end-line="78" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/ConfigObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="25" column="83" selection-start-line="25" selection-start-column="83" selection-end-line="25" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4394">
+          <caret line="375" selection-start-line="375" selection-end-line="375" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-kernel/3.5.2/neo4j-kernel-3.5.2.jar!/org/neo4j/kernel/impl/proc/ReflectiveProcedureCompiler.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="573" selection-start-line="573" selection-end-line="573" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-kernel/3.5.2/neo4j-kernel-3.5.2.jar!/org/neo4j/kernel/impl/newapi/AllStoreHolder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="713" selection-start-line="713" selection-end-line="713" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-single-node">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-433">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        <state relative-caret-position="372">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1035#1041#0" expanded="true" />
+            <element signature="e#1101#1115#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-cycle-simple">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-clockwise">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
         </state>
       </provider>
     </entry>

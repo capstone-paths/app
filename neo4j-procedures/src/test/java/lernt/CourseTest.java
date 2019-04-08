@@ -2,14 +2,15 @@ package lernt;
 
 import org.junit.*;
 import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.summary.ResultSummary;
+import org.neo4j.driver.v1.summary.SummaryCounters;
 import org.neo4j.harness.junit.Neo4jRule;
 
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.LineNumberReader;
 import java.net.URL;
@@ -177,7 +178,48 @@ public class CourseTest
         courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
 
+    @Test
+    public void shouldHandleThreeWayComplexCycle() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-three-complex");
 
+        String[] expectedValues = {
+                "VirtualPathStart -> Algorithms",
+                "Algorithms -> CS50x",
+                "CS50x -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 5;
+        int expectedRels = 4;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+
+    @Test
+    public void shouldHandleFourWayDevilishCycle() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-four-devilish");
+
+        String[] expectedValues = {
+                "VirtualPathStart -> CS50x",
+                "VirtualPathStart -> Probability",
+                "CS50x -> Machine Learning",
+                "CS50x -> Probability",
+                "Probability -> Algorithms",
+                "Probability -> Machine Learning",
+                "Algorithms -> Machine Learning",
+                "Machine Learning -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 6;
+        int expectedRels = 8;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
 
 
     @Test
@@ -285,8 +327,10 @@ public class CourseTest
      */
     private void processRelationshipsFile(String filename) throws Throwable
     {
+        URL url = this.getClass().getResource(filename);
+        File file = Paths.get(url.toURI()).toFile();
 
-        LineNumberReader lr = new LineNumberReader(new FileReader(filename));
+        LineNumberReader lr = new LineNumberReader(new FileReader(file));
         String line;
         String trimmed;
         while ((line = lr.readLine()) != null)
@@ -315,7 +359,10 @@ public class CourseTest
         params.put("targetID", parts[4]);
 
         // https://stackoverflow.com/q/24274364/6854595
-        String query = "CREATE (#sourceLabel# {id: {sourceID})-[#relLabel#]->(#targetLabel# {id: {targetID}})";
+//        String query = "MERGE (#sourceLabel# {id: {sourceID}})-[#relLabel#]->(#targetLabel# {id: {targetID}})";
+        String query = "MATCH (src #sourceLabel# {id: {sourceID}}) " +
+                       "MATCH (trg #targetLabel# {id: {targetID}}) " +
+                       "CREATE (src)-[#relLabel#]->(trg)";
         for (String key: params.keySet()) {
             query = query.replaceAll("#" + key + "#", String.valueOf(params.get(key)));
         }
@@ -323,14 +370,21 @@ public class CourseTest
         int reps = Integer.valueOf(parts[5]);
 
         for (int i = 0; i < reps; i++) {
-            session.run(query, params);
+            // TODO: Debug cleanup
+            StatementResult sr = session.run(query, params);
+            ResultSummary rs = sr.summary();
+            SummaryCounters sc = rs.counters();
         }
     }
 
 
     private void courseAndPrereqTester(String query, int expectedNode, int expectedRels, String[] expectedValues)
     {
-        Record record = session.run(query).list().get(0);
+        StatementResult sr = session.run(query);
+        ResultSummary rs = sr.summary();
+        List<Record> recList = sr.list();
+        assertTrue(recList.size() > 0);
+        Record record = recList.get(0);
         Value nodes = record.get("nodes");
         Value rels = record.get("relationships");
 

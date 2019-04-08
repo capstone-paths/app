@@ -67,15 +67,16 @@ public class Candidate
     public boolean shouldAddToNextNodes(HashMap<String, Candidate> nextNodes, Double threshold)
             throws Exception
     {
-        // The proportion of people that recommend the course as a prereq
-        double recommendCoefficient = this.getRecommendationsCoefficient();
-
-        if (recommendCoefficient < threshold) {
-            return false;
-        }
-
-        Candidate currentBest = nextNodes.get(this.getCandidateCategory());
-        return currentBest == null || currentBest.getRecommendationsCoefficient() < recommendCoefficient;
+//        // The proportion of people that recommend the course as a prereq
+//        double recommendCoefficient = this.getRecommendationsCoefficient();
+//
+//        if (recommendCoefficient < threshold) {
+//            return false;
+//        }
+//
+//        Candidate currentBest = nextNodes.get(this.getCandidateCategory());
+//        return currentBest == null || currentBest.getRecommendationsCoefficient() < recommendCoefficient;
+        return true;
     }
 
 

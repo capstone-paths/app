@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class ConfigObject
 {
+    private String userID;
     private String courseWeightPropName;
     private String courseLabelName;
     private String courseCategoryPropName;
@@ -17,11 +18,12 @@ public class ConfigObject
 
     public ConfigObject(Map<String, Object> config)
     {
+        this.userID = (String) config.getOrDefault("userID", null);
         this.courseWeightPropName = (String) config.getOrDefault("courseWeightPropName", "recommendations");
-        this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "category");
+        this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "subject");
         this.courseLabelName = (String) config.getOrDefault("courseLabelName", "Course");
         this.prereqWeightPropName = (String) config.getOrDefault("prereqWeightPropName", "recommendations");
-        this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "REQUIRED_BY");
+        this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "NEXT");
     }
 
 
