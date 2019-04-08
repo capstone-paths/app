@@ -74,6 +74,24 @@ public class CoursePath
             return;
         }
 
+        // Get relationships from both directions
+        // For each relationship
+            // Get node at other end
+            // Add to visited
+            // if incoming
+                // add to incoming map <Node, NumOccurrences>
+                // increment incoming total counter
+
+        // if incoming map is empty get out
+
+        // for each member of the incoming set
+
+
+        // if candidate set is > 0, remove
+
+        // recurse over list of candidates
+
+
         HashMap<String, Candidate> nextNodes = new HashMap<>();
         Relationship prereq = null;
         Candidate candidate = null;
