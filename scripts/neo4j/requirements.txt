@@ -1,0 +1,8 @@
+DateTime==4.3
+neo4j==1.7.2
+neobolt==1.7.4
+neotime==1.7.4
+pytz==2018.9
+six==1.12.0
+uuid==1.30
+zope.interface==4.6.0
