@@ -11,6 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from neo4j import GraphDatabase
 from db_conn import import_params # import neo4j driver, credentials
 import uuid
+import json
 
 # function checks if a user with a given username exists in the database
 def check_if_user_exists(driver,user_name):
@@ -70,6 +71,23 @@ def create_track(driver, track_name, track_id):
         with driver.session() as session: # using merge so that it will be created only if it does not exists
             return session.run("MERGE (t:Track { trackID : $track_id,  name : $track_name }) "
                                "RETURN id(t)", track_name=track_name.strip(), track_id=track_id)
+
+# function to save path objects locally
+def write_sequence_to_json(sequence):
+    save_decision = input("\nDo you want to save the sequence json object locally. If saved the .json can be imported again to the database ? [y or n only] : ")
+
+    # if user wants to save file
+    if(save_decision.lower()=='y'):
+        print("Saving Path Object locally as .json")
+        fileExists = os.path.exists('path_jsons')      # check if directory exists
+        if not fileExists:
+            os.makedirs('path_jsons')                    # create directory if no
+
+        json_file = sequence['sequence_name'].replace(' ','_').lower() + '.json' # json file name
+        with open( os.path.join('path_jsons', json_file ), 'w') as fp:
+            json.dump(sequence, fp)
+            print("JSON {0} has been saved in directory 'path_jsons'".format(json_file))
+
 
 # function to add input courses to sequence
 def add_courses_to_sequence(driver, sequence_id, sequence_name, track_id, track_name, course_list, relationship_pair_list, user_name):
@@ -311,6 +329,9 @@ def main():
 
         # writing sequence / learning path to database
         add_courses_to_sequence(import_params.driver, sequence_data['sequence_id'], sequence_data['sequence_name'] , sequence_data['track_id'], sequence_data['track_name'], sequence_data['master_list'], sequence_data['relationship_list'] ,sequence_data['username'] )
+
+        # save path object locally
+        write_sequence_to_json(sequence_data)
 
         conti = input("Do you want to input another sequence? [y or n] ")
         if ( conti == 'n' ):
