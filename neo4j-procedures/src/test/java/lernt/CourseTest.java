@@ -97,6 +97,27 @@ public class CourseTest
 
 
     @Test
+    public void shouldHandleCommonPrereqsA() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-common-a");
+
+        String[] expectedValues = {
+                "VirtualPathStart -> CS50x",
+                "CS50x -> Algorithms",
+                "CS50x -> Probability",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 5;
+        int exptectedRels = 5;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, exptectedRels, expectedValues);
+    }
+
+
+    @Test
     public void shouldHandleComplexCycles() throws Throwable
     {
         setDBInitStateFromFile("bm-000");
@@ -106,8 +127,8 @@ public class CourseTest
         int expectedRels = 6;
 
         String[] expectedValues = {
-                "VirtualPath -> Intro to Probability",
-                "Intro to Probability -> CS50x",
+                "VirtualPathStart -> Probability",
+                "Probability -> CS50x",
                 "CS50x -> Algorithms",
                 "Algorithms -> Machine Learning",
                 "Probabilistic Graphs -> Track: Machine Learning",
@@ -127,9 +148,9 @@ public class CourseTest
         int expectedRels = 6;
 
         String[] expectedValues = {
-                "VirtualPath -> CS50x",
-                "VirtualPath -> Algorithms",
-                "VirtualPath -> Machine Learning",
+                "VirtualPathStart -> CS50x",
+                "VirtualPathStart -> Algorithms",
+                "VirtualPathStart -> Machine Learning",
                 "CS50x -> Track: Machine Learning",
                 "Algorithms -> Track: Machine Learning",
                 "Machine Learning -> Track: Machine Learning"
@@ -155,16 +176,36 @@ public class CourseTest
         setDBInitStateFromFile("bm-000");
         processRelationshipsFile("bm-000-test-similar");
 
-        int expectedNodes = 2;
-        int expectedRels = 1;
+        int expectedNodes = 3;
+        int expectedRels = 2;
 
         String[] expectedValues = {
+                "VirtualPathStart -> Algorithms",
                 "Algorithms -> Track: Machine Learning"
         };
 
         courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
 
+
+    @Test
+    public void shouldHandleComplexScenario() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000-test-full");
+
+        int expectedNodes = 5;
+        int expectedRels = 5;
+
+        String[] expectedValues = {
+                "VirtualPathStart -> Algorithms",
+                "VirtualPathStart -> Probability",
+                "Algorithms -> Machine Learning",
+                "Probability -> Machine Learning",
+                "Machine Learning -> Track: Machine Learning"
+        };
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
 
 
     private void setDBInitStateFromFile(String filename) throws Throwable
@@ -173,6 +214,7 @@ public class CourseTest
         String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
         session.run(init);
     }
+
 
     /**
      * Parses a relationship file line by line and creates the necessary relationships
@@ -196,9 +238,8 @@ public class CourseTest
             if (parts.length != 6) {
                 throw new Exception("Invalid line: " + trimmed);
             }
-            createRelationships(line);
+            createRelationships(parts);
         }
-
     }
 
     private void createRelationships(String[] parts) throws Throwable

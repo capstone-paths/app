@@ -1,0 +1,12 @@
+// Test case for triangle with common ancestor
+// Cycle-breaking mechanism should not break this model
+// VirtualPathStart -> CS50x
+// Algorithms -> CS50x
+// Algorithms -> Probability
+// CS50x -> Probability
+// Probability -> Track: Machine Learning
+
+:Course 3, :NEXT, :Course 1, 1
+:Course 1, :NEXT, :Course 5, 1
+:Course 3, :NEXT, :Course 5, 1
+:Course 5, :NEXT, :Track 1, 1
