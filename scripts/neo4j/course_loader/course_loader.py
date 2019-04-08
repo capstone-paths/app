@@ -68,6 +68,7 @@ def parse_date(date_str):
 
 # function to parse scrapped json file
 def process_course_json(json_file_wPath):
+    LERNTIO_NAMESPACE_DNS = uuid.uuid3(uuid.NAMESPACE_DNS, 'lernt.io') # UUID for the lernt.io domain
     with open(json_file_wPath) as json_file:
         data = json.load(json_file)
 
@@ -75,7 +76,7 @@ def process_course_json(json_file_wPath):
         print("Loading courses as nodes into neo4j database...")
         for course in data:
             modCourse = dict()
-            modCourse['courseID'] = str(uuid.uuid4())               # course unique identifier
+            modCourse['courseID'] = str(uuid.uuid3(LERNTIO_NAMESPACE_DNS, course['Provider'].strip() + course['Title'].strip() ))     # course reproducible unique identifier
             modCourse['name']     = course['Title'].strip()         # name of course
             modCourse['effort']   = parse_effort(course['Effort'])  # course effort
             modCourse['cost']     = parse_cost(course['Cost'])      # cost
