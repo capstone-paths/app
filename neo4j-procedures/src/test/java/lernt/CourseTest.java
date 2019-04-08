@@ -111,10 +111,73 @@ public class CourseTest
         };
 
         int expectedNodes = 5;
-        int exptectedRels = 5;
+        int expectedRels = 5;
 
-        courseAndPrereqTester(baseWorkingQuery, expectedNodes, exptectedRels, expectedValues);
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
+
+
+    @Test
+    public void shouldHandleCommonPrereqsB() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-common-b");
+
+        String[] expectedValues = {
+                "VirtualPathStart -> Algorithms",
+                "Algorithms -> CS50x",
+                "CS50x -> Probability",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 5;
+        int expectedRels = 5;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+
+    @Test
+    public void shouldHandleThreeWayClockwiseCycle() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-three-clockwise");
+
+        String[] expectedValues = {
+                "VirtualPathStart -> CS50x",
+                "CS50x -> Algorithms",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 5;
+        int expectedRels = 4;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+
+    @Test
+    public void shouldHandleThreeWayCounterCycle() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-three-counter");
+
+        String[] expectedValues = {
+                "VirtualPathStart -> Algorithms",
+                "Algorithms -> CS50x",
+                "CS50x -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 5;
+        int expectedRels = 4;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+
 
 
     @Test
