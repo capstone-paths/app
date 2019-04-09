@@ -66,6 +66,9 @@ public class CandidateSet
 
     private List<Node> processPrereqs(Map<Node, Integer> incoming, Tracker tracker, ConfigObject config)
     {
+        List<NewCandidate> candidates = new ArrayList<>();
+
+
 
 
 
