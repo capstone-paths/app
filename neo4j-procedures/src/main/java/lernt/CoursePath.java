@@ -23,7 +23,6 @@ public class CoursePath
 
     @Procedure(name = "lernt.findCoursePath", mode=Mode.SCHEMA)
     public Stream<GraphResult> findCoursePath(@Name("startNode") Node startNode,
-                                              @Name("threshold") Double threshold,
                                               @Name("config") Map<String, Object> config) throws Exception
     {
         ConfigObject configuration = new ConfigObject(config);

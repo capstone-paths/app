@@ -8,13 +8,18 @@ import java.util.Set;
 public class NewCandidate
 {
     private Node courseNode;
+
+
+
+    private int frequency;
     private String category;
     private String[] tags;
 
-    public NewCandidate(Node courseNode, ConfigObject config)
+    public NewCandidate(Node courseNode, int frequency, ConfigObject config)
             throws Exception
     {
         this.courseNode = courseNode;
+        this.frequency = frequency;
 
         Object courseCategory = courseNode.getProperty(config.getCourseCategoryPropName());
         if (!(courseCategory instanceof String)) {
@@ -36,7 +41,7 @@ public class NewCandidate
      * @param otherCandidate
      * @return
      */
-    public double isSimilar(NewCandidate otherCandidate)
+    public double getSimilarityCoefficient(NewCandidate otherCandidate)
     {
         int matches = 0;
 
@@ -84,5 +89,10 @@ public class NewCandidate
     public String[] getTags()
     {
         return tags;
+    }
+
+    public int getFrequency()
+    {
+        return frequency;
     }
 }

@@ -4,41 +4,54 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import scala.reflect.internal.Trees;
 
 import java.util.*;
 
 public class CandidateDecider
 {
-    Node currentCourse;
-    Tracker tracker;
-    ConfigObject config;
+    private Node currentCourse;
+    private Tracker tracker;
+    private ConfigObject config;
+    private double frequencyThreshold;
+    private double similarityThreshold;
 
     public CandidateDecider(Node currentCourse, Tracker tracker, ConfigObject config)
+            throws Exception
     {
         this.currentCourse = currentCourse;
         this.tracker = tracker;
         this.config = config;
+
+        Object frequencyThreshold = config.getFrequencyThreshold();
+        if (!(frequencyThreshold instanceof Double)) {
+            throw new Exception("frequencyThreshold not a Double: " + String.valueOf(frequencyThreshold));
+        }
+        this.frequencyThreshold = (double) frequencyThreshold;
+
+        Object similarityThreshold = config.getSimilarityThreshold();
+        if (!(similarityThreshold instanceof Double)) {
+            throw new Exception("similarityThreshold not a Double: " + String.valueOf(similarityThreshold));
+        }
+        this.similarityThreshold = (double) similarityThreshold;
     }
 
-    public List<Node> getCandidateSet()
+    public Set<NewCandidate> getCandidateSet()
+            throws Exception
     {
         RelationshipType prereqRelType = RelationshipType.withName(config.getPrereqLabelName());
         boolean hasIncoming = currentCourse.hasRelationship(Direction.INCOMING, prereqRelType);
 
         // There are no incoming relationships; no candidates, return empty
         if (!hasIncoming) {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
 
         Iterator<Relationship> rels = currentCourse.getRelationships(prereqRelType).iterator();
 
-        // Produce a map of nodes and relative frequencies
-        // Count relative frequencies
+        Map<Node, Integer> coursesAndFrequencies = getIncomingFrequencies(rels);
 
-        // For every node in the map, consider if it should be added to final list
-        // Produce final list of candidates
-
-        return new ArrayList<>();
+        return processAll(coursesAndFrequencies);
     }
 
 
@@ -70,45 +83,59 @@ public class CandidateDecider
     }
 
 
-    private Set<Node> processPrereqs(Map<Node, Integer> incoming)
+    private Set<NewCandidate> processAll(Map<Node, Integer> incoming)
+            throws Exception
     {
         int totalIncoming = incoming.values().stream().reduce(0, Integer::sum);
 
+        Set<NewCandidate> candidates = new HashSet<>();
 
-        // for every incoming
-            // if passes threshold(course freq, total freq)
-            // make new candidate
-            // for each existing candidate
-                // compare newcomer with incumbent
-                // if too similar
-                    // pick the one with more recommendations
-                    // remove incumbent if necessary
+        for (Map.Entry<Node, Integer> entry : incoming.entrySet())
+        {
+            int currentFrequency = entry.getValue();
+            if (!passesMinimumThreshold(currentFrequency, totalIncoming)) {
+                continue;
+            }
 
+            NewCandidate current = new NewCandidate(entry.getKey(), currentFrequency, config);
 
+            NewCandidate similar = findSimilarCandidate(candidates, current);
+            if (similar != null) {
+                if (similar.getFrequency() < currentFrequency) {
+                    candidates.remove(similar);
+                    candidates.add(current);
+                }
+            }
+            else {
+                candidates.add(current);
+            }
+        }
 
-
-
-
-
+        return candidates;
     }
 
 
-    private boolean passesMinimumThreshold(Node incoming)
+    private boolean passesMinimumThreshold(int courseFrequency, int totalFrequency)
+            throws Exception
     {
-        return false;
+        if (totalFrequency <= 0) {
+            throw new Exception("totalFrequency is not positive: " + totalFrequency);
+        }
+
+        return (double) courseFrequency / (double) totalFrequency > this.frequencyThreshold;
+    }
+
+    private NewCandidate findSimilarCandidate(Set<NewCandidate> set, NewCandidate incoming) {
+        for (NewCandidate incumbent : set) {
+            double similarity = incumbent.getSimilarityCoefficient(incoming);
+            if (similarity > similarityThreshold) {
+                return incumbent;
+            }
+        }
+
+        // we haven't found anything return null
+        return null;
     }
 
 
-    public boolean areCourseCategoriesSimilar(Node incumbent, Node incoming)
-    {
-        // Get the labels and cat of both nodes
-        // If more than x similarity, return true
-        return false;
-    }
-
-
-    public Set<Node> getListOfCandidates()
-    {
-        return candidates.keySet();
-    }
 }
