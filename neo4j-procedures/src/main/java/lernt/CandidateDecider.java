@@ -7,24 +7,30 @@ import org.neo4j.graphdb.RelationshipType;
 
 import java.util.*;
 
-public class CandidateSet
+public class CandidateDecider
 {
+    Node currentCourse;
     Tracker tracker;
-    HashMap<Node, Integer> candidates;
     ConfigObject config;
-    int totalIncomingCount;
 
-    public static List<Node> getCandidateSet(Node node, Tracker tracker, ConfigObject config)
+    public CandidateDecider(Node currentCourse, Tracker tracker, ConfigObject config)
+    {
+        this.currentCourse = currentCourse;
+        this.tracker = tracker;
+        this.config = config;
+    }
+
+    public List<Node> getCandidateSet()
     {
         RelationshipType prereqRelType = RelationshipType.withName(config.getPrereqLabelName());
-        boolean hasIncoming = node.hasRelationship(Direction.INCOMING, prereqRelType);
+        boolean hasIncoming = currentCourse.hasRelationship(Direction.INCOMING, prereqRelType);
 
         // There are no incoming relationships; no candidates, return empty
         if (!hasIncoming) {
             return new ArrayList<>();
         }
 
-        Iterator<Relationship> rels = node.getRelationships(prereqRelType).iterator();
+        Iterator<Relationship> rels = currentCourse.getRelationships(prereqRelType).iterator();
 
         // Produce a map of nodes and relative frequencies
         // Count relative frequencies
@@ -36,17 +42,17 @@ public class CandidateSet
     }
 
 
-    private Map<Node, Integer> getIncomingFrequencies(Node curNode, Iterator<Relationship> it, Tracker tracker)
+    private Map<Node, Integer> getIncomingFrequencies(Iterator<Relationship> it)
     {
         Map<Node, Integer> map = new HashMap<>();
 
         while(it.hasNext()) {
             Relationship rel = it.next();
-            Node otherNode = rel.getOtherNode(curNode);
+            Node otherNode = rel.getOtherNode(currentCourse);
             tracker.addToVisited(otherNode);
 
             // Relationship is outgoing, we don't need its frequency
-            if (rel.getStartNode().equals(curNode)) {
+            if (rel.getStartNode().equals(currentCourse)) {
                 continue;
             }
 
@@ -64,9 +70,21 @@ public class CandidateSet
     }
 
 
-    private List<Node> processPrereqs(Map<Node, Integer> incoming, Tracker tracker, ConfigObject config)
+    private Set<Node> processPrereqs(Map<Node, Integer> incoming)
     {
-        List<NewCandidate> candidates = new ArrayList<>();
+        int totalIncoming = incoming.values().stream().reduce(0, Integer::sum);
+
+
+        // for every incoming
+            // if passes threshold(course freq, total freq)
+            // make new candidate
+            // for each existing candidate
+                // compare newcomer with incumbent
+                // if too similar
+                    // pick the one with more recommendations
+                    // remove incumbent if necessary
+
+
 
 
 

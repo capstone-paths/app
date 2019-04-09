@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ba7137c7-b2ba-434a-8ceb-e2a4f53f81c1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/lernt/CandidateSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/CandidateSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lernt/NewCandidate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/NewCandidate.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -74,7 +73,7 @@
           <entry key="bm-000-test-full" value="565" />
           <entry key="bm-000-test-single-node" value="144" />
           <entry key="dummy" value="1" />
-          <entry key="java" value="45911" />
+          <entry key="java" value="46401" />
           <entry key="small-test-000" value="32" />
           <entry key="small-test-0011" value="21" />
           <entry key="small-test-002" value="60" />
@@ -85,7 +84,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="45911" />
+          <entry key="JAVA" value="46401" />
           <entry key="PLAIN_TEXT" value="9430" />
           <entry key="XML" value="48" />
         </counts>
@@ -187,7 +186,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/lernt/NewCandidate.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1049">
+                <state relative-caret-position="268">
                   <caret line="82" selection-start-line="82" selection-end-line="82" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -229,8 +228,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CandidateSet.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="915">
-                  <caret line="69" column="7" selection-start-line="69" selection-start-column="7" selection-end-line="69" selection-end-column="7" />
+                <state relative-caret-position="338">
+                  <caret line="71" column="7" selection-start-line="71" selection-start-column="7" selection-end-line="71" selection-end-column="7" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1373#1374#0" expanded="true" />
@@ -438,7 +437,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554802954515" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554804893453" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -543,7 +542,7 @@
       <workItem from="1553093213699" duration="5428000" />
       <workItem from="1553107543863" duration="41079000" />
       <workItem from="1554452278179" duration="29284000" />
-      <workItem from="1554736719200" duration="16028000" />
+      <workItem from="1554736719200" duration="17216000" />
     </task>
     <servers />
   </component>
@@ -580,7 +579,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99402000" />
+    <option name="totallyTimeSpent" value="100590000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1067,7 +1066,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/lernt/NewCandidate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1049">
+        <state relative-caret-position="268">
           <caret line="82" selection-start-line="82" selection-end-line="82" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1081,8 +1080,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CandidateSet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="915">
-          <caret line="69" column="7" selection-start-line="69" selection-start-column="7" selection-end-line="69" selection-end-column="7" />
+        <state relative-caret-position="338">
+          <caret line="71" column="7" selection-start-line="71" selection-start-column="7" selection-end-line="71" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1373#1374#0" expanded="true" />
