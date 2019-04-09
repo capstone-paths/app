@@ -17,14 +17,16 @@ public class Tracker
     private Set<Relationship> resultRels;
     private Set<Long> visited;
     private Set<Node> heads;
+    private Set<Node> userCompleted;
 
 
-    public Tracker()
+    public Tracker(Set<Node> userCompleted)
     {
         this.resultNodes = new HashSet<>();
         this.resultRels = new HashSet<>();
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
+        this.userCompleted = userCompleted;
     }
 
 
@@ -103,5 +105,10 @@ public class Tracker
         ArrayList<Relationship> list = new ArrayList<>();
         list.addAll(resultRels);
         return list;
+    }
+
+    public boolean hasUserCompleted(Node course)
+    {
+        return userCompleted.contains(course);
     }
 }

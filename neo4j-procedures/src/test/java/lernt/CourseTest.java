@@ -102,8 +102,13 @@ public class CourseTest
         setDBInitStateFromFile("bm-000");
         processRelationshipsFile("bm-000-test-user");
 
-        List<Record> record = session.run(baseWorkingQuery).list();
-        assertEquals(record.size(), 0);
+        String query = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
+                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id'}) "
+                +  "YIELD nodes, relationships "
+                +  "RETURN nodes, relationships";
+
+        List<Record> record = session.run(query).list();
+        assertEquals(0, record.size());
     }
 
     @Test
@@ -363,7 +368,6 @@ public class CourseTest
         params.put("targetID", parts[4]);
 
         // https://stackoverflow.com/q/24274364/6854595
-//        String query = "MERGE (#sourceLabel# {id: {sourceID}})-[#relLabel#]->(#targetLabel# {id: {targetID}})";
         String query = "MATCH (src #sourceLabel# {id: {sourceID}}) " +
                        "MATCH (trg #targetLabel# {id: {targetID}}) " +
                        "CREATE (src)-[#relLabel#]->(trg)";

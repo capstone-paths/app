@@ -27,10 +27,9 @@ public class CoursePath
     {
         ConfigObject configuration = new ConfigObject(config);
 
-        // Collections for Courses and Prereqs to return
-        // Plus a set to keep track of visited nodes
-        // TODO: Add as global or as own class
-        Tracker tracker = new Tracker();
+        Set<Node> completedCourses = getAllUserCourses(configuration);
+        Tracker tracker = new Tracker(completedCourses);
+
         tracker.addToVisited(startNode);
 
         findCoursePathPrivate(startNode, tracker, configuration);
@@ -70,18 +69,43 @@ public class CoursePath
             tracker.makeRelationship(prereq , curNode);
             tracker.removeFromHeads(curNode);
             findCoursePathPrivate(prereq, tracker, config);
-//            if (tracker.isInResultNodes(prereq)) {
-//                tracker.makeRelationship(prereq , curNode);
-//            }
-//            else if (tracker.isInVisited(prereq)) {
-//                tracker.addToResultNodes(prereq);
-//                tracker.makeRelationship(prereq, curNode);
-//            }
-//            else { // not in result, and not in visited
-//                tracker.removeFromHeads(curNode);
-//                findCoursePathPrivate(prereq, tracker, config);
-//            }
         }
+    }
+
+    private Set<Node> getAllUserCourses(ConfigObject config)
+    {
+        Set<Node> set = new HashSet<>();
+
+        String userID = config.getUserID();
+        if (userID == null) {
+            return set;
+        }
+        String userLabelName = config.getUserLabelName();
+        Label userLabel = Label.label(userLabelName);
+        String userIDPropName = config.getUserIDPropName();
+
+        // TODO: Ponder this
+        // The procedure doesn't fail if a user id is provided, but not user is matched
+        // Is this the behavior we really want?
+        Node user = db.findNode(userLabel, userIDPropName, userID);
+        if (user == null) {
+            return set;
+        }
+
+        RelationshipType type = RelationshipType.withName(config.getCompletedCourseRelName());
+
+        Iterator<Relationship> completed = user.getRelationships(Direction.OUTGOING, type).iterator();
+
+        if (!completed.hasNext()) {
+            return null;
+        }
+
+        while(completed.hasNext()) {
+            Relationship rel = completed.next();
+            set.add(rel.getOtherNode(user));
+        }
+
+        return set;
     }
 
 

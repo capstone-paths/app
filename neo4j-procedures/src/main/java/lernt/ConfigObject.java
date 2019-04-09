@@ -9,6 +9,9 @@ import java.util.Map;
 public class ConfigObject
 {
     private String userID;
+    private String userLabelName;
+    private String userIDPropName;
+    private String completedCourseRelName;
     private String courseWeightPropName;
     private String courseLabelName;
     private String courseCategoryPropName;
@@ -23,6 +26,9 @@ public class ConfigObject
     {
         // TODO: I think these casts are not safe
         this.userID = (String) config.getOrDefault("userID", null);
+        this.userIDPropName = (String) config.getOrDefault("userIDPropName", "userID");
+        this.userLabelName = (String) config.getOrDefault("userLabelName", "User");
+        this.completedCourseRelName = (String) config.getOrDefault("completedCourseRelName", "COMPLETED");
         this.courseWeightPropName = (String) config.getOrDefault("courseWeightPropName", "recommendations");
         this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "subject");
         this.courseTagsPropName = (String) config.getOrDefault("courseTagsPropName", "tags");
@@ -76,5 +82,25 @@ public class ConfigObject
     public Object getFrequencyThreshold()
     {
         return frequencyThreshold;
+    }
+
+    public String getUserID()
+    {
+        return userID;
+    }
+
+    public String getUserLabelName()
+    {
+        return userLabelName;
+    }
+
+    public String getCompletedCourseRelName()
+    {
+        return completedCourseRelName;
+    }
+
+    public String getUserIDPropName()
+    {
+        return userIDPropName;
     }
 }

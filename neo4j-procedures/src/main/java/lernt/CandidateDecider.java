@@ -58,11 +58,18 @@ public class CandidateDecider
     {
         Map<Node, Integer> map = new HashMap<>();
 
+        // TODO: Clean up this logic, too many continues
         while(it.hasNext()) {
             Relationship rel = it.next();
             Node otherNode = rel.getOtherNode(currentCourse);
 
+            // User has completed, not interested
+            if (tracker.hasUserCompleted(otherNode)) {
+                continue;
+            }
+
             boolean isOutgoing = rel.getStartNode().equals(currentCourse);
+
 
             // If an incoming relationship has already been visited,
             // we add it to the results, but we don't consider it a recursion candidate
