@@ -50,7 +50,7 @@ public class Tracker
             VirtualRelationship rel = head.createRelationshipTo(node, RelationshipType.withName("NEXT"));
             addToResultRels(rel);
         }
-        addToResultNodes(nodes);
+        addToResultNodes(head);
     }
 
     public void addToResultRels(Relationship rel)
