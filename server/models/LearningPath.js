@@ -48,7 +48,29 @@ class LearningPath {
     return this;
   }
 
+ /**
+   * Finds all paths
+   * @param {Session} session 
+   */
+  static async findAll(session) {
+    const query = `
+      MATCH (s: PathStart)
+      RETURN s 
+    `;
 
+    const results = await session.run(query);
+    if (results.records.length === 0) {
+      return undefined;
+    }
+
+    let sequenceData = results.records.map((sequence) => {
+      return sequence.get("s").properties;
+    });
+    
+    return { 
+      sequences: sequenceData
+    };
+  }
   /**
    * Finds a sequence by id
    * @param {Session} session 
@@ -88,33 +110,6 @@ class LearningPath {
       sequence: sequenceData,
       courseNodes, 
       rels 
-    };
-  }
-
-    /**
-   * Finds a sequence by id
-   * @param {Session} session 
-   * @param {Integer} id 
-   */
-  static async findAll(session, id) {
-    const query = `
-      MATCH (s: Sequence)
-      RETURN s as sequence
-    `;
-
-    const results = await session.run(query, { id });
-    if (results.records.length === 0) {
-      return undefined;
-    }
-
-    let records = results.records[0];
-
-    let sequenceData = records.get('sequence').map((sequence) => {
-      return sequence.properties
-    });
-    
-    return { 
-      sequences: sequenceData
     };
   }
 
