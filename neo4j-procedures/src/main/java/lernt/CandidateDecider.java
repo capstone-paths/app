@@ -70,22 +70,9 @@ public class CandidateDecider
 
             boolean isOutgoing = rel.getStartNode().equals(currentCourse);
 
-
-            // If an incoming relationship has already been visited,
-            // we add it to the results, but we don't consider it a recursion candidate
-            // This is meant to break out of nasty cycles
-            // while preserving as much information as possible
-            if (!isOutgoing && tracker.isInVisited(otherNode)) {
-                tracker.addToHeads(otherNode);
-                tracker.addToResultNodes(otherNode);
-                tracker.makeRelationship(otherNode, currentCourse);
-                continue;
-            }
-
-            tracker.addToVisited(otherNode);
-
             // Relationship is outgoing, we don't need its frequency
             if (isOutgoing) {
+                tracker.addToVisited(otherNode);
                 continue;
             }
 
@@ -117,7 +104,27 @@ public class CandidateDecider
                 continue;
             }
 
-            NewCandidate current = new NewCandidate(entry.getKey(), currentFrequency, config);
+            Node candidateNode = entry.getKey();
+
+            if (tracker.isInResultNodes(candidateNode)) {
+                if (!tracker.hasSomeRelationship(currentCourse, candidateNode)) {
+                    tracker.removeFromHeads(currentCourse);
+                    tracker.addToHeads(candidateNode);
+                    tracker.makeRelationship(currentCourse, candidateNode);
+                }
+                continue;
+            }
+            else if (tracker.isInVisited(candidateNode)) {
+                tracker.removeFromHeads(currentCourse);
+                tracker.addToHeads(candidateNode);
+                tracker.addToResultNodes(candidateNode);
+                tracker.makeRelationship(candidateNode, currentCourse);
+                continue;
+            }
+
+            tracker.addToVisited(candidateNode);
+
+            NewCandidate current = new NewCandidate(candidateNode, currentFrequency, config);
 
             NewCandidate similar = findSimilarCandidate(candidates, current);
             if (similar != null) {

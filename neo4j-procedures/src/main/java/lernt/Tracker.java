@@ -18,6 +18,7 @@ public class Tracker
     private Set<Long> visited;
     private Set<Node> heads;
     private Set<Node> userCompleted;
+    private Set<UnorderedTuple> relTuples;
 
 
     public Tracker(Set<Node> userCompleted)
@@ -27,6 +28,7 @@ public class Tracker
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
+        this.relTuples = new HashSet<>();
     }
 
 
@@ -41,6 +43,14 @@ public class Tracker
         RelationshipType type = RelationshipType.withName("NEXT");
         VirtualRelationship vr = new VirtualRelationship(from, to, type);
         addToResultRels(vr);
+        UnorderedTuple ut = new UnorderedTuple(from.getId(), to.getId());
+        relTuples.add(ut);
+    }
+
+    public boolean hasSomeRelationship(Node a, Node b)
+    {
+        UnorderedTuple ut = new UnorderedTuple(a.getId(), b.getId());
+        return relTuples.contains(ut);
     }
 
     public void buildHead(GraphDatabaseService db) {
@@ -55,7 +65,7 @@ public class Tracker
         addToResultNodes(head);
     }
 
-    public void addToResultRels(Relationship rel)
+    private void addToResultRels(Relationship rel)
     {
         resultRels.add(rel);
     }
