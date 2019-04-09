@@ -18,17 +18,25 @@ public class NewCandidate
         this.courseNode = courseNode;
         this.frequency = frequency;
 
-        Object courseCategory = courseNode.getProperty(config.getCourseCategoryPropName());
+        // Category field should be required, but just in case
+        Object courseCategory = courseNode.getProperty(config.getCourseCategoryPropName(), null);
         if (!(courseCategory instanceof String)) {
             throw new Exception("Course category not a String: " + String.valueOf(courseCategory));
         }
         this.category = (String) courseCategory;
 
-        Object courseTags = courseNode.getProperty(config.getCourseTagsPropName());
-        if (!(courseTags instanceof String[])) {
-            throw new Exception("Course tags is not a String array: " + String.valueOf(courseTags));
+        // Tags are made optional
+        // An empty array will mean that tags are not considered in a similarity comparison
+        Object courseTags = courseNode.getProperty(config.getCourseTagsPropName(), null);
+        if (courseTags == null) {
+            this.tags = new String[]{};
         }
-        this.tags = (String[]) courseTags;
+        else {
+            if (!(courseTags instanceof String[])) {
+                throw new Exception("Course tags is not a String array: " + String.valueOf(courseTags));
+            }
+            this.tags = (String[]) courseTags;
+        }
     }
 
 
