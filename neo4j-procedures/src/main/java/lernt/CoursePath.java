@@ -31,14 +31,10 @@ public class CoursePath
         // Collections for Courses and Prereqs to return
         // Plus a set to keep track of visited nodes
         // TODO: Add as global or as own class
-        List<Node> nodes = new ArrayList<Node>();
-        List<Relationship> relationships = new ArrayList<Relationship>();
-        Set<Long> visited = new HashSet<>();
-        Set<Node> heads = new HashSet<>();
+        Tracker tracker = new Tracker();
+        tracker.addToVisited(startNode);
 
-        visited.add(startNode.getId());
-
-        findCoursePathPrivate(nodes, relationships, visited, heads, startNode, threshold, configuration);
+        findCoursePathPrivate(startNode, tracker, configuration);
 
         // Nothing found
         if (nodes.size() < 2) {
@@ -60,12 +56,11 @@ public class CoursePath
     }
 
 
-    private void findCoursePathPrivate(List<Node> nodes, List<Relationship> rels, Set<Long> visited, Set<Node> heads,
-                                       Node curNode, Double threshold, ConfigObject config)
+    private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config)
             throws Exception
     {
-        nodes.add(curNode);
-        heads.add(curNode);
+        tracker.addToNodes(curNode);
+        tracker.addToHeads(curNode);
 
         Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(config.getPrereqLabelName()),
                                                                  Direction.INCOMING).iterator();

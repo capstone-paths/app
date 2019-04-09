@@ -12,6 +12,7 @@ public class ConfigObject
     private String courseWeightPropName;
     private String courseLabelName;
     private String courseCategoryPropName;
+    private String courseTagsPropName;
     private String prereqWeightPropName;
     private String prereqLabelName;
 
@@ -21,6 +22,7 @@ public class ConfigObject
         this.userID = (String) config.getOrDefault("userID", null);
         this.courseWeightPropName = (String) config.getOrDefault("courseWeightPropName", "recommendations");
         this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "subject");
+        this.courseTagsPropName = (String) config.getOrDefault("courseTagsPropName", "tags");
         this.courseLabelName = (String) config.getOrDefault("courseLabelName", "Course");
         this.prereqWeightPropName = (String) config.getOrDefault("prereqWeightPropName", "recommendations");
         this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "NEXT");
@@ -54,5 +56,10 @@ public class ConfigObject
     public String getPrereqLabelName()
     {
         return prereqLabelName;
+    }
+
+    public String getCourseTagsPropName()
+    {
+        return courseTagsPropName;
     }
 }
