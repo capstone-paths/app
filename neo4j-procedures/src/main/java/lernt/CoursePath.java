@@ -54,7 +54,7 @@ public class CoursePath
     {
         // TODO:
         // Not sure we need this logic; review
-        if (tracker.isInVisited(curNode)) {
+        if (tracker.isInResultNodes(curNode)) {
             return;
         }
 
@@ -65,7 +65,6 @@ public class CoursePath
 
         CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
         Set<NewCandidate> candidateSet = cd.getCandidateSet();
-
 
         for (NewCandidate candidate : candidateSet)
         {

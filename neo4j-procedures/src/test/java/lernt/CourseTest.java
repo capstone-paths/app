@@ -54,7 +54,7 @@ public class CourseTest
     }
 
     String baseWorkingQuery = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
-            +  "CALL lernt.findCoursePath(t, 0, {}) "
+            +  "CALL lernt.findCoursePath(t, {}) "
             +  "YIELD nodes, relationships "
             +  "RETURN nodes, relationships";
 
