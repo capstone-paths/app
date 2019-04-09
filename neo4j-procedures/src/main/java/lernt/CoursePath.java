@@ -52,14 +52,12 @@ public class CoursePath
     private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config)
             throws Exception
     {
-        // TODO:
-        // Not sure we need this logic; review
+        // This guard is necessary because CandidateDecider also adds nodes to the result set
+        // A node can have therefore been added depth-first, when we attempt to add it in breadth
         if (tracker.isInResultNodes(curNode)) {
             return;
         }
 
-        // TODO:
-        // More logical to add at the end, check
         tracker.addToResultNodes(curNode);
         tracker.addToHeads(curNode);
 
@@ -69,17 +67,20 @@ public class CoursePath
         for (NewCandidate candidate : candidateSet)
         {
             Node prereq = candidate.getCourseNode();
-            if (tracker.isInResultNodes(prereq)) {
-                tracker.makeRelationship(prereq , curNode);
-            }
-            else if (tracker.isInVisited(prereq)) {
-                tracker.addToResultNodes(prereq);
-                tracker.makeRelationship(prereq, curNode);
-            }
-            else { // not in result, and not in visited
-                tracker.removeFromHeads(prereq);
-                findCoursePathPrivate(prereq, tracker, config);
-            }
+            tracker.makeRelationship(prereq , curNode);
+            tracker.removeFromHeads(curNode);
+            findCoursePathPrivate(prereq, tracker, config);
+//            if (tracker.isInResultNodes(prereq)) {
+//                tracker.makeRelationship(prereq , curNode);
+//            }
+//            else if (tracker.isInVisited(prereq)) {
+//                tracker.addToResultNodes(prereq);
+//                tracker.makeRelationship(prereq, curNode);
+//            }
+//            else { // not in result, and not in visited
+//                tracker.removeFromHeads(curNode);
+//                findCoursePathPrivate(prereq, tracker, config);
+//            }
         }
     }
 

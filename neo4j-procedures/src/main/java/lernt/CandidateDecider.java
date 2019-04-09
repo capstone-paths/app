@@ -61,10 +61,24 @@ public class CandidateDecider
         while(it.hasNext()) {
             Relationship rel = it.next();
             Node otherNode = rel.getOtherNode(currentCourse);
+
+            boolean isOutgoing = rel.getStartNode().equals(currentCourse);
+
+            // If an incoming relationship has already been visited,
+            // we add it to the results, but we don't consider it a recursion candidate
+            // This is meant to break out of nasty cycles
+            // while preserving as much information as possible
+            if (!isOutgoing && tracker.isInVisited(otherNode)) {
+                tracker.addToHeads(otherNode);
+                tracker.addToResultNodes(otherNode);
+                tracker.makeRelationship(otherNode, currentCourse);
+                continue;
+            }
+
             tracker.addToVisited(otherNode);
 
             // Relationship is outgoing, we don't need its frequency
-            if (rel.getStartNode().equals(currentCourse)) {
+            if (isOutgoing) {
                 continue;
             }
 
