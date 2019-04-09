@@ -8,9 +8,6 @@ import java.util.Set;
 public class NewCandidate
 {
     private Node courseNode;
-
-
-
     private int frequency;
     private String category;
     private String[] tags;
@@ -78,6 +75,9 @@ public class NewCandidate
 
         return (double) matches / (double) uniques.size();
     }
+
+
+    public Node getCourseNode() { return courseNode; }
 
 
     public String getCategory()

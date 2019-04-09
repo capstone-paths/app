@@ -36,9 +36,10 @@ public class CoursePath
         findCoursePathPrivate(startNode, tracker, configuration);
 
         // Nothing found
-        if (nodes.size() < 2) {
+        if (tracker.getResultNodesSize() < 2) {
             return Stream.empty();
         }
+
 
         // Create virtual node
         // Create relationship between node and all nodes in the heads
@@ -58,67 +59,35 @@ public class CoursePath
     private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config)
             throws Exception
     {
-        tracker.addToNodes(curNode);
-        tracker.addToHeads(curNode);
-
-        Iterator<Relationship> relsIt = curNode.getRelationships(RelationshipType.withName(config.getPrereqLabelName()),
-                                                                 Direction.INCOMING).iterator();
-
-        if (!relsIt.hasNext()) {
+        // TODO:
+        // Not sure we need this logic; review
+        if (tracker.isInVisited(curNode)) {
             return;
         }
 
-        // Get relationships from both directions
-        // For each relationship
-            // Get node at other end
-            // Add to visited
-            // if incoming
-                // add to incoming map <Node, NumOccurrences>
-                // increment incoming total counter
+        // TODO:
+        // More logical to add at the end, check
+        tracker.addToResultNodes(curNode);
+        tracker.addToHeads(curNode);
 
-        // if incoming map is empty get out
-
-        // for each member of the incoming set
+        CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
+        Set<NewCandidate> candidateSet = cd.getCandidateSet();
 
 
-        // if candidate set is > 0, remove
-
-        // recurse over list of candidates
-
-
-        HashMap<String, Candidate> nextNodes = new HashMap<>();
-        Relationship prereq = null;
-        Candidate candidate = null;
-
-        while (relsIt.hasNext()) {
-            prereq = relsIt.next();
-            candidate = new Candidate(curNode, prereq, prereq.getOtherNode(curNode), config);
-
-            // TODO: Debug, remove
-            String cur = curNode.getProperty("name").toString();
-            String can = candidate.getCandidateCourse().getProperty("name").toString();
-
-            // if node has been visited we don't add it
-            // prereq is only added if node hasn't been visited
-            // this helps break cycles but affects the model's fidelity
-            if (visited.contains(candidate.getCandidateId())) {
-                continue;
+        for (NewCandidate candidate : candidateSet)
+        {
+            Node prereq = candidate.getCourseNode();
+            if (tracker.isInResultNodes(prereq)) {
+                tracker.makeRelationship(prereq , curNode);
             }
-            rels.add(prereq);
-
-            visited.add(candidate.getCandidateId());
-
-            if (candidate.shouldAddToNextNodes(nextNodes, threshold)) {
-                nextNodes.put(candidate.getCandidateCategory(), candidate);
+            else if (tracker.isInVisited(prereq)) {
+                tracker.addToResultNodes(prereq);
+                tracker.makeRelationship(prereq, curNode);
             }
-        }
-
-        if (nextNodes.size() > 0) {
-            heads.remove(curNode);
-        }
-
-        for (Candidate toAdd : nextNodes.values()) {
-            findCoursePathPrivate(nodes, rels, visited, heads, toAdd.getCandidateCourse(), threshold, config);
+            else { // not in result, and not in visited
+                tracker.removeFromHeads(prereq);
+                findCoursePathPrivate(prereq, tracker, config);
+            }
         }
     }
 
