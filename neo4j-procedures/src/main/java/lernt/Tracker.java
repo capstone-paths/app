@@ -1,8 +1,6 @@
 package lernt;
 
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,6 +41,18 @@ public class Tracker
         addToResultRels(vr);
     }
 
+    public void buildHead(GraphDatabaseService db) {
+        VirtualNode head = new VirtualNode(-1, db);
+        head.addLabel(Label.label("VirtualPathStart"));
+        head.setProperty("name", "VirtualPathStart");
+
+        for (Node node : heads) {
+            VirtualRelationship rel = head.createRelationshipTo(node, RelationshipType.withName("NEXT"));
+            addToResultRels(rel);
+        }
+        addToResultNodes(nodes);
+    }
+
     public void addToResultRels(Relationship rel)
     {
         resultRels.add(rel);
@@ -79,5 +89,19 @@ public class Tracker
     public int getResultNodesSize()
     {
         return resultNodes.size();
+    }
+
+    public List<Node> getResultNodesList()
+    {
+        ArrayList<Node> list = new ArrayList<>();
+        list.addAll(resultNodes);
+        return list;
+    }
+
+    public List<Relationship> getResultRelsList()
+    {
+        ArrayList<Relationship> list = new ArrayList<>();
+        list.addAll(resultRels);
+        return list;
     }
 }

@@ -36,21 +36,14 @@ public class CoursePath
         findCoursePathPrivate(startNode, tracker, configuration);
 
         // Nothing found
-        if (tracker.getResultNodesSize() < 2) {
+        if (tracker.getResultNodesSize() <= 1) {
             return Stream.empty();
         }
 
+        tracker.buildHead(db);
 
-        // Create virtual node
-        // Create relationship between node and all nodes in the heads
-        VirtualNode head = new VirtualNode(-1, db);
-        head.addLabel(Label.label("VirtualPathStart"));
-        head.setProperty("name", "VirtualPathStart");
-        for (Node node : heads) {
-            VirtualRelationship rel = head.createRelationshipTo(node, RelationshipType.withName("NEXT"));
-            relationships.add(rel);
-        }
-        nodes.add(head);
+        List<Node> nodes = tracker.getResultNodesList();
+        List<Relationship> relationships = tracker.getResultRelsList();
 
         return Stream.of(new GraphResult(nodes, relationships));
     }
