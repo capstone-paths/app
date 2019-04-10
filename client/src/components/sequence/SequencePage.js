@@ -4,27 +4,42 @@ import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
 import { Icon } from 'semantic-ui-react'
 import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
+import CourseDetailsMini from '../course/CourseDetailsMini';
 
 class SequencePage extends Component {
     constructor(props) {
         super(props);
-        this.state = { loaded: false };
+        this.state = { loaded: false, currentCourse: null };
         this.api = new LerntApi();
         this.api.getSequence(props.match.params.sequenceId)
             .then((response) => {
                 this.setState({ loaded: true, data: response.data })
             });
     }
+
     render() {
         let vis;
+
         function onclick() {
             alert('Add course to sequence');
         }
-        function onCourseSelect(course){
-            console.log('parent sees' + course);
+        let onCourseSelect = (course) => {
+            var state = this.state;
+            console.log(state);
+            state.currentCourse = course.selectedCourse;
+            this.setState(state);
+            console.log(course);
         }
+        let  getCourseDetails = () => {
+            console.log('asdasdasd');
+            if(this.state.currentCourse !== null){
+                return  <CourseDetailsMini courseId ={this.state.currentCourse} ></CourseDetailsMini>
+            }
+            return ''
+        }
+
         if (this.state.loaded) {
-            vis = <CouseNetworkVis sequenceId={this.props.match.params.sequenceId} onCourseSelect={onCourseSelect}></CouseNetworkVis>
+            vis = <CouseNetworkVis sequenceId={this.props.match.params.sequenceId} selectedCourse={this.state.currentCourse} onCourseSelect={onCourseSelect}></CouseNetworkVis>
         } else {
             //This will block out the page, which sucks. Working on it. 
             // vis =  <Dimmer active>
@@ -32,7 +47,7 @@ class SequencePage extends Component {
             //         </Dimmer>
             vis = <div>Loading ... <Icon loading name='spinner' /></div>
         }
-      
+        console.log('render');
         return (
             <div style={{ fontSize: '2em' }}>
                 <Header as='h1' attached='top'>
@@ -59,6 +74,9 @@ class SequencePage extends Component {
                                     <Menu.Item>
                                         <Header as='h4'>Sequence Statistics</Header>
                                         <p>100% Awesome</p>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        {getCourseDetails()}
                                     </Menu.Item>
                                 </Menu>
                             </Grid.Column>

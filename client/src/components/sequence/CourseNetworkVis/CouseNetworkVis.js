@@ -53,6 +53,16 @@ export default class CouseNetworkVis extends Component {
         this.setState(state);
       });
   }
+  //this component should not update after the initial render. All interaction is handled in canvas
+  first = true;
+  shouldComponentUpdate(nextProps, nextState){
+    if(this.first){
+      this.first = false;
+      return true; 
+    }
+    return false;
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     var nodes = new vis.DataSet(this.state.nodes);
     var edges = new vis.DataSet(this.state.edges);
@@ -97,15 +107,20 @@ export default class CouseNetworkVis extends Component {
         }
       },
       edges: {
-        length: 335
-      },
+        length: 235,
+        smooth: {
+            type: 'cubicBezier',
+            forceDirection: 'horizontal',
+            roundness: 0.4
+        }
+    },
     };
     var network = new vis.Network(container, data, options);
-    
+
     //when a node is selected, communicate to parent page
     network.on("selectNode", (params) => {
-      this.onCourseSelect({ selectedCourse: params.node });
       this.selectedCourse = params.nodes[0];
+      this.onCourseSelect({ selectedCourse: params.nodes[0] });
     });
 
     var input = document.getElementById("awesomplete");
