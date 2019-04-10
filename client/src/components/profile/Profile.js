@@ -3,15 +3,14 @@ import {
     Button,
     Card,
     Grid,
-    Header,
     Icon, 
-    Label, 
     Modal
   } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import SequenceList from '../collections/SequenceList';
 import ProfileEditor from './ProfileEditor';
 import CourseTable from '../collections/CourseTable';
+import ProfileSideBar from './ProfileSidebar';
 
 class Profile extends Component {
     state = {openModal:false}
@@ -32,42 +31,7 @@ class Profile extends Component {
         return (
             <Grid >
                 <Grid.Column width={6}>
-                    <Card textAlign='center'>
-                        <Icon color='yellow' name='user circle' size='massive' style={{ margin: '.25em', marginLeft:'.70em' }} /> 
-                        {editButton}
-                         
-                        <Card.Content>
-                            <Card.Header>Sam Chao</Card.Header>
-                            <Card.Meta>
-                                    <span className='date'>Lerner since 2019</span>
-                            </Card.Meta>
-                            <Card.Description> I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.   </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <Icon name='map outline' /> 2 Active Paths
-                            <br></br>
-                            <Icon name='certificate' /> 1 Path Completed
-                        </Card.Content>
-                        <Card.Content >
-                            <Header as='h3'>Learning Style </Header>
-                            <Label> Pragmatist  </Label>
-                            <br></br>
-
-                            <Header as='h3'>Areas of Interest </Header>
-                            <Label> Front End </Label> <Label> Full Stack</Label>
-                            <br></br>
-                        </Card.Content>
-                        <Card.Content >
-                            <Header as='h3'>Expert At </Header>
-                             <Label> Data </Label> <Label> Analytics </Label> <Label> R </Label> <Label> SQL </Label>
-                            <br></br>
-                            <Header as='h3'>Proficient In</Header>
-                            <Label>Java</Label> <Label>C</Label>
-                            <br></br>
-                            <Header as='h3'>Experinece With</Header>
-                            <Label>Web Development</Label>
-                        </Card.Content>
-                    </Card>
+                    <ProfileSideBar/>
                 </Grid.Column>
                 <Grid.Column width={10} >
                     <Grid.Row >

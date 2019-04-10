@@ -57,12 +57,8 @@ class ProfileSidebar extends Component {
                             <Header as='h3'>Experinece With</Header>
                             <Label>Web Development</Label>
                         </Card.Content>
-                    </Card>
-               
-
-          
-        )
+        </Card> )
+        }
     }
-}
+        export default ProfileSidebar;
 
-export default ProfileSidebar;
