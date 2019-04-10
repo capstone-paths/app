@@ -8,8 +8,8 @@ CREATE (:Course { id: "3", name: "Algorithms", institution: "Princeton", subject
 CREATE (:Course { id: "4", name: "Algorithms", institution: "Stanford", subject: "DS & Algorithms", tags: ["algorithms"], rating: 4.91 })
 CREATE (:Course { id: "5", name: "Probability", institution: "MIT", subject: "Stats & Probability", tags: ["probability"], rating: 4.93 })
 CREATE (:Course { id: "6", name: "Probabilistic Graphs", institution: "MIT", subject: "Artificial Intelligence", tags: ["probability", "probabilistic graphical models"], rating: 4.55 })
-CREATE (:Course { id: "7", name: "Machine Learning", institution: "Stanford", tags: ["machine learning core"], rating: 4.96 })
-CREATE (:Course { id: "8", name: "Machine Learning", institution: "Georgia Tech", tags: ["machine learning core"], rating: 4.74 })
+CREATE (:Course { id: "7", name: "Machine Learning", institution: "Stanford", subject: "Machine Learning", tags: ["machine learning core"], rating: 4.96 })
+CREATE (:Course { id: "8", name: "Machine Learning", institution: "Georgia Tech", subject: "Machine Learning", tags: ["machine learning core"], rating: 4.74 })
 
 CREATE (:Track { id: "1", name: "Track: Machine Learning" })
 

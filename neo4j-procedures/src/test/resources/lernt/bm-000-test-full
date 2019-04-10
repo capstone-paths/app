@@ -8,7 +8,7 @@
 :Course 4, :NEXT, :Course 7, 900
 :Course 3, :NEXT, :Course 7, 733
 :Course 5, :NEXT, :Course 7, 655
-:Course 6, :NEXT, :Course 7, 130
+// :Course 6, :NEXT, :Course 7, 130
 :Course 5, :NEXT, :Course 6, 420
 :Course 7, :NEXT, :Track 1, 200
 :Course 8, :NEXT, :Track 1, 10

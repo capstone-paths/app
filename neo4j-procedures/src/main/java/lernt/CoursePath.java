@@ -31,6 +31,7 @@ public class CoursePath
         Tracker tracker = new Tracker(completedCourses);
 
         tracker.addToVisited(startNode);
+        tracker.addToResultNodes(startNode);
 
         findCoursePathPrivate(startNode, tracker, configuration);
 
@@ -51,20 +52,20 @@ public class CoursePath
     private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config)
             throws Exception
     {
-        // This guard is necessary because CandidateDecider also adds nodes to the result set
-        // A node can have therefore been added depth-first, when we attempt to add it in breadth
-        if (tracker.isInResultNodes(curNode)) {
-            return;
-        }
-
-        tracker.addToResultNodes(curNode);
-        tracker.addToHeads(curNode);
-
         CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
         Set<NewCandidate> candidateSet = cd.getCandidateSet();
 
         if (candidateSet.size() > 0) {
             tracker.removeFromHeads(curNode);
+        }
+
+        // TODO: Fix this, probably do it in the candidate decider
+        for (NewCandidate candidate : candidateSet)
+        {
+            Node prereq = candidate.getCourseNode();
+            tracker.addToHeads(prereq);
+            tracker.addToResultNodes(prereq);
+            tracker.makeRelationship(prereq , curNode);
         }
 
         for (NewCandidate candidate : candidateSet)
@@ -73,8 +74,6 @@ public class CoursePath
             // TODO: Debug remove
             String curName = (String) curNode.getProperty("name", null);
             String preName = (String) prereq.getProperty("name", null);
-            tracker.makeRelationship(prereq , curNode);
-//            tracker.removeFromHeads(curNode);
             findCoursePathPrivate(prereq, tracker, config);
         }
     }
