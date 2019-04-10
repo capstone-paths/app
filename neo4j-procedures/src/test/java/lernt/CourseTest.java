@@ -155,11 +155,11 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-common-a");
 
         String[] expectedValues = {
-//                "VirtualPathStart -> CS50x",
-//                "CS50x -> Algorithms",
-//                "CS50x -> Probability",
-//                "Algorithms -> Probability",
-//                "Probability -> Track: Machine Learning"
+                "VirtualPathStart -> CS50x",
+                "CS50x -> Algorithms",
+                "CS50x -> Probability",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
         };
 
         int expectedNodes = 5;
@@ -176,11 +176,11 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-common-b");
 
         String[] expectedValues = {
-//                "VirtualPathStart -> Algorithms",
-//                "Algorithms -> CS50x",
-//                "CS50x -> Probability",
-//                "Algorithms -> Probability",
-//                "Probability -> Track: Machine Learning"
+                "VirtualPathStart -> Algorithms",
+                "Algorithms -> CS50x",
+                "CS50x -> Probability",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
         };
 
         int expectedNodes = 5;
@@ -236,14 +236,15 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-three-complex");
 
         String[] expectedValues = {
-//                "VirtualPathStart -> Algorithms",
-//                "Algorithms -> CS50x",
-//                "CS50x -> Probability",
-//                "Probability -> Track: Machine Learning"
+                "VirtualPathStart -> CS50x",
+                "VirtualPathStart -> Algorithms",
+                "CS50x -> Probability",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
         };
 
         int expectedNodes = 5;
-        int expectedRels = 4;
+        int expectedRels = 5;
 
         courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
@@ -256,18 +257,17 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-four-devilish");
 
         String[] expectedValues = {
-//                "VirtualPathStart -> CS50x",
-//                "VirtualPathStart -> Probability",
+                "VirtualPathStart -> CS50x",
+                "VirtualPathStart -> Algorithms",
+                "VirtualPathStart -> Probability",
                 "CS50x -> Machine Learning",
-                "CS50x -> Probability",
-                "Probability -> Algorithms",
-                "Probability -> Machine Learning",
                 "Algorithms -> Machine Learning",
+                "Probability -> Machine Learning",
                 "Machine Learning -> Track: Machine Learning"
         };
 
         int expectedNodes = 6;
-        int expectedRels = 8;
+        int expectedRels = 7;
 
         courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }
@@ -426,24 +426,9 @@ public class CourseTest
             list.add(startCourseName + " -> " + endCourseName);
         }
 
-        if (expectedNode != nodes.size()) {
-            System.out.println("Error detected: ");
-            System.out.println();
+        for (String tuple : list) {
+            System.out.println(tuple);
             System.out.flush();
-            for (Value course : nodes.values()) {
-                System.out.println(course.get("name").asString());
-                System.out.println();
-                System.out.flush();
-            }
-        }
-
-        if (expectedRels != rels.size()) {
-            System.out.println("Error detected");
-            for (String tuple : list) {
-                System.out.println(tuple);
-                System.out.flush();
-            }
-
         }
 
         assertEquals(expectedNode, nodes.size());

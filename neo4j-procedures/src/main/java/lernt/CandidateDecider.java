@@ -106,11 +106,12 @@ public class CandidateDecider
 
             Node candidateNode = entry.getKey();
 
+            // TODO: Clean this up
             if (tracker.isInResultNodes(candidateNode)) {
                 if (!tracker.hasSomeRelationship(currentCourse, candidateNode)) {
                     tracker.removeFromHeads(currentCourse);
                     tracker.addToHeads(candidateNode);
-                    tracker.makeRelationship(currentCourse, candidateNode);
+                    tracker.makeRelationship(candidateNode, currentCourse);
                 }
                 continue;
             }
