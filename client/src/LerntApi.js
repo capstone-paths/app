@@ -4,6 +4,9 @@ export default class LerntApi{
     getSequence(id){
         return axios.get('/api/learning-paths/' + id)
     }
+    getSequences(){
+        return axios.get('/api/learning-paths/')
+    }
     getSequenceNodeRecommendation(id){
         return axios.get('/api/learning-paths/' + id + '/recommendation')
     }
