@@ -280,15 +280,17 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-complex");
 
         int expectedNodes = 7;
-        int expectedRels = 6;
+        int expectedRels = 8;
 
         String[] expectedValues = {
-//                "VirtualPathStart -> Probability",
+                "VirtualPathStart -> Discrete Math",
+                "VirtualPathStart -> Probability",
+                "Discrete Math -> CS50x",
                 "Probability -> CS50x",
-                "CS50x -> Algorithms",
-                "Algorithms -> Machine Learning",
-                "Probabilistic Graphs -> Track: Machine Learning",
-                "Machine Learning -> Track: Machine Learning"
+                "CS50x -> Machine Learning",
+                "CS50x -> Probabilistic Graphs",
+                "Machine Learning -> Track: Machine Learning",
+                "Probabilistic Graphs -> Track: Machine Learning"
         };
 
         courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);

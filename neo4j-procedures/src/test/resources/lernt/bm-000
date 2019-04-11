@@ -10,6 +10,7 @@ CREATE (:Course { id: "5", name: "Probability", institution: "MIT", subject: "St
 CREATE (:Course { id: "6", name: "Probabilistic Graphs", institution: "MIT", subject: "Artificial Intelligence", tags: ["probability", "probabilistic graphical models"], rating: 4.55 })
 CREATE (:Course { id: "7", name: "Machine Learning", institution: "Stanford", subject: "Machine Learning", tags: ["machine learning core"], rating: 4.96 })
 CREATE (:Course { id: "8", name: "Machine Learning", institution: "Georgia Tech", subject: "Machine Learning", tags: ["machine learning core"], rating: 4.74 })
+CREATE (:Course { id: "9", name: "Discrete Math", institution: "Harvard", subject: "Mathematics", tags: ["math"], rating: 4.55 })
 
 CREATE (:Track { id: "1", name: "Track: Machine Learning" })
 
