@@ -18,4 +18,4 @@
 :Course 7, :NEXT, :Course 9, 1
 :Course 9, :NEXT, :Course 1, 1
 :Course 7, :NEXT, :Track 1, 1
-:Course 5, :NEXT, :Track 1, 1
+:Course 6, :NEXT, :Track 1, 1

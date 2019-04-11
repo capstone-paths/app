@@ -64,9 +64,6 @@ public class CoursePath
         {
             Node prereq = candidate.getCourseNode();
             String curName = (String) curNode.getProperty("name", null);
-            if (curName.equals("Probability")) {
-                System.out.println();
-            }
             String preName = (String) prereq.getProperty("name", null);
             tracker.addToHeads(prereq);
             tracker.addToResultNodes(prereq);
