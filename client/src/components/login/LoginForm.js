@@ -14,7 +14,7 @@ class LoginForm extends Component {
           }
         `}
         </style>
-        <Grid style={{ height: '80%' }} verticalAlign='middle'>
+        <Grid style={{ height: '80%', marginLeft:'25%'}} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 600 }}>
             <Header as='h2' color='yellow' textAlign='center'>
               Login to your learning space

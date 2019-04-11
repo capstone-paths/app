@@ -31,7 +31,7 @@ class HomePage extends Component {
       }}
     />
     <Button as={ Link } to="/login" color='yellow' size='huge'>
-       I'd like to recieve my custom syllabus.
+       I'd like to recieve my custom Learning Path
       <Icon name='right arrow' /> 
     </Button>
   </Container>

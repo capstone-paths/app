@@ -52,7 +52,7 @@ class ProfileSidebar extends Component {
                         </Card.Content>
                         <Card.Content >
                             
-                            <Header as='h3'>Knows</Header>
+                            <Header as='h3'>Has Experience with</Header>
                             {this.props.user.experience.map((value) => {
                                 return <Label> {value} </Label>
                             })}
