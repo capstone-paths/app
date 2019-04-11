@@ -423,8 +423,10 @@ public class CourseTest
 
         ArrayList<String> list = new ArrayList<>();
         for (Value prereq : rels.values()) {
-            String startCourseName = map.get(prereq.asRelationship().startNodeId());
-            String endCourseName = map.get(prereq.asRelationship().endNodeId());
+            Long startNodeId = prereq.asRelationship().startNodeId();
+            Long endNodeId = prereq.asRelationship().endNodeId();
+            String startCourseName = map.get(startNodeId);
+            String endCourseName = map.get(endNodeId);
             list.add(startCourseName + " -> " + endCourseName);
         }
 

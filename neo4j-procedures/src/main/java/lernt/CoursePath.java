@@ -28,10 +28,7 @@ public class CoursePath
         ConfigObject configuration = new ConfigObject(config);
 
         Set<Node> completedCourses = getAllUserCourses(configuration);
-        Tracker tracker = new Tracker(completedCourses);
-
-        tracker.addToVisited(startNode);
-        tracker.addToResultNodes(startNode);
+        Tracker tracker = new Tracker(db, completedCourses);
 
         findCoursePathPrivate(startNode, tracker, configuration);
 
@@ -59,24 +56,17 @@ public class CoursePath
             tracker.removeFromHeads(curNode);
         }
 
-        // TODO: Fix this, probably do it in the candidate decider
-        for (NewCandidate candidate : candidateSet)
-        {
-            Node prereq = candidate.getCourseNode();
-            String curName = (String) curNode.getProperty("name", null);
-            String preName = (String) prereq.getProperty("name", null);
-            tracker.addToHeads(prereq);
-            tracker.addToResultNodes(prereq);
-            tracker.makeRelationship(prereq , curNode);
-        }
-
         for (NewCandidate candidate : candidateSet)
         {
             Node prereq = candidate.getCourseNode();
             // TODO: Debug remove
             String curName = (String) curNode.getProperty("name", null);
             String preName = (String) prereq.getProperty("name", null);
-            findCoursePathPrivate(prereq, tracker, config);
+            if (!tracker.checkIfCycle(curNode, prereq)) {
+                tracker.makeRelationship(prereq , curNode);
+                tracker.addToHeads(prereq);
+                findCoursePathPrivate(prereq, tracker, config);
+            }
         }
     }
 

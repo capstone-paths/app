@@ -72,7 +72,6 @@ public class CandidateDecider
 
             // Relationship is outgoing, we don't need its frequency
             if (isOutgoing) {
-                tracker.addToVisited(otherNode);
                 continue;
             }
 
@@ -106,24 +105,6 @@ public class CandidateDecider
 
             Node candidateNode = entry.getKey();
 
-            // TODO: Clean this up
-            if (tracker.isInResultNodes(candidateNode)) {
-                if (!tracker.hasSomeRelationship(currentCourse, candidateNode)) {
-                    tracker.removeFromHeads(currentCourse);
-                    tracker.addToHeads(candidateNode);
-                    tracker.makeRelationship(candidateNode, currentCourse);
-                }
-                continue;
-            }
-            else if (tracker.isInVisited(candidateNode)) {
-                tracker.removeFromHeads(currentCourse);
-                tracker.addToHeads(candidateNode);
-                tracker.addToResultNodes(candidateNode);
-                tracker.makeRelationship(candidateNode, currentCourse);
-                continue;
-            }
-
-            tracker.addToVisited(candidateNode);
 
             NewCandidate current = new NewCandidate(candidateNode, currentFrequency, config);
 

@@ -2,10 +2,7 @@ package lernt;
 
 import org.neo4j.graphdb.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Collection of data structures and methods
@@ -13,39 +10,120 @@ import java.util.Set;
  */
 public class Tracker
 {
-    private Set<Node> resultNodes;
+    private GraphDatabaseService db;
+//    private Set<Node> resultNodes;
+    private Map<Long, VirtualNode> resultNodes;
     private Set<Relationship> resultRels;
     private Set<Long> visited;
     private Set<Node> heads;
     private Set<Node> userCompleted;
     private Set<UnorderedTuple> relTuples;
+    private Map<Long, VirtualNode> realToVirtual;
 
-
-    public Tracker(Set<Node> userCompleted)
+    public Tracker(GraphDatabaseService db, Set<Node> userCompleted)
     {
-        this.resultNodes = new HashSet<>();
+        this.db = db;
+//        this.resultNodes = new HashSet<>();
+        this.resultNodes = new HashMap<>();
         this.resultRels = new HashSet<>();
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
         this.relTuples = new HashSet<>();
+        this.realToVirtual = new HashMap<>();
     }
-
 
     public void addToResultNodes(Node node)
     {
-        resultNodes.add(node);
+        VirtualNode vn = makeVirtualNode(node);
+        resultNodes.put(vn.getId(), vn);
+        realToVirtual.put(node.getId(), vn);
     }
+
+
+    private VirtualNode makeVirtualNode(Node node)
+    {
+        // TODO: This is not necessary, the courseID would be enough
+        Label[] labels = new Label[1];
+        Map<String, Object> props = node.getAllProperties();
+        String id;
+        if (node.hasLabel(Label.label("Course"))) {
+            labels[0] = Label.label("VirtualCourse");
+            id = (String) props.getOrDefault("id", "failure");
+        }
+        else {
+            labels[0] = Label.label("VirtualEnd");
+            id = "-1";
+        }
+        // This need to be retrieved from config, type-checked, etc.
+        return new VirtualNode(labels, props, db);
+    }
+
 
     // TODO: Arguably belongs in a factory class but OK
     public void makeRelationship(Node from, Node to)
     {
+        VirtualNode start = makeVirtualNode(from);
+        VirtualNode end = makeVirtualNode(to);
+
         RelationshipType type = RelationshipType.withName("NEXT");
-        VirtualRelationship vr = new VirtualRelationship(from, to, type);
-        addToResultRels(vr);
+
+        VirtualRelationship vr = new VirtualRelationship(start, end, type);
         UnorderedTuple ut = new UnorderedTuple(from.getId(), to.getId());
+
         relTuples.add(ut);
+
+        resultNodes.put(start.getId(), start);
+        resultNodes.put(end.getId(), end);
+        // TODO: This really needs to be cleaned up
+        realToVirtual.put(from.getId(), start);
+        realToVirtual.put(to.getId(), start);
+
+        addToResultRels(vr);
     }
+
+    public boolean checkIfCycle(Node start, Node end)
+    {
+        // TODO: Type check, etc.
+//        String endCourseID = (String) end.getProperty("id", "endNode");
+        VirtualNode virtualEnd = resultNodes.get(end.getId());
+
+        if (virtualEnd == null) {
+            return false;
+        }
+
+        Label[] labels = { Label.label("VirtualCourse") };
+        VirtualNode virtualStart = new VirtualNode(labels, start.getAllProperties(), db);
+        Relationship rel = virtualEnd.createRelationshipTo(virtualStart, RelationshipType.withName("NEXT"));
+
+        boolean hasCycle = checkIfCycleIn(virtualStart, virtualEnd);
+
+        virtualEnd.delete(rel);
+
+        return hasCycle;
+    }
+
+
+    private boolean checkIfCycleIn(VirtualNode target, VirtualNode current)
+    {
+        Iterator<Relationship> it = current.getRelationships(RelationshipType.withName("NEXT"), Direction.INCOMING).iterator();
+
+        while(it.hasNext()) {
+            Relationship rel = it.next();
+            Node incoming = rel.getOtherNode(current);
+            // TODO: Merge this
+            if (current.equals(target)) {
+                return true;
+            }
+            boolean ret = checkIfCycleIn(target, (VirtualNode) incoming);
+            if (ret) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public boolean hasSomeRelationship(Node a, Node b)
     {
@@ -54,15 +132,16 @@ public class Tracker
     }
 
     public void buildHead(GraphDatabaseService db) {
-        VirtualNode head = new VirtualNode(-1, db);
+        // Fix this, need a proper id
+        VirtualNode head = new VirtualNode(-25000, db);
         head.addLabel(Label.label("VirtualPathStart"));
         head.setProperty("name", "VirtualPathStart");
 
+        resultNodes.put(-25000L, head);
         for (Node node : heads) {
             VirtualRelationship rel = head.createRelationshipTo(node, RelationshipType.withName("NEXT"));
             addToResultRels(rel);
         }
-        addToResultNodes(head);
     }
 
     private void addToResultRels(Relationship rel)
@@ -71,31 +150,28 @@ public class Tracker
     }
 
 
-    public void addToVisited(Node node)
-    {
-        visited.add(node.getId());
-    }
-
-    public boolean isInVisited(Node node)
-    {
-        return visited.contains(node.getId());
-    }
-
-
     public void addToHeads(Node node)
     {
-        heads.add(node);
+        VirtualNode vn = realToVirtual.get(node.getId());
+        if (vn != null) {
+            heads.add(vn);
+        }
     }
 
 
     public void removeFromHeads(Node node)
     {
-        heads.remove(node);
+        VirtualNode vn = realToVirtual.get(node.getId());
+        if (vn != null) {
+            heads.remove(vn);
+        }
     }
 
+    // TODO: Type check, remove etc.
+    // We shouldn't need this method at all if cycle checking works
     public boolean isInResultNodes(Node node)
     {
-        return resultNodes.contains(node);
+        return resultNodes.containsKey((String) node.getProperty("courseID"));
     }
 
     public int getResultNodesSize()
@@ -105,9 +181,7 @@ public class Tracker
 
     public List<Node> getResultNodesList()
     {
-        ArrayList<Node> list = new ArrayList<>();
-        list.addAll(resultNodes);
-        return list;
+        return new ArrayList<Node>(resultNodes.values());
     }
 
     public List<Relationship> getResultRelsList()
