@@ -3,7 +3,6 @@ import {
     Button,
     Card,
     Grid,
-    Icon, 
     Modal
   } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
@@ -13,25 +12,30 @@ import CourseTable from '../collections/CourseTable';
 import ProfileSideBar from './ProfileSidebar';
 
 class Profile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {user: {username:'Sam Chao', 
+                      bio:"I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations. ",
+                      learningType:["Activist - Learn by doing"],
+                      interest:["angular","design", "css"],
+                      experience:["data"]
+                    }}
+    }
     state = {openModal:false}
     closeModal = () => this.setState({ openModal: false })
     openModal = () => this.setState({ openModal: true })
     editProfile = () => {this.openModal();}
-
+    onFinish= (user) => {
+        console.log(user)
+        this.setState({user: user});
+    }
     render (){
-        const editButton = <Button 
-                                id="editButton" 
-                                floated='right' 
-                                color='black'
-                                onClick={this.editProfile}
-                                content='Update your profile'> 
-                            </Button>
         const {openModal} = this.state
-
+        console.log(this.state.user)
         return (
             <Grid >
                 <Grid.Column width={6}>
-                    <ProfileSideBar/>
+                    <ProfileSideBar modalControl={this.editProfile} user={this.state.user}/>
                 </Grid.Column>
                 <Grid.Column width={10} >
                     <Grid.Row >
@@ -60,18 +64,8 @@ class Profile extends Component {
                 <Modal 
                     open={openModal}
                     onClose={this.close}>
-                    <Modal.Header>Tell Us About You</Modal.Header>
-                    <Modal.Content >
-                        <ProfileEditor/>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button color='red' onClick={this.closeModal}>
-                            <Icon name='remove' /> Cancel edit, I'd like to come back to this later
-                        </Button>
-                        <Button color='green' onClick={this.closeModal}>
-                            <Icon name='checkmark' /> I'm done sharing!
-                        </Button>
-                    </Modal.Actions>
+                        <ProfileEditor onFinish={this.onFinish} user={this.state.user} closeModal={this.closeModal}/>
+                    
                 </Modal>
           </Grid>
 

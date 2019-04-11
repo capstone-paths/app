@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import {
     Button,
@@ -9,11 +10,9 @@ import {
 
 
 class ProfileSidebar extends Component {
-    openModal = () => this.setState({ openModal: true })
-    editProfile = () => { console.log("editing profile") 
-    this.openModal();}
-
+    
     render (){
+        console.log(this.props.user)
         return (
             
                     <Card>
@@ -22,16 +21,16 @@ class ProfileSidebar extends Component {
                                 id="editButton" 
                                 floated='right' 
                                 color='black'
-                                onClick={this.editProfile}
+                                onClick={this.props.modalControl}
                                 content='Update your profile'> 
                             </Button>
                          
                         <Card.Content>
-                            <Card.Header>Sam Chao</Card.Header>
+                            <Card.Header>{this.props.user.username}</Card.Header>
                             <Card.Meta>
                                     <span className='date'>Lerner since 2019</span>
                             </Card.Meta>
-                            <Card.Description> I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.   </Card.Description>
+                            <Card.Description> {this.props.user.bio} </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
                             <Icon name='map outline' /> 2 Active Paths
@@ -40,22 +39,23 @@ class ProfileSidebar extends Component {
                         </Card.Content>
                         <Card.Content >
                             <Header as='h3'>Learning Style </Header>
-                            <Label> Pragmatist  </Label>
+                            {console.log(this.props.user.learningType)}
+                            {this.props.user.learningType.map((value) => {
+                                return <Label> {value} </Label>
+                            })}
                             <br></br>
-
                             <Header as='h3'>Areas of Interest </Header>
-                            <Label> Front End </Label> <Label> Full Stack</Label>
+                            {this.props.user.interest.map((value) => {
+                                return <Label> {value} </Label>
+                            })}
                             <br></br>
                         </Card.Content>
                         <Card.Content >
-                            <Header as='h3'>Expert At </Header>
-                             <Label> Data </Label> <Label> Analytics </Label> <Label> R </Label> <Label> SQL </Label>
-                            <br></br>
-                            <Header as='h3'>Proficient In</Header>
-                            <Label>Java</Label> <Label>C</Label>
-                            <br></br>
-                            <Header as='h3'>Experinece With</Header>
-                            <Label>Web Development</Label>
+                            
+                            <Header as='h3'>Knows</Header>
+                            {this.props.user.experience.map((value) => {
+                                return <Label> {value} </Label>
+                            })}
                         </Card.Content>
         </Card> )
         }

@@ -1,20 +1,17 @@
+"""
+Program loads scrapped data into a Neo4j instance as defined in db_conn/.env file.
+"""
+import sys
+import os
+# add parent directory to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import json
 from neo4j import GraphDatabase
-#import hashlib
 import uuid
 from datetime import datetime
 from urllib.parse import quote # library to escape urls
-import import_params #get database parameters - database host, user name, pwd etc
-
-#.env file needs to be in current director of the following format
-
-'''
-{
-"uri":"bolt://ec2-18-220-22-55.us-east-2.compute.amazonaws.com:7687",
-"neo4j_user" : "test_user",
-"neo4j_passw" : "test123"
-}
-'''
+from db_conn import import_params #get database parameters - database host, user name, pwd etc
 
 
 # function to add course node to database
@@ -34,19 +31,6 @@ def parse_effort(effort_desc):
     # extract effort hours
     effort_list = [int(word) for word in effort_desc.replace('-',' ').split() if word.isdigit()]
     return effort_list
-
-    #clean up later
-    '''
-    # default effort setting to 0 if not available
-    effort = { "lower": 0,
-               "upper": 0
-             }
-    if (len(effort_list) == 2): # if range of effort available
-        effort['lower'], effort['upper'] = effort_list
-    elif (len(effort_list) == 1):
-        effort['lower'] = effort['upper'] = effort_list[0]
-    return effort
-    '''
 
 
 # function to parse cost involved
@@ -82,27 +66,49 @@ def parse_date(date_str):
     else:
         return datetime.strptime(cln_date_str, '%d %b %Y')
 
+# function to parse scrapped json file
+def process_course_json(json_file_wPath):
+    LERNTIO_NAMESPACE_DNS = uuid.uuid3(uuid.NAMESPACE_DNS, 'lernt.io') # UUID for the lernt.io domain
+    with open(json_file_wPath) as json_file:
+        data = json.load(json_file)
 
-with open('./moocdata.json') as json_file:
-    data = json.load(json_file)
+        s = set()
+        print("Loading courses as nodes into neo4j database...")
+        for course in data:
+            modCourse = dict()
+            modCourse['courseID'] = str(uuid.uuid3(LERNTIO_NAMESPACE_DNS, course['Provider'].strip() + course['Title'].strip() ))     # course reproducible unique identifier
+            modCourse['name']     = course['Title'].strip()         # name of course
+            modCourse['effort']   = parse_effort(course['Effort'])  # course effort
+            modCourse['cost']     = parse_cost(course['Cost'])      # cost
+            modCourse['duration'] = parse_duration(course['Duration'])      # course duration
+            modCourse['subject']  = course['Subject'].strip()      # subject
+            modCourse['url']      = quote(course['URL'].strip(), safe='')  # escape url
+            modCourse['provider']  = course['Provider'].strip()      # provider
+            modCourse['language']  = course['Language'].strip()      # language
+            modCourse['startDate'] = parse_date(course['Start Date'])      # course start date
+            modCourse['syllabus']  = course['Syllabus'].strip()      # syllabus
+            modCourse['instructors']  = course['Instructors']      # list of instructors
+            modCourse['session']  = course['Session'].strip()      # session status
+            modCourse['institution']  = course['Partner'].strip()      # institution
+            modCourse['overview']  = course['Overview'].strip()      # overview
 
-    s = set()
-    for course in data:
-        modCourse = dict()
-        modCourse['courseID'] = str(uuid.uuid4())               # course unique identifier
-        modCourse['name']     = course['Title'].strip()         # name of course
-        modCourse['effort']   = parse_effort(course['Effort'])  # course effort
-        modCourse['cost']     = parse_cost(course['Cost'])      # cost
-        modCourse['duration'] = parse_duration(course['Duration'])      # course duration
-        modCourse['subject']  = course['Subject'].strip()      # subject
-        modCourse['url']      = quote(course['URL'].strip(), safe='')  # escape url
-        modCourse['provider']  = course['Provider'].strip()      # provider
-        modCourse['language']  = course['Language'].strip()      # language
-        modCourse['startDate'] = parse_date(course['Start Date'])      # course start date
-        modCourse['syllabus']  = course['Syllabus'].strip()      # syllabus
-        modCourse['instructors']  = course['Instructors']      # list of instructors
-        modCourse['session']  = course['Session'].strip()      # session status
-        modCourse['institution']  = course['Partner'].strip()      # institution
-        modCourse['overview']  = course['Overview'].strip()      # overview
+            add_course(import_params.driver, modCourse)              # write to database
+        print("Course loading complete.")
 
-        add_course(import_params.driver, modCourse)              # write to database
+# function to load scrapped data as course nodes
+def load_scraped_courses_data():
+    file_choice = input("Use file found at ./scraped_data/moocdata.json as source of course nodes [ y or n only] ? " )
+
+    if ( file_choice.lower() == 'y' ):
+        process_course_json('./scraped_data/moocdata.json')
+    else:
+        jFilePath = input("Enter full path of JSON file you want to use? ")
+        fileExists = os.path.isfile(jFilePath.strip())
+        if fileExists:
+            process_course_json(jFilePath)
+        else:
+            print('{0} file not found '.format(jFilePath))
+
+
+#comment
+#load_scraped_courses_data()
