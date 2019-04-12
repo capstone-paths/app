@@ -31,7 +31,9 @@ public class CoursePath
         Tracker tracker = new Tracker(db, completedCourses);
         tracker.addToResultNodes(startNode);
 
-        findCoursePathPrivate(startNode, tracker, configuration);
+        Queue<Node> q = new LinkedList<>();
+
+        findCoursePathPrivate(startNode, tracker, configuration, q);
 
         // Nothing found
         if (tracker.getResultNodesSize() <= 1) {
@@ -47,7 +49,7 @@ public class CoursePath
     }
 
 
-    private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config)
+    private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config, Queue<Node> q)
             throws Exception
     {
         // TODO: Debug remove
@@ -70,9 +72,16 @@ public class CoursePath
                 tracker.makeRelationship(prereq , curNode);
                 tracker.removeFromHeads(curNode);
                 tracker.addToHeads(prereq);
-                findCoursePathPrivate(prereq, tracker, config);
+                q.add(prereq);
+//                findCoursePathPrivate(prereq, tracker, config);
             }
         }
+
+        Node next;
+        while ((next = q.poll()) != null) {
+            findCoursePathPrivate(next, tracker, config, q);
+        }
+
     }
 
     private Set<Node> getAllUserCourses(ConfigObject config)
