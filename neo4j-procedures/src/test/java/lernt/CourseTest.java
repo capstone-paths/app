@@ -328,10 +328,16 @@ public class CourseTest
     @Test
     public void shouldHandleComplexScenario() throws Throwable
     {
-        setDBInitStateFromFile("bm-000-test-full");
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-full");
 
         int expectedNodes = 5;
         int expectedRels = 5;
+
+        String query = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
+                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id'}) "
+                +  "YIELD nodes, relationships "
+                +  "RETURN nodes, relationships";
 
         String[] expectedValues = {
 //                "VirtualPathStart -> Algorithms",
@@ -341,7 +347,7 @@ public class CourseTest
                 "Machine Learning -> Track: Machine Learning"
         };
 
-        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+        courseAndPrereqTester(query, expectedNodes, expectedRels, expectedValues);
     }
 
 
@@ -398,6 +404,7 @@ public class CourseTest
             query = query.replaceAll("#" + key + "#", String.valueOf(params.get(key)));
         }
 
+        String repsStr = parts[5];
         int reps = Integer.valueOf(parts[5]);
 
         for (int i = 0; i < reps; i++) {
