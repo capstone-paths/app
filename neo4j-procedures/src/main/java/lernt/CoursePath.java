@@ -29,6 +29,7 @@ public class CoursePath
 
         Set<Node> completedCourses = getAllUserCourses(configuration);
         Tracker tracker = new Tracker(db, completedCourses);
+        tracker.addToResultNodes(startNode);
 
         findCoursePathPrivate(startNode, tracker, configuration);
 
@@ -49,6 +50,9 @@ public class CoursePath
     private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config)
             throws Exception
     {
+        // TODO: Debug remove
+        String curName = (String) curNode.getProperty("name", null);
+
         CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
         Set<NewCandidate> candidateSet = cd.getCandidateSet();
 
@@ -60,9 +64,9 @@ public class CoursePath
         {
             Node prereq = candidate.getCourseNode();
             // TODO: Debug remove
-            String curName = (String) curNode.getProperty("name", null);
+            curName = (String) curNode.getProperty("name", null);
             String preName = (String) prereq.getProperty("name", null);
-            if (!tracker.checkIfCycle(curNode, prereq)) {
+            if (!tracker.checkIfCycle(prereq, curNode)) {
                 tracker.makeRelationship(prereq , curNode);
                 tracker.addToHeads(prereq);
                 findCoursePathPrivate(prereq, tracker, config);

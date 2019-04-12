@@ -11,33 +11,34 @@ import java.util.*;
 public class Tracker
 {
     private GraphDatabaseService db;
-//    private Set<Node> resultNodes;
     private Map<Long, VirtualNode> resultNodes;
     private Set<Relationship> resultRels;
     private Set<Long> visited;
     private Set<Node> heads;
     private Set<Node> userCompleted;
-    private Set<UnorderedTuple> relTuples;
     private Map<Long, VirtualNode> realToVirtual;
 
     public Tracker(GraphDatabaseService db, Set<Node> userCompleted)
     {
         this.db = db;
-//        this.resultNodes = new HashSet<>();
         this.resultNodes = new HashMap<>();
         this.resultRels = new HashSet<>();
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
-        this.relTuples = new HashSet<>();
         this.realToVirtual = new HashMap<>();
     }
 
-    public void addToResultNodes(Node node)
+    public VirtualNode addToResultNodes(Node node)
     {
-        VirtualNode vn = makeVirtualNode(node);
-        resultNodes.put(vn.getId(), vn);
-        realToVirtual.put(node.getId(), vn);
+        VirtualNode vn = realToVirtual.get(node.getId());
+        if (vn == null) {
+            vn = makeVirtualNode(node);
+            resultNodes.put(vn.getId(), vn);
+            realToVirtual.put(node.getId(), vn);
+            return vn;
+        }
+        return vn;
     }
 
 
@@ -61,44 +62,46 @@ public class Tracker
 
 
     // TODO: Arguably belongs in a factory class but OK
-    public void makeRelationship(Node from, Node to)
+    public void makeRelationship(Node start, Node end)
     {
-        VirtualNode start = makeVirtualNode(from);
-        VirtualNode end = makeVirtualNode(to);
+        VirtualNode vStart = realToVirtual.get(start.getId());
+        if (vStart == null) {
+            vStart = addToResultNodes(start);
+        }
+
+        // TODO: This should never be happening, maybe throw
+        VirtualNode vEnd = realToVirtual.get(end.getId());
+        if (vEnd == null) {
+            vEnd = addToResultNodes(end);
+        }
 
         RelationshipType type = RelationshipType.withName("NEXT");
+        VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
 
-        VirtualRelationship vr = new VirtualRelationship(start, end, type);
-        UnorderedTuple ut = new UnorderedTuple(from.getId(), to.getId());
-
-        relTuples.add(ut);
-
-        resultNodes.put(start.getId(), start);
-        resultNodes.put(end.getId(), end);
-        // TODO: This really needs to be cleaned up
-        realToVirtual.put(from.getId(), start);
-        realToVirtual.put(to.getId(), start);
-
+        // Need this because otherwise can't comfortably navigate the virtual graph
+        vEnd.createRelationshipFrom(vStart, type);
         addToResultRels(vr);
     }
 
-    public boolean checkIfCycle(Node start, Node end)
+    public boolean checkIfCycle(Node start, Node end) throws Exception
     {
         // TODO: Type check, etc.
 //        String endCourseID = (String) end.getProperty("id", "endNode");
-        VirtualNode virtualEnd = resultNodes.get(end.getId());
+        VirtualNode virtualEnd = realToVirtual.get(end.getId());
+        VirtualNode virtualStart = realToVirtual.get(start.getId());
 
+        // The virtual end should always be in the solution space
         if (virtualEnd == null) {
+            throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
+        }
+
+        // If the virtualStart is not in the solution space,
+        // then it's not possible to create a cycle
+        if (virtualStart == null) {
             return false;
         }
 
-        Label[] labels = { Label.label("VirtualCourse") };
-        VirtualNode virtualStart = new VirtualNode(labels, start.getAllProperties(), db);
-        Relationship rel = virtualEnd.createRelationshipTo(virtualStart, RelationshipType.withName("NEXT"));
-
-        boolean hasCycle = checkIfCycleIn(virtualStart, virtualEnd);
-
-        virtualEnd.delete(rel);
+        boolean hasCycle = checkIfCycleIn(virtualEnd, virtualStart);
 
         return hasCycle;
     }
@@ -106,13 +109,25 @@ public class Tracker
 
     private boolean checkIfCycleIn(VirtualNode target, VirtualNode current)
     {
+        // TODO: Debug remove
+        String curName = (String) current.getProperty("name", null);
         Iterator<Relationship> it = current.getRelationships(RelationshipType.withName("NEXT"), Direction.INCOMING).iterator();
+
+        // TODO: Debug remove
+//        Iterator<Relationship> it2 = current.getRelationships(RelationshipType.withName("NEXT"), Direction.BOTH).iterator();
+//        while (it2.hasNext()) {
+//            Relationship rel = it2.next();
+//            Node incoming = rel.getOtherNode(current);
+//            String preName = (String) incoming.getProperty("name", null);
+//        }
 
         while(it.hasNext()) {
             Relationship rel = it.next();
             Node incoming = rel.getOtherNode(current);
+            // TODO: Debug remove
+            String preName = (String) incoming.getProperty("name", null);
             // TODO: Merge this
-            if (current.equals(target)) {
+            if (incoming.getId() == target.getId()) {
                 return true;
             }
             boolean ret = checkIfCycleIn(target, (VirtualNode) incoming);
@@ -125,11 +140,7 @@ public class Tracker
     }
 
 
-    public boolean hasSomeRelationship(Node a, Node b)
-    {
-        UnorderedTuple ut = new UnorderedTuple(a.getId(), b.getId());
-        return relTuples.contains(ut);
-    }
+
 
     public void buildHead(GraphDatabaseService db) {
         // Fix this, need a proper id
@@ -171,7 +182,7 @@ public class Tracker
     // We shouldn't need this method at all if cycle checking works
     public boolean isInResultNodes(Node node)
     {
-        return resultNodes.containsKey((String) node.getProperty("courseID"));
+        return resultNodes.containsKey(node.getId());
     }
 
     public int getResultNodesSize()
