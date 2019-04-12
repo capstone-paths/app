@@ -56,9 +56,9 @@ public class CoursePath
         CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
         Set<NewCandidate> candidateSet = cd.getCandidateSet();
 
-        if (candidateSet.size() > 0) {
-            tracker.removeFromHeads(curNode);
-        }
+//        if (candidateSet.size() > 0) {
+//            tracker.removeFromHeads(curNode);
+//        }
 
         for (NewCandidate candidate : candidateSet)
         {
@@ -68,6 +68,7 @@ public class CoursePath
             String preName = (String) prereq.getProperty("name", null);
             if (!tracker.checkIfCycle(prereq, curNode)) {
                 tracker.makeRelationship(prereq , curNode);
+                tracker.removeFromHeads(curNode);
                 tracker.addToHeads(prereq);
                 findCoursePathPrivate(prereq, tracker, config);
             }
