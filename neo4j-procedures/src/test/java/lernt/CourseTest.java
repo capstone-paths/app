@@ -198,9 +198,9 @@ public class CourseTest
 
         String[] expectedValues = {
 //                "VirtualPathStart -> CS50x",
-//                "CS50x -> Algorithms",
-//                "Algorithms -> Probability",
-//                "Probability -> Track: Machine Learning"
+                "CS50x -> Algorithms",
+                "Algorithms -> Probability",
+                "Probability -> Track: Machine Learning"
         };
 
         int expectedNodes = 5;
@@ -218,9 +218,9 @@ public class CourseTest
 
         String[] expectedValues = {
 //                "VirtualPathStart -> Algorithms",
-//                "Algorithms -> CS50x",
-//                "CS50x -> Probability",
-//                "Probability -> Track: Machine Learning"
+                "Algorithms -> CS50x",
+                "CS50x -> Probability",
+                "Probability -> Track: Machine Learning"
         };
 
         int expectedNodes = 5;
@@ -237,7 +237,7 @@ public class CourseTest
 
         String[] expectedValues = {
                 "VirtualPathStart -> CS50x",
-                "VirtualPathStart -> Algorithms",
+                "CS50x -> Algorithms",
                 "CS50x -> Probability",
                 "Algorithms -> Probability",
                 "Probability -> Track: Machine Learning"
@@ -257,17 +257,21 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-four-devilish");
 
         String[] expectedValues = {
-                "VirtualPathStart -> CS50x",
-                "VirtualPathStart -> Algorithms",
-                "VirtualPathStart -> Probability",
-                "CS50x -> Machine Learning",
-                "Algorithms -> Machine Learning",
+                "CS50x -> Algorithms",
+                // TODO: PathStart here can be any of two options
+                // Need to find a way to test it
+//                "VirtualPathStart -> CS50x",
+                // Same with Algorithms, could go either way
+//                "Algorithms -> Probability",
+                "Machine Learning -> Track: Machine Learning",
                 "Probability -> Machine Learning",
-                "Machine Learning -> Track: Machine Learning"
+                "Algorithms -> Machine Learning",
+                "CS50x -> Machine Learning",
+                "CS50x -> Probability"
         };
 
         int expectedNodes = 6;
-        int expectedRels = 7;
+        int expectedRels = 8;
 
         courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
     }

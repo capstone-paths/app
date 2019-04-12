@@ -16,7 +16,6 @@ public class Tracker
     private Set<Long> visited;
     private Set<Node> heads;
     private Set<Node> userCompleted;
-    private Set<Node> pending;
     private Map<Long, VirtualNode> realToVirtual;
 
     public Tracker(GraphDatabaseService db, Set<Node> userCompleted)
@@ -28,6 +27,16 @@ public class Tracker
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
         this.realToVirtual = new HashMap<>();
+    }
+
+    public void addToVisited(Node n)
+    {
+        visited.add(n.getId());
+    }
+
+    public boolean hasBeenVisited(Node n)
+    {
+        return visited.contains(n.getId());
     }
 
     public VirtualNode addToResultNodes(Node node)
@@ -206,18 +215,5 @@ public class Tracker
     public boolean hasUserCompleted(Node course)
     {
         return userCompleted.contains(course);
-    }
-
-
-    public void addToPending(Node n) {
-        this.pending.add(n);
-    }
-
-    public void removeFromPending(Node n) {
-        this.pending.remove(n);
-    }
-
-    public boolean isInPending(Node n) {
-        return this.pending.contains(n);
     }
 }

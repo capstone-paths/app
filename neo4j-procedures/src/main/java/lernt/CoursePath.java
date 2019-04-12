@@ -72,13 +72,18 @@ public class CoursePath
                 tracker.makeRelationship(prereq , curNode);
                 tracker.removeFromHeads(curNode);
                 tracker.addToHeads(prereq);
-                q.add(prereq);
+                if (!tracker.hasBeenVisited(prereq)) {
+                    tracker.addToVisited(prereq);
+                    q.add(prereq);
+                }
 //                findCoursePathPrivate(prereq, tracker, config);
             }
         }
 
         Node next;
         while ((next = q.poll()) != null) {
+            // TODO: Debug remove
+            String nextName = (String) next.getProperty("name", null);
             findCoursePathPrivate(next, tracker, config, q);
         }
 
