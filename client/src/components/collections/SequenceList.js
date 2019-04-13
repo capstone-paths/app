@@ -6,13 +6,13 @@ class SequenceList extends Component {
     render() {
         const sequences = [{
             id: 1,
-            name: "Front End Developer",
+            name: "Sam Chao's Front End Development Path",
             author: "Sam Chao",
             domain: "Front-End Development"
         },
         {
             id: 2,
-            name: "Full Stack Developer",
+            name: "Sam Chao's Full Stack Development Path",
             author: "Sam Chao",
             domain: "Full Stack Development"
         }];

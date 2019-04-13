@@ -7,6 +7,24 @@ const utils = require('../utils');
 const router = express.Router();
 const LearningPath = require('../models/LearningPath');
 
+/**
+ * @route  GET /api/sequences
+ * @access Public
+ * @desc   Retrieves all sequences
+ * @param  id (in-path, mandatory, id)
+ */
+router.get('/', (req, res, next) => {
+  const session = utils.getDBSession(req);
+  LearningPath
+    .findAll(session)
+    .then((result) => {
+      if (!result) {
+        res.status(400);
+      }
+      res.json(result);
+    })
+    .catch(next)
+});
 
 /**
  * @route  GET /api/learning-paths/:id

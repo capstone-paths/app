@@ -3,71 +3,39 @@ import {
     Button,
     Card,
     Grid,
-    Header,
-    Icon, 
-    Label, 
     Modal
   } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import SequenceList from '../collections/SequenceList';
 import ProfileEditor from './ProfileEditor';
 import CourseTable from '../collections/CourseTable';
+import ProfileSideBar from './ProfileSidebar';
 
 class Profile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {user: {username:'Sam Chao', 
+                      bio:"I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations. ",
+                      learningType:["Activist - Learn by doing"],
+                      interest:["angular","design", "css"],
+                      experience:["data"]
+                    }}
+    }
     state = {openModal:false}
     closeModal = () => this.setState({ openModal: false })
     openModal = () => this.setState({ openModal: true })
     editProfile = () => {this.openModal();}
-
+    onFinish= (user) => {
+        console.log(user)
+        this.setState({user: user});
+    }
     render (){
-        const editButton = <Button 
-                                id="editButton" 
-                                floated='right' 
-                                color='black'
-                                onClick={this.editProfile}
-                                content='Update your profile'> 
-                            </Button>
         const {openModal} = this.state
-
+        console.log(this.state.user)
         return (
             <Grid >
                 <Grid.Column width={6}>
-                    <Card textAlign='center'>
-                        <Icon color='yellow' name='user circle' size='massive' style={{ margin: '.25em', marginLeft:'.70em' }} /> 
-                        {editButton}
-                         
-                        <Card.Content>
-                            <Card.Header>Sam Chao</Card.Header>
-                            <Card.Meta>
-                                    <span className='date'>Lerner since 2019</span>
-                            </Card.Meta>
-                            <Card.Description> I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.   </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <Icon name='map outline' /> 2 Active Paths
-                            <br></br>
-                            <Icon name='certificate' /> 1 Path Completed
-                        </Card.Content>
-                        <Card.Content >
-                            <Header as='h3'>Learning Style </Header>
-                            <Label> Pragmatist  </Label>
-                            <br></br>
-
-                            <Header as='h3'>Areas of Interest </Header>
-                            <Label> Front End </Label> <Label> Full Stack</Label>
-                            <br></br>
-                        </Card.Content>
-                        <Card.Content >
-                            <Header as='h3'>Expert At </Header>
-                             <Label> Data </Label> <Label> Analytics </Label> <Label> R </Label> <Label> SQL </Label>
-                            <br></br>
-                            <Header as='h3'>Proficient In</Header>
-                            <Label>Java</Label> <Label>C</Label>
-                            <br></br>
-                            <Header as='h3'>Experinece With</Header>
-                            <Label>Web Development</Label>
-                        </Card.Content>
-                    </Card>
+                    <ProfileSideBar modalControl={this.editProfile} user={this.state.user}/>
                 </Grid.Column>
                 <Grid.Column width={10} >
                     <Grid.Row >
@@ -96,18 +64,8 @@ class Profile extends Component {
                 <Modal 
                     open={openModal}
                     onClose={this.close}>
-                    <Modal.Header>Tell Us About You</Modal.Header>
-                    <Modal.Content >
-                        <ProfileEditor/>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button color='red' onClick={this.closeModal}>
-                            <Icon name='remove' /> Cancel edit, I'd like to come back to this later
-                        </Button>
-                        <Button color='green' onClick={this.closeModal}>
-                            <Icon name='checkmark' /> I'm done sharing!
-                        </Button>
-                    </Modal.Actions>
+                        <ProfileEditor onFinish={this.onFinish} user={this.state.user} closeModal={this.closeModal}/>
+                    
                 </Modal>
           </Grid>
 
