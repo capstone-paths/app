@@ -17,8 +17,9 @@ public class Tracker
     private Set<Node> heads;
     private Set<Node> userCompleted;
     private Map<Long, VirtualNode> realToVirtual;
+    private ConfigObject config;
 
-    public Tracker(GraphDatabaseService db, Set<Node> userCompleted)
+    public Tracker(GraphDatabaseService db, ConfigObject config, Set<Node> userCompleted)
     {
         this.db = db;
         this.resultNodes = new HashMap<>();
@@ -27,6 +28,12 @@ public class Tracker
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
         this.realToVirtual = new HashMap<>();
+        this.config = config;
+    }
+
+    public Set<Node> getUserCompleted()
+    {
+        return this.userCompleted;
     }
 
     public void addToVisited(Node n)
@@ -123,13 +130,6 @@ public class Tracker
         String curName = (String) current.getProperty("name", null);
         Iterator<Relationship> it = current.getRelationships(RelationshipType.withName("NEXT"), Direction.INCOMING).iterator();
 
-        // TODO: Debug remove
-//        Iterator<Relationship> it2 = current.getRelationships(RelationshipType.withName("NEXT"), Direction.BOTH).iterator();
-//        while (it2.hasNext()) {
-//            Relationship rel = it2.next();
-//            Node incoming = rel.getOtherNode(current);
-//            String preName = (String) incoming.getProperty("name", null);
-//        }
 
         while(it.hasNext()) {
             Relationship rel = it.next();
@@ -215,5 +215,11 @@ public class Tracker
     public boolean hasUserCompleted(Node course)
     {
         return userCompleted.contains(course);
+    }
+
+
+    public ResultNode makeResultNode(Node node) {
+        return new ResultNode(node, this.config, this.db);
+
     }
 }

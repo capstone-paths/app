@@ -56,13 +56,13 @@ public class CoursePath
         String curName = (String) curNode.getProperty("name", null);
 
         CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
-        Set<NewCandidate> candidateSet = cd.getCandidateSet();
+        Set<Course> candidateSet = cd.getCandidateSet();
 
 //        if (candidateSet.size() > 0) {
 //            tracker.removeFromHeads(curNode);
 //        }
 
-        for (NewCandidate candidate : candidateSet)
+        for (Course candidate : candidateSet)
         {
             Node prereq = candidate.getCourseNode();
             // TODO: Debug remove

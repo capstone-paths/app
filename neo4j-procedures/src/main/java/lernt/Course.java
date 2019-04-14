@@ -5,14 +5,14 @@ import org.neo4j.graphdb.Node;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NewCandidate
+public class Course
 {
     private Node courseNode;
     private int frequency;
     private String category;
     private String[] tags;
 
-    public NewCandidate(Node courseNode, int frequency, ConfigObject config)
+    public Course(Node courseNode, int frequency, ConfigObject config)
             throws Exception
     {
         this.courseNode = courseNode;
@@ -46,7 +46,7 @@ public class NewCandidate
      * @param otherCandidate
      * @return
      */
-    public double getSimilarityCoefficient(NewCandidate otherCandidate)
+    public double getSimilarityCoefficient(Course otherCandidate)
     {
         int matches = 0;
 

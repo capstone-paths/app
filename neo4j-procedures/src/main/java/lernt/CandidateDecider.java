@@ -32,9 +32,11 @@ public class CandidateDecider
         this.similarityThreshold = (double) similarityThreshold;
     }
 
-    public Set<NewCandidate> getCandidateSet()
+
+    public Set<Course> getCandidateSet()
             throws Exception
     {
+        // TODO: Change this to incoming rels, no longer need outgoin
         RelationshipType prereqRelType = RelationshipType.withName(config.getPrereqLabelName());
         boolean hasIncoming = currentCourse.hasRelationship(Direction.INCOMING, prereqRelType);
 
@@ -44,6 +46,16 @@ public class CandidateDecider
         }
 
         Iterator<Relationship> rels = currentCourse.getRelationships(prereqRelType).iterator();
+
+        // create new set
+        // for every relationship of iterator
+            // get the other node
+            // check if it's a course!
+            // make a candidate
+            // check if user has completed this course or similar
+            // check if similar courses in solution set
+
+
 
         Map<Node, Integer> coursesAndFrequencies = getIncomingFrequencies(rels);
 
@@ -86,12 +98,12 @@ public class CandidateDecider
     }
 
 
-    private Set<NewCandidate> processAll(Map<Node, Integer> incoming)
+    private Set<Course> processAll(Map<Node, Integer> incoming)
             throws Exception
     {
         int totalIncoming = incoming.values().stream().reduce(0, Integer::sum);
 
-        Set<NewCandidate> candidates = new HashSet<>();
+        Set<Course> candidates = new HashSet<>();
 
         for (Map.Entry<Node, Integer> entry : incoming.entrySet())
         {
@@ -109,9 +121,21 @@ public class CandidateDecider
                 continue;
             }
 
-            NewCandidate current = new NewCandidate(candidateNode, currentFrequency, config);
+            Course current = new Course(candidateNode, currentFrequency, config);
 
-            NewCandidate similar = findSimilarCandidate(candidates, current);
+
+            // TODO: This is absolutely filthy, unperformant, and needs to be cleaned up
+            Set<Course> completed = new HashSet<>();
+            for (Node n : tracker.getUserCompleted()) {
+                completed.add(new Course(n, 0, config));
+            }
+            if (findSimilarCandidate(completed, current) != null) {
+                continue;
+            }
+
+
+
+            Course similar = findSimilarCandidate(candidates, current);
             if (similar != null) {
                 if (similar.getFrequency() < currentFrequency) {
                     candidates.remove(similar);
@@ -137,8 +161,8 @@ public class CandidateDecider
         return (double) courseFrequency / (double) totalFrequency > this.frequencyThreshold;
     }
 
-    private NewCandidate findSimilarCandidate(Set<NewCandidate> set, NewCandidate incoming) {
-        for (NewCandidate incumbent : set) {
+    private Course findSimilarCandidate(Set<Course> set, Course incoming) {
+        for (Course incumbent : set) {
             double similarity = incumbent.getSimilarityCoefficient(incoming);
             if (similarity > similarityThreshold) {
                 return incumbent;
