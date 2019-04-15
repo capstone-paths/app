@@ -27,13 +27,14 @@ public class CoursePath
     {
         ConfigObject configuration = new ConfigObject(config);
 
-        Set<Node> completedCourses = getAllUserCourses(db, configuration);
+        Set<Course> completedCourses = getAllUserCourses(db, configuration);
         Tracker tracker = new Tracker(db, configuration, completedCourses);
-        tracker.addToResultNodes(startNode);
+        ResultNode start = new ResultNode(startNode, configuration, db);
+        tracker.addToResultNodes(start);
 
         Queue<Node> q = new LinkedList<>();
 
-        findCoursePathPrivate(startNode, tracker, configuration, q);
+        findCoursePathPrivate(start, tracker, configuration, q);
 
         // Nothing found
         if (tracker.getResultNodesSize() <= 1) {
@@ -49,13 +50,13 @@ public class CoursePath
     }
 
 
-    private void findCoursePathPrivate(Node curNode, Tracker tracker, ConfigObject config, Queue<Node> q)
+    private void findCoursePathPrivate(ResultNode current, Tracker tracker, ConfigObject config, Queue<Node> q)
             throws Exception
     {
         // TODO: Debug remove
-        String curName = (String) curNode.getProperty("name", null);
+        String curName = (String) current.getNode().getProperty("name", null);
 
-        CandidateDecider cd = new CandidateDecider(curNode, tracker, config);
+        CandidateDecider cd = new CandidateDecider(current, tracker, config);
         Set<Course> candidateSet = cd.getCandidateSet();
 
 //        if (candidateSet.size() > 0) {
@@ -64,13 +65,14 @@ public class CoursePath
 
         for (Course candidate : candidateSet)
         {
-            Node prereq = candidate.getCourseNode();
+            Node prereq = candidate.getNode();
+            Node currentNode = current.getNode();
             // TODO: Debug remove
-            curName = (String) curNode.getProperty("name", null);
+            curName = (String) current.getNode().getProperty("name", null);
             String preName = (String) prereq.getProperty("name", null);
-            if (!tracker.checkIfCycle(prereq, curNode)) {
-                tracker.makeRelationship(prereq , curNode);
-                tracker.removeFromHeads(curNode);
+            if (!tracker.checkIfCycle(prereq, currentNode)) {
+                tracker.makeRelationship(prereq , currentNode);
+                tracker.removeFromHeads(currentNode);
                 tracker.addToHeads(prereq);
                 if (!tracker.hasBeenVisited(prereq)) {
                     tracker.addToVisited(prereq);

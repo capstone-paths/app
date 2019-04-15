@@ -11,25 +11,27 @@ import java.util.*;
 public class Tracker
 {
     private GraphDatabaseService db;
-    private Map<Long, VirtualNode> resultNodes;
+//    private Map<Long, VirtualNode> resultNodes;
+    private Set<ResultNode> resultNodes;
     private Set<Relationship> resultRels;
     private Set<Long> visited;
     private Set<Node> heads;
     private Map<Long, VirtualNode> realToVirtual;
     private ConfigObject config;
     private Set<Course> userCompleted;
-    private Set<Course> resultCourses;
+
 
     public Tracker(GraphDatabaseService db, ConfigObject config, Set<Course> userCompleted)
     {
         this.db = db;
-        this.resultNodes = new HashMap<>();
+        this.resultNodes = new HashSet<>();
         this.resultRels = new HashSet<>();
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
         this.realToVirtual = new HashMap<>();
         this.config = config;
+
     }
 
 //    public Set<Node> getUserCompleted()
@@ -47,16 +49,21 @@ public class Tracker
         return visited.contains(n.getId());
     }
 
-    public VirtualNode addToResultNodes(Node node)
+//    public VirtualNode addToResultNodes(Node node)
+//    {
+//        VirtualNode vn = realToVirtual.get(node.getId());
+//        if (vn == null) {
+//            vn = makeVirtualNode(node);
+//            resultNodes.put(vn.getId(), vn);
+//            realToVirtual.put(node.getId(), vn);
+//            return vn;
+//        }
+//        return vn;
+//    }
+
+    public void addToResultNodes(ResultNode node)
     {
-        VirtualNode vn = realToVirtual.get(node.getId());
-        if (vn == null) {
-            vn = makeVirtualNode(node);
-            resultNodes.put(vn.getId(), vn);
-            realToVirtual.put(node.getId(), vn);
-            return vn;
-        }
-        return vn;
+        resultNodes.add(node);
     }
 
 

@@ -9,16 +9,16 @@ import static java.util.stream.Collectors.toMap;
 
 public class CandidateDecider
 {
-    private Course currentCourse;
+    private ResultNode current;
     private Tracker tracker;
     private ConfigObject config;
     private double frequencyThreshold;
     private double similarityThreshold;
 
-    public CandidateDecider(Course current, Tracker tracker, ConfigObject config)
+    public CandidateDecider(ResultNode current, Tracker tracker, ConfigObject config)
             throws Exception
     {
-        this.currentCourse = current;
+        this.current = current;
         this.tracker = tracker;
         this.config = config;
 
@@ -90,7 +90,7 @@ public class CandidateDecider
     private Map<Node, Integer> getIncomingFrequencies()
     {
         RelationshipType prereqRelType = RelationshipType.withName(config.getPrereqLabelName());
-        Iterable<Relationship> rels = currentCourse.getNode().getRelationships(prereqRelType, Direction.INCOMING);
+        Iterable<Relationship> rels = current.getNode().getRelationships(prereqRelType, Direction.INCOMING);
 
         Map<Node, Integer> map = new HashMap<>();
 
