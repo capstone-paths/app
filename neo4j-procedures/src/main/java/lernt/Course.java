@@ -54,11 +54,14 @@ public class Course extends ResultNode
         Set<String> uniques = new HashSet<>();
         String[] otherTags = other.getTags();
 
+        String[] larger = tags.length > otherTags.length ? tags : otherTags;
+        String[] smaller = larger == tags ? otherTags : tags;
+
         // https://stackoverflow.com/a/29293548/6854595
-        for(int i = 0, j = 0; i < tags.length && j < otherTags.length;){
-            uniques.add(tags[i]);
-            uniques.add(tags[j]);
-            int res = tags[i].compareTo(otherTags[j]);
+        for(int i = 0, j = 0; i < larger.length && j < smaller.length;){
+            uniques.add(larger[i]);
+            uniques.add(larger[j]);
+            int res = larger[i].compareTo(smaller[j]);
             if(res == 0){
                 matches++;
                 i++;
