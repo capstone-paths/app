@@ -69,23 +69,23 @@ public class Tracker
     }
 
 
-    private VirtualNode makeVirtualNode(Node node)
-    {
-        // TODO: This is not necessary, the courseID would be enough
-        Label[] labels = new Label[1];
-        Map<String, Object> props = node.getAllProperties();
-        String id;
-        if (node.hasLabel(Label.label("Course"))) {
-            labels[0] = Label.label("VirtualCourse");
-            id = (String) props.getOrDefault("id", "failure");
-        }
-        else {
-            labels[0] = Label.label("VirtualEnd");
-            id = "-1";
-        }
-        // This need to be retrieved from config, type-checked, etc.
-        return new VirtualNode(labels, props, db);
-    }
+//    private VirtualNode makeVirtualNode(Node node)
+//    {
+//        // TODO: This is not necessary, the courseID would be enough
+//        Label[] labels = new Label[1];
+//        Map<String, Object> props = node.getAllProperties();
+//        String id;
+//        if (node.hasLabel(Label.label("Course"))) {
+//            labels[0] = Label.label("VirtualCourse");
+//            id = (String) props.getOrDefault("id", "failure");
+//        }
+//        else {
+//            labels[0] = Label.label("VirtualEnd");
+//            id = "-1";
+//        }
+//        // This need to be retrieved from config, type-checked, etc.
+//        return new VirtualNode(labels, props, db);
+//    }
 
 
 //    // TODO: Arguably belongs in a factory class but OK
@@ -196,16 +196,19 @@ public class Tracker
 
 
     public void buildHead(GraphDatabaseService db) {
-        // Fix this, need a proper id
-        VirtualNode head = new VirtualNode(-25000, db);
+        VirtualNode head = new VirtualNode(Long.MIN_VALUE, db);
         head.addLabel(Label.label("VirtualPathStart"));
         head.setProperty("name", "VirtualPathStart");
 
+        // This is quite unclean
+        ResultNode rn = new ResultNode(head, config, db);
+//        VirtualNode vn = rn.getVirtualNode();
 
-        resultNodes.add(new ResultNode(head, config, db));
+        resultNodes.add(rn);
         for (ResultNode node : heads) {
-            VirtualRelationship rel = head.createRelationshipTo(node.getVirtualNode(), RelationshipType.withName("NEXT"));
-            addToResultRels(rel);
+            makeRelationship(rn, node);
+//            VirtualRelationship rel = vn.createRelationshipTo(node.getVirtualNode(), RelationshipType.withName("NEXT"));
+//            addToResultRels(rel);
         }
     }
 

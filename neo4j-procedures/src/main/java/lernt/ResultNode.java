@@ -41,6 +41,7 @@ public class ResultNode
         this.virtualNode = new VirtualNode(labelArr, props, db);
     }
 
+
     public Node getNode() { return this.node; }
 
     public VirtualNode getVirtualNode() { return this.virtualNode; }
