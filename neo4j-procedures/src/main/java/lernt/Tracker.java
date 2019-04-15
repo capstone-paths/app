@@ -15,11 +15,12 @@ public class Tracker
     private Set<Relationship> resultRels;
     private Set<Long> visited;
     private Set<Node> heads;
-    private Set<Node> userCompleted;
     private Map<Long, VirtualNode> realToVirtual;
     private ConfigObject config;
+    private Set<Course> userCompleted;
+    private Set<Course> resultCourses;
 
-    public Tracker(GraphDatabaseService db, ConfigObject config, Set<Node> userCompleted)
+    public Tracker(GraphDatabaseService db, ConfigObject config, Set<Course> userCompleted)
     {
         this.db = db;
         this.resultNodes = new HashMap<>();
@@ -31,10 +32,10 @@ public class Tracker
         this.config = config;
     }
 
-    public Set<Node> getUserCompleted()
-    {
-        return this.userCompleted;
-    }
+//    public Set<Node> getUserCompleted()
+//    {
+//        return this.userCompleted;
+//    }
 
     public void addToVisited(Node n)
     {
@@ -220,6 +221,39 @@ public class Tracker
 
     public ResultNode makeResultNode(Node node) {
         return new ResultNode(node, this.config, this.db);
-
     }
+
+    public Course makeCourse(Node node)
+            throws Exception
+    {
+        return new Course(node, this.config, this.db);
+    }
+
+    public boolean hasUserCompletedSimilar(Course course, double similarityThreshold)
+    {
+        return checkIfSimilar(course, similarityThreshold, userCompleted);
+    }
+
+    public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
+    {
+        return checkIfSimilar(course, similarityThreshold, resultCourses);
+    }
+
+    private boolean checkIfSimilar(Course course, double similarityThreshold, Set<Course> set)
+    {
+        if (set.contains(course)) {
+            return true;
+        }
+
+        for (Course completed : set) {
+            if (completed.getSimilarityCoefficient(course) > similarityThreshold) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
 }

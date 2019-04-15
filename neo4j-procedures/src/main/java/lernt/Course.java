@@ -1,25 +1,26 @@
 package lernt;
 
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Course
+public class Course extends ResultNode
 {
-    private Node courseNode;
-    private int frequency;
+    private Integer totalIncoming;
     private String category;
     private String[] tags;
 
-    public Course(Node courseNode, int frequency, ConfigObject config)
+    public Course(Node node, ConfigObject config, GraphDatabaseService db)
             throws Exception
     {
-        this.courseNode = courseNode;
-        this.frequency = frequency;
+        super(node, config, db);
+
+        this.totalIncoming = null;
 
         // Category field should be required, but just in case
-        Object courseCategory = courseNode.getProperty(config.getCourseCategoryPropName(), null);
+        Object courseCategory = node.getProperty(config.getCourseCategoryPropName(), null);
         if (!(courseCategory instanceof String)) {
             throw new Exception("Course category not a String: " + String.valueOf(courseCategory));
         }
@@ -27,7 +28,7 @@ public class Course
 
         // Tags are made optional
         // An empty array will mean that tags are not considered in a similarity comparison
-        Object courseTags = courseNode.getProperty(config.getCourseTagsPropName(), null);
+        Object courseTags = node.getProperty(config.getCourseTagsPropName(), null);
         if (courseTags == null) {
             this.tags = new String[]{};
         }
@@ -43,15 +44,15 @@ public class Course
     /**
      * Simple algorithm to determine similitude between categories
      * Returns a coefficient between 0 and 1
-     * @param otherCandidate
+     * @param other
      * @return
      */
-    public double getSimilarityCoefficient(Course otherCandidate)
+    public double getSimilarityCoefficient(Course other)
     {
         int matches = 0;
 
         Set<String> uniques = new HashSet<>();
-        String[] otherTags = otherCandidate.getTags();
+        String[] otherTags = other.getTags();
 
         // https://stackoverflow.com/a/29293548/6854595
         for(int i = 0, j = 0; i < tags.length && j < otherTags.length;){
@@ -69,7 +70,7 @@ public class Course
             }
         }
 
-        String otherCategory  = otherCandidate.getCategory();
+        String otherCategory  = other.getCategory();
         uniques.add(otherCategory);
         uniques.add(category);
         if (category.compareTo(otherCategory) == 0) {
@@ -85,22 +86,17 @@ public class Course
     }
 
 
-    public Node getCourseNode() { return courseNode; }
-
-
     public String getCategory()
     {
         return category;
     }
-
 
     public String[] getTags()
     {
         return tags;
     }
 
-    public int getFrequency()
-    {
-        return frequency;
-    }
+    public Integer getTotalIncoming() { return totalIncoming; }
+
+    public void setTotalIncoming(Integer totalIncoming) { this.totalIncoming = totalIncoming; }
 }

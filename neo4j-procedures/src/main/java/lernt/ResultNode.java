@@ -13,7 +13,8 @@ public class ResultNode
 {
     private long originalID;
     private long id;
-    private VirtualNode node;
+    private Node node;
+    private VirtualNode virtualNode;
     private ConfigObject config;
 
 
@@ -34,9 +35,9 @@ public class ResultNode
 
     public Node getNode() { return this.node; }
 
+    public VirtualNode getVirtualNode() { return this.virtualNode; }
 
     public long getOriginalID() { return this.originalID; }
-
 
     public long getID() { return this.id; }
 

@@ -28,7 +28,7 @@ public class CoursePath
         ConfigObject configuration = new ConfigObject(config);
 
         Set<Node> completedCourses = getAllUserCourses(configuration);
-        Tracker tracker = new Tracker(db, completedCourses);
+        Tracker tracker = new Tracker(db, configuration, completedCourses);
         tracker.addToResultNodes(startNode);
 
         Queue<Node> q = new LinkedList<>();
