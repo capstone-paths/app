@@ -63,12 +63,6 @@ public class CoursePath
 
         for (Course candidate : candidateSet)
         {
-//            Node prereq = candidate.getNode();
-//            Node currentNode = current.getNode();
-            // TODO: Debug remove
-//            curName = (String) current.getNode().getProperty("name", null);
-//            String preName = (String) prereq.getProperty("name", null);
-
             if (!tracker.checkIfCycle(candidate, current)) {
                 // TODO: Abstract into a single method
                 tracker.addToResultNodes(candidate);
