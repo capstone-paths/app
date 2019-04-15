@@ -27,7 +27,7 @@ public class CoursePath
     {
         ConfigObject configuration = new ConfigObject(config);
 
-        Set<Node> completedCourses = getAllUserCourses(configuration);
+        Set<Node> completedCourses = getAllUserCourses(db, configuration);
         Tracker tracker = new Tracker(db, configuration, completedCourses);
         tracker.addToResultNodes(startNode);
 
@@ -89,9 +89,10 @@ public class CoursePath
 
     }
 
-    private Set<Node> getAllUserCourses(ConfigObject config)
+    private Set<Course> getAllUserCourses(GraphDatabaseService db, ConfigObject config)
+            throws Exception
     {
-        Set<Node> set = new HashSet<>();
+        Set<Course> set = new HashSet<>();
 
         String userID = config.getUserID();
         if (userID == null) {
@@ -119,7 +120,7 @@ public class CoursePath
 
         while(completed.hasNext()) {
             Relationship rel = completed.next();
-            set.add(rel.getOtherNode(user));
+            set.add(new Course(rel.getOtherNode(user), config, db));
         }
 
         return set;
