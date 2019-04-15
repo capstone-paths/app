@@ -21,16 +21,24 @@ public class ResultNode
     public ResultNode(Node node, ConfigObject config, GraphDatabaseService db)
     {
         this.originalID = node.getId();
+        this.node = node;
 
+        // There might be an easier way to do this but the APOC interface forces
+        // this back-and-forth... It should be a very cheap operation anyway
         List<Label> labels = new ArrayList<>();
         Iterable<Label> it = node.getLabels();
         for (Label l : it) {
             labels.add(l);
         }
 
+        Label[] labelArr = new Label[labels.size()];
+        for (int i = 0; i < labels.size(); i++) {
+            labelArr[i] = labels.get(i);
+        }
+
         Map<String, Object> props = node.getAllProperties();
 
-        this.node = new VirtualNode((Label []) labels.toArray(), props, db);
+        this.virtualNode = new VirtualNode(labelArr, props, db);
     }
 
     public Node getNode() { return this.node; }

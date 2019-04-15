@@ -32,7 +32,7 @@ public class CoursePath
         ResultNode start = new ResultNode(startNode, configuration, db);
         tracker.addToResultNodes(start);
 
-        Queue<Node> q = new LinkedList<>();
+        Queue<ResultNode> q = new LinkedList<>();
 
         findCoursePathPrivate(start, tracker, configuration, q);
 
@@ -50,42 +50,42 @@ public class CoursePath
     }
 
 
-    private void findCoursePathPrivate(ResultNode current, Tracker tracker, ConfigObject config, Queue<Node> q)
+    private void findCoursePathPrivate(ResultNode current, Tracker tracker, ConfigObject config, Queue<ResultNode> q)
             throws Exception
     {
         // TODO: Debug remove
         String curName = (String) current.getNode().getProperty("name", null);
 
+
         CandidateDecider cd = new CandidateDecider(current, tracker, config);
         Set<Course> candidateSet = cd.getCandidateSet();
 
-//        if (candidateSet.size() > 0) {
-//            tracker.removeFromHeads(curNode);
-//        }
 
         for (Course candidate : candidateSet)
         {
-            Node prereq = candidate.getNode();
-            Node currentNode = current.getNode();
+//            Node prereq = candidate.getNode();
+//            Node currentNode = current.getNode();
             // TODO: Debug remove
-            curName = (String) current.getNode().getProperty("name", null);
-            String preName = (String) prereq.getProperty("name", null);
-            if (!tracker.checkIfCycle(prereq, currentNode)) {
-                tracker.makeRelationship(prereq , currentNode);
-                tracker.removeFromHeads(currentNode);
-                tracker.addToHeads(prereq);
-                if (!tracker.hasBeenVisited(prereq)) {
-                    tracker.addToVisited(prereq);
-                    q.add(prereq);
+//            curName = (String) current.getNode().getProperty("name", null);
+//            String preName = (String) prereq.getProperty("name", null);
+
+            if (!tracker.checkIfCycle(candidate, current)) {
+                // TODO: Abstract into a single method
+                tracker.addToResultNodes(candidate);
+                tracker.makeRelationship(candidate, current);
+                tracker.removeFromHeads(current);
+                tracker.addToHeads(candidate);
+                if (!tracker.hasBeenVisited(candidate)) {
+                    tracker.addToVisited(candidate);
+                    q.add(candidate);
                 }
-//                findCoursePathPrivate(prereq, tracker, config);
             }
         }
 
-        Node next;
+        ResultNode next;
         while ((next = q.poll()) != null) {
             // TODO: Debug remove
-            String nextName = (String) next.getProperty("name", null);
+//            String nextName = (String) next.getProperty("name", null);
             findCoursePathPrivate(next, tracker, config, q);
         }
 

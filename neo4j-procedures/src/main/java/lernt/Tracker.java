@@ -14,11 +14,12 @@ public class Tracker
 //    private Map<Long, VirtualNode> resultNodes;
     private Set<ResultNode> resultNodes;
     private Set<Relationship> resultRels;
-    private Set<Long> visited;
-    private Set<Node> heads;
-    private Map<Long, VirtualNode> realToVirtual;
+    private Set<ResultNode> visited;
+//    private Set<Node> heads;
+//    private Map<Long, VirtualNode> realToVirtual;
     private ConfigObject config;
     private Set<Course> userCompleted;
+    private Set<ResultNode> heads;
 
 
     public Tracker(GraphDatabaseService db, ConfigObject config, Set<Course> userCompleted)
@@ -29,7 +30,7 @@ public class Tracker
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
-        this.realToVirtual = new HashMap<>();
+//        this.realToVirtual = new HashMap<>();
         this.config = config;
 
     }
@@ -39,14 +40,15 @@ public class Tracker
 //        return this.userCompleted;
 //    }
 
-    public void addToVisited(Node n)
+    public void addToVisited(ResultNode n)
     {
-        visited.add(n.getId());
+        visited.add(n);
     }
 
-    public boolean hasBeenVisited(Node n)
+
+    public boolean hasBeenVisited(ResultNode n)
     {
-        return visited.contains(n.getId());
+        return visited.contains(n);
     }
 
 //    public VirtualNode addToResultNodes(Node node)
@@ -86,19 +88,33 @@ public class Tracker
     }
 
 
-    // TODO: Arguably belongs in a factory class but OK
-    public void makeRelationship(Node start, Node end)
-    {
-        VirtualNode vStart = realToVirtual.get(start.getId());
-        if (vStart == null) {
-            vStart = addToResultNodes(start);
-        }
+//    // TODO: Arguably belongs in a factory class but OK
+//    public void makeRelationship(Node start, Node end)
+//    {
+//        VirtualNode vStart = realToVirtual.get(start.getId());
+//        if (vStart == null) {
+//            vStart = addToResultNodes(start);
+//        }
+//
+//        // TODO: This should never be happening, maybe throw
+//        VirtualNode vEnd = realToVirtual.get(end.getId());
+//        if (vEnd == null) {
+//            vEnd = addToResultNodes(end);
+//        }
+//
+//        RelationshipType type = RelationshipType.withName("NEXT");
+//        VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
+//
+//        // Need this because otherwise can't comfortably navigate the virtual graph
+//        vEnd.createRelationshipFrom(vStart, type);
+//        addToResultRels(vr);
+//    }
 
-        // TODO: This should never be happening, maybe throw
-        VirtualNode vEnd = realToVirtual.get(end.getId());
-        if (vEnd == null) {
-            vEnd = addToResultNodes(end);
-        }
+
+    public void makeRelationship(ResultNode start, ResultNode end)
+    {
+        VirtualNode vStart = start.getVirtualNode();
+        VirtualNode vEnd = end.getVirtualNode();
 
         RelationshipType type = RelationshipType.withName("NEXT");
         VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
@@ -108,27 +124,46 @@ public class Tracker
         addToResultRels(vr);
     }
 
-    public boolean checkIfCycle(Node start, Node end) throws Exception
-    {
-        // TODO: Type check, etc.
-//        String endCourseID = (String) end.getProperty("id", "endNode");
-        VirtualNode virtualEnd = realToVirtual.get(end.getId());
-        VirtualNode virtualStart = realToVirtual.get(start.getId());
+//    public boolean checkIfCycle(Node start, Node end) throws Exception
+//    {
+//        // TODO: Type check, etc.
+////        String endCourseID = (String) end.getProperty("id", "endNode");
+//        VirtualNode virtualEnd = realToVirtual.get(end.getId());
+//        VirtualNode virtualStart = realToVirtual.get(start.getId());
+//
+//        // The virtual end should always be in the solution space
+//        if (virtualEnd == null) {
+//            throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
+//        }
+//
+//        // If the virtualStart is not in the solution space,
+//        // then it's not possible to create a cycle
+//        if (virtualStart == null) {
+//            return false;
+//        }
+//
+//        boolean hasCycle = checkIfCycleIn(virtualEnd, virtualStart);
+//
+//        return hasCycle;
+//    }
 
+    public boolean checkIfCycle(ResultNode start, ResultNode end) throws Exception
+    {
         // The virtual end should always be in the solution space
-        if (virtualEnd == null) {
+        if (!resultNodes.contains(end)) {
             throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
         }
 
         // If the virtualStart is not in the solution space,
         // then it's not possible to create a cycle
-        if (virtualStart == null) {
+        if (!resultNodes.contains(start)) {
             return false;
         }
 
-        boolean hasCycle = checkIfCycleIn(virtualEnd, virtualStart);
+        VirtualNode virtualEnd = end.getVirtualNode();
+        VirtualNode virtualStart = start.getVirtualNode();
 
-        return hasCycle;
+        return checkIfCycleIn(virtualEnd, virtualStart);
     }
 
 
@@ -166,9 +201,10 @@ public class Tracker
         head.addLabel(Label.label("VirtualPathStart"));
         head.setProperty("name", "VirtualPathStart");
 
-        resultNodes.put(-25000L, head);
-        for (Node node : heads) {
-            VirtualRelationship rel = head.createRelationshipTo(node, RelationshipType.withName("NEXT"));
+
+        resultNodes.add(new ResultNode(head, config, db));
+        for (ResultNode node : heads) {
+            VirtualRelationship rel = head.createRelationshipTo(node.getVirtualNode(), RelationshipType.withName("NEXT"));
             addToResultRels(rel);
         }
     }
@@ -179,30 +215,40 @@ public class Tracker
     }
 
 
-    public void addToHeads(Node node)
+//    public void addToHeads(Node node)
+//    {
+//        VirtualNode vn = realToVirtual.get(node.getId());
+//        if (vn != null) {
+//            heads.add(vn);
+//        }
+//    }
+
+    public void addToHeads(ResultNode node)
     {
-        VirtualNode vn = realToVirtual.get(node.getId());
-        if (vn != null) {
-            heads.add(vn);
-        }
+        heads.add(node);
+    }
+
+    public void removeFromHeads(ResultNode node)
+    {
+        heads.remove(node);
     }
 
 
-    public void removeFromHeads(Node node)
-    {
-        VirtualNode vn = realToVirtual.get(node.getId());
-        if (vn != null) {
-            heads.remove(vn);
-        }
-    }
+//    public void removeFromHeads(Node node)
+//    {
+//        VirtualNode vn = realToVirtual.get(node.getId());
+//        if (vn != null) {
+//            heads.remove(vn);
+//        }
+//    }
 
     // TODO: Type check, remove etc.
     // We shouldn't need this method at all if cycle checking works
-    public boolean isInResultNodes(Node node)
-    {
-        return resultNodes.containsKey(node.getId());
-    }
-
+//    public boolean isInResultNodes(Node node)
+//    {
+//        return resultNodes.containsKey(node.getId());
+//    }
+//
     public int getResultNodesSize()
     {
         return resultNodes.size();
@@ -210,7 +256,11 @@ public class Tracker
 
     public List<Node> getResultNodesList()
     {
-        return new ArrayList<Node>(resultNodes.values());
+        List<Node> list = new ArrayList<>();
+        for (ResultNode r : resultNodes) {
+            list.add(r.getVirtualNode());
+        }
+        return list;
     }
 
     public List<Relationship> getResultRelsList()
@@ -238,22 +288,38 @@ public class Tracker
 
     public boolean hasUserCompletedSimilar(Course course, double similarityThreshold)
     {
-        return checkIfSimilar(course, similarityThreshold, userCompleted);
-    }
-
-    public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
-    {
-        return checkIfSimilar(course, similarityThreshold, resultCourses);
-    }
-
-    private boolean checkIfSimilar(Course course, double similarityThreshold, Set<Course> set)
-    {
-        if (set.contains(course)) {
+        if (userCompleted.contains(course)) {
             return true;
         }
 
-        for (Course completed : set) {
+        for (Course completed : userCompleted) {
             if (completed.getSimilarityCoefficient(course) > similarityThreshold) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+//    public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
+//    {
+//        return checkIfSimilar(course, similarityThreshold, resultNodes);
+//    }
+
+    public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
+    {
+        if (resultNodes.contains(course)) {
+            return true;
+        }
+
+        for (ResultNode completed : resultNodes) {
+            if (!(completed instanceof Course)) {
+                continue;
+            }
+
+            Course c = (Course) completed;
+
+            if (c.getSimilarityCoefficient(course) > similarityThreshold) {
                 return true;
             }
         }
