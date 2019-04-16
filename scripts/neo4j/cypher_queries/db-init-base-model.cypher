@@ -5,13 +5,38 @@
 // -- things will very likely break in the server
 
 
-// Create some test users
-CREATE ( u001: User { userID: '0', username: 'PJ' } )
-CREATE ( u002: User { userID: '1', username: 'Ajay' } )
-CREATE ( u003: User { userID: '2', username: 'Sam' } )
-CREATE ( u004: User { userID: '3', username: 'Jon' } )
-CREATE ( u005: User { userID: '4', username: 'Stephen' } )
+CREATE(ls0: LearningStyle {learningStyleID: '0', name:'Activist', description: 'Learn by doing'})
+CREATE(ls1: LearningStyle {learningStyleID: '1', name:'Theorist', description: 'Want to undstand the theory behind it'})
+CREATE(ls2: LearningStyle {learningStyleID: '2', name:'Pragmatist', description: 'Want the real world application'})
+CREATE(ls3: LearningStyle {learningStyleID: '3', name:'Reflector', description: 'Learn by observing'})
 
+CREATE(s1: Skill {skillID: '1', name:'Angular'})
+CREATE(s2: Skill {skillID: '2', name:'CSS'})
+CREATE(s3: Skill {skillID: '3', name:'Graphic Design'})
+CREATE(s4: Skill {skillID: '4', name:'Ember'})
+CREATE(s5: Skill {skillID: '5', name:'HTML'})
+CREATE(s6: Skill {skillID: '6', name:'Information Architecture'})
+CREATE(s7: Skill {skillID: '7', name:'Javascript'})
+CREATE(s8: Skill {skillID: '8', name:'Mechanical Engineering'})
+CREATE(s9: Skill {skillID: '9', name:'Meteor'})
+CREATE(s10: Skill {skillID: '10', name:'NodeJS'})
+CREATE(s11: Skill {skillID: '11', name:'Full-Stack Engineering'})
+CREATE(s12: Skill {skillID: '12', name:'Python'})
+CREATE(s13: Skill {skillID: '13', name:'Rails'})
+CREATE(s14: Skill {skillID: '14', name:'React'})
+CREATE(s15: Skill {skillID: '15', name:'Data Science'})
+CREATE(s16: Skill {skillID: '16', name:'Ruby'})
+CREATE(s17: Skill {skillID: '17', name:'UI Design'})
+CREATE(s18: Skill {skillID: '18', name:'User Experience'})
+
+
+
+// Create some test users
+CREATE ( u001: User { userID: '0', username: 'PJ', bio: '' } )
+CREATE ( u002: User { userID: '1', username: 'Ajay', bio: '' } )
+CREATE ( u003: User { userID: '2', username: 'Sam', bio: "I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations." } )
+CREATE ( u004: User { userID: '3', username: 'Jon', bio: '' } )
+CREATE ( u005: User { userID: '4', username: 'Stephen', bio: ''} )
 
 // This is a trick to separate commands
 WITH count(*) as dummy
@@ -51,6 +76,8 @@ MERGE (feui)-[:NEXT {pathID: '1'}]->(reac)
 MERGE (reac)-[:NEXT {pathID: '1'}]->(mobi)
 MERGE (mobi)-[:NEXT {pathID: '1'}]->(tr01)
 MERGE (sam)-[:CREATED]->(st01)
+MERGE (sam)-[:SUBSCRIBED]->(st01)
+
 
 // Sam Sequence #2 Relationships
 MERGE (st02: PathStart { pathID: '2', name: "Sam Chao's Full Stack Development" })-[:BELONGS_TO {trackID: '2'}]->(tr02: Track { trackID: '2', name: 'Full Stack Development' })
@@ -71,3 +98,33 @@ MERGE (ssdv)-[:NEXT {pathID: '2'}]->(test)
 MERGE (test)-[:NEXT {pathID: '2'}]->(secu)
 MERGE (secu)-[:NEXT {pathID: '2'}]->(tr02)
 MERGE (sam)-[:CREATED]->(st02)
+MERGE (sam)-[:SUBSCRIBED]->(st02)
+
+
+
+
+
+
+// This is a trick to separate commands
+WITH count(*) as dummy
+
+//Register Sam's learning style 
+MATCH (u:User),(ls:LearningStyle)
+WHERE u.userID = "2" AND ls.learningStyleID = "1"
+CREATE (u)-[:LEARNS_BY]->(ls)
+
+// This is a trick to separate commands
+WITH count(*) as dummy
+
+// Register Sam's Experience relationships to Skill nodes
+MATCH (u:User),(s:Skill)
+WHERE u.userID = "2" AND s.skillID in [ "5","2"]
+CREATE (u)-[:EXPERIENCED]->(s)
+
+// This is a trick to separate commands
+WITH count(*) as dummy
+
+//Register Sam's Interests relationships to Skill Nodes
+MATCH (u:User),(s:Skill)
+WHERE u.userID = "2" AND s.skillID in [ "7","15","18"]
+CREATE (u)-[:INTERESTED]->(s)
