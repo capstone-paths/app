@@ -5,10 +5,15 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Builds a result node; an abstraction including the original node and a virtual node
+ * Virtual nodes are needed for efficient cycle-checking
+ * Equality methods are overriden; two result nodes are equal when they refer to the same Neo4j node
+ */
 public class ResultNode
 {
     private long originalID;
@@ -42,15 +47,6 @@ public class ResultNode
     }
 
 
-    public Node getNode() { return this.node; }
-
-    public VirtualNode getVirtualNode() { return this.virtualNode; }
-
-    public long getOriginalID() { return this.originalID; }
-
-    public long getID() { return this.id; }
-
-
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -73,4 +69,15 @@ public class ResultNode
         result = 31 * result + (int) this.originalID;
         return result;
     }
+
+
+    public Node getNode() { return this.node; }
+
+    public VirtualNode getVirtualNode() { return this.virtualNode; }
+
+    public long getOriginalID() { return this.originalID; }
+
+    public long getID() { return this.id; }
+
+
 }

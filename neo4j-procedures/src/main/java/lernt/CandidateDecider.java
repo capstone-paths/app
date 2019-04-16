@@ -3,10 +3,13 @@ package lernt;
 import org.neo4j.graphdb.*;
 
 import java.util.*;
-
-import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
+
+/**
+ * Given a course and a possible prereq, decides whether the prereq
+ * should be added to the result set
+ */
 public class CandidateDecider
 {
     private ResultNode current;
@@ -15,6 +18,14 @@ public class CandidateDecider
     private double frequencyThreshold;
     private double similarityThreshold;
 
+
+    /**
+     * Instantiates a CandidateDecider
+     * @param current     The current node in recursion
+     * @param tracker     Recursion state
+     * @param config      Configuration context
+     * @throws Exception  If the config doesn't provide the necessary items
+     */
     public CandidateDecider(ResultNode current, Tracker tracker, ConfigObject config)
             throws Exception
     {
@@ -36,27 +47,27 @@ public class CandidateDecider
     }
 
 
+    /**
+     * Produces the set of candidates to add to the results tree
+     * @return            The set of course candidates to add
+     * @throws Exception
+     */
     public Set<Course> getCandidateSet()
             throws Exception
     {
+        // Get all incoming courses and their relative frequencies, and calculate the total of incoming
         Map<Node, Integer> freqs = getIncomingFrequencies();
         int totalIncoming = freqs.values().stream().reduce(0, Integer::sum);
 
 
+        // Sort from highest to lower frequency
+        // This is necessary when later we check for duplicates
         Map<Node, Integer> sorted = freqs
                 .entrySet()
                 .stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
                                 LinkedHashMap::new));
-
-        // create new set
-        // for every relationship of iterator
-            // get the other node
-            // check if it's a course!
-            // make a candidate
-            // check if user has completed this course or similar
-            // check if similar courses in solution set
 
         Set<Course> candidateSet = new HashSet<>();
 
@@ -78,6 +89,13 @@ public class CandidateDecider
         return candidateSet;
     }
 
+
+    /**
+     * Checks if a course should be added to candidates
+     * @param c             The course that we are looking to add
+     * @param candidateSet  The set of current candidates
+     * @return  True if should add, false otherwise
+     */
     private boolean shouldAddToCandidates(Course c, Set<Course> candidateSet)
     {
         return !tracker.hasUserCompletedSimilar(c, similarityThreshold)
@@ -87,6 +105,11 @@ public class CandidateDecider
     }
 
 
+    /**
+     * Organizes all prereqs as a map of relative frequencies and nodes
+     * This is due to the fact that our model creates multiple relationships between nodes to signify frequency
+     * @return  The map of frequencies and nodes
+     */
     private Map<Node, Integer> getIncomingFrequencies()
     {
         RelationshipType prereqRelType = RelationshipType.withName(config.getPrereqLabelName());
@@ -114,59 +137,13 @@ public class CandidateDecider
     }
 
 
-//    private Set<Course> processAll(Map<Node, Integer> incoming)
-//            throws Exception
-//    {
-//        int totalIncoming = incoming.values().stream().reduce(0, Integer::sum);
-//
-//        Set<Course> candidates = new HashSet<>();
-//
-//        for (Map.Entry<Node, Integer> entry : incoming.entrySet())
-//        {
-//            int currentFrequency = entry.getValue();
-//            if (!passesMinimumThreshold(currentFrequency, totalIncoming)) {
-//                continue;
-//            }
-//
-//            Node candidateNode = entry.getKey();
-//
-//            String curName = (String) candidateNode.getProperty("name", null);
-//
-//            // TODO: Make this right
-//            if (!candidateNode.hasLabel(Label.label("Course"))) {
-//                continue;
-//            }
-//
-//            Course current = new Course(candidateNode, currentFrequency, config);
-//
-//
-//            // TODO: This is absolutely filthy, unperformant, and needs to be cleaned up
-//            Set<Course> completed = new HashSet<>();
-//            for (Node n : tracker.getUserCompleted()) {
-//                completed.add(new Course(n, 0, config));
-//            }
-//            if (findSimilarCandidate(completed, current) != null) {
-//                continue;
-//            }
-//
-//
-//
-//            Course similar = findSimilarCandidate(candidates, current);
-//            if (similar != null) {
-//                if (similar.getFrequency() < currentFrequency) {
-//                    candidates.remove(similar);
-//                    candidates.add(current);
-//                }
-//            }
-//            else {
-//                candidates.add(current);
-//            }
-//        }
-//
-//        return candidates;
-//    }
-
-
+    /**
+     * Whether a course passes the minimum threshold set in the procedure custom parameters
+     * @param courseFrequency  The relative frequency of the course
+     * @param totalFrequency   The total number of incoming relationships for the target course
+     * @return
+     * @throws Exception If division by zero or negative number
+     */
     private boolean passesMinimumThreshold(int courseFrequency, int totalFrequency)
             throws Exception
     {
@@ -177,6 +154,7 @@ public class CandidateDecider
         return (double) courseFrequency / (double) totalFrequency > this.frequencyThreshold;
     }
 
+
     private boolean hasSimilarCandidate(Set<Course> set, Course incoming) {
         for (Course incumbent : set) {
             double similarity = incumbent.getSimilarityCoefficient(incoming);
@@ -185,9 +163,6 @@ public class CandidateDecider
             }
         }
 
-        // return false
         return false;
     }
-
-
 }

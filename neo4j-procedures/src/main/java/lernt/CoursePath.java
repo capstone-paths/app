@@ -21,17 +21,26 @@ public class CoursePath
     public Log log;
 
 
+    /**
+     * APOC procedure entry point
+     * @param startNode   The start node on which we start to recurse; could be Course or Track
+     * @param config      The configuration parameters object
+     * @return            A sub-graph containing all courses
+     * @throws Exception  If procedure call fails
+     */
     @Procedure(name = "lernt.findCoursePath", mode=Mode.SCHEMA)
     public Stream<GraphResult> findCoursePath(@Name("startNode") Node startNode,
                                               @Name("config") Map<String, Object> config) throws Exception
     {
         ConfigObject configuration = new ConfigObject(config);
 
+        // TODO: Arguably getting all user courses could be done in tracker
         Set<Course> completedCourses = getAllUserCourses(db, configuration);
         Tracker tracker = new Tracker(db, configuration, completedCourses);
         ResultNode start = new ResultNode(startNode, configuration, db);
         tracker.addToResultNodes(start);
 
+        // Use a queue for breadth-first recursion over the tree
         Queue<ResultNode> q = new LinkedList<>();
 
         findCoursePathPrivate(start, tracker, configuration, q);
@@ -50,23 +59,27 @@ public class CoursePath
     }
 
 
+    /**
+     * Navigates the graph breadth-first, adding relevant courses to the result set
+     * @param current     The current node in recursion
+     * @param tracker     The tracker keeping recursion state
+     * @param config      The configuration object
+     * @param q           A queue to enable breadth-first recursion
+     * @throws Exception  In a variety of scenarios in which graph navigation may fail
+     */
     private void findCoursePathPrivate(ResultNode current, Tracker tracker, ConfigObject config, Queue<ResultNode> q)
             throws Exception
     {
-        // TODO: Debug remove
-        String curName = (String) current.getNode().getProperty("name", null);
-
-
+        // Get all incoming candidates
+        // The candidate decider filters out courses which should not be added to the result set
         CandidateDecider cd = new CandidateDecider(current, tracker, config);
         Set<Course> candidateSet = cd.getCandidateSet();
 
-
+        // For every viable candidate, add to result set as long as it doesn't create a cycle
         for (Course candidate : candidateSet)
         {
-            String candName = (String) candidate.getNode().getProperty("name", null);
-
             if (!tracker.checkIfCycle(candidate, current)) {
-                // TODO: Abstract into a single method
+                // TODO: Abstract all these calls into a single tracker method
                 tracker.addToResultNodes(candidate);
                 tracker.makeRelationship(candidate, current);
                 tracker.removeFromHeads(current);
@@ -78,11 +91,9 @@ public class CoursePath
             }
         }
 
+        // Recurse over all candidates, breadth-first
         ResultNode next;
         while ((next = q.poll()) != null) {
-            String nextName = (String) next.getNode().getProperty("name", null);
-            // TODO: Debug remove
-//            String nextName = (String) next.getProperty("name", null);
             findCoursePathPrivate(next, tracker, config, q);
         }
 
