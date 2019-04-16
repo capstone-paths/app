@@ -5,115 +5,43 @@ import org.neo4j.graphdb.*;
 import java.util.*;
 
 /**
- * Collection of data structures and methods
- * to keep track of state of course graph navigation
+ * Collection of data structures and methods keeping track
+ * of graph navigation
  */
 public class Tracker
 {
-    private GraphDatabaseService db;
-//    private Map<Long, VirtualNode> resultNodes;
-//    private Set<ResultNode> resultNodes;
-    private Map<Long, ResultNode> resultNodes;
-    private Set<Relationship> resultRels;
-    private Set<ResultNode> visited;
-//    private Set<Node> heads;
-//    private Map<Long, VirtualNode> realToVirtual;
-    private ConfigObject config;
-    private Set<Course> userCompleted;
-    private Set<ResultNode> heads;
+    private GraphDatabaseService db;            // database object for context
+    private ConfigObject config;                // the configuration parameters passed in to the procedure
+    private Map<Long, ResultNode> resultNodes;  // final result nodes, mapped by original node id
+    private Set<Relationship> resultRels;       // final result relationships
+    private Set<ResultNode> visited;            // keep track of visited nodes in graph; useful for BF recursion
+    private Set<Course> userCompleted;          // courses that the user has completed
+    private Set<ResultNode> heads;              // the current heads of the results tree
 
 
+    /**
+     * Instantiates a tracker
+     * @param db             Neo4j database context
+     * @param config         Configuration for the neo4j custom procedure
+     * @param userCompleted  Set of user completed courses
+     */
     public Tracker(GraphDatabaseService db, ConfigObject config, Set<Course> userCompleted)
     {
         this.db = db;
-//        this.resultNodes = new HashSet<>();
+        this.config = config;
         this.resultNodes = new HashMap<>();
         this.resultRels = new HashSet<>();
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
         this.userCompleted = userCompleted;
-//        this.realToVirtual = new HashMap<>();
-        this.config = config;
-
-    }
-
-//    public Set<Node> getUserCompleted()
-//    {
-//        return this.userCompleted;
-//    }
-
-    public void addToVisited(ResultNode n)
-    {
-        visited.add(n);
     }
 
 
-    public boolean hasBeenVisited(ResultNode n)
-    {
-        return visited.contains(n);
-    }
-
-//    public VirtualNode addToResultNodes(Node node)
-//    {
-//        VirtualNode vn = realToVirtual.get(node.getId());
-//        if (vn == null) {
-//            vn = makeVirtualNode(node);
-//            resultNodes.put(vn.getId(), vn);
-//            realToVirtual.put(node.getId(), vn);
-//            return vn;
-//        }
-//        return vn;
-//    }
-
-    public void addToResultNodes(ResultNode node)
-    {
-//        resultNodes.add(node);
-        resultNodes.putIfAbsent(node.getOriginalID(), node);
-    }
-
-
-//    private VirtualNode makeVirtualNode(Node node)
-//    {
-//        // TODO: This is not necessary, the courseID would be enough
-//        Label[] labels = new Label[1];
-//        Map<String, Object> props = node.getAllProperties();
-//        String id;
-//        if (node.hasLabel(Label.label("Course"))) {
-//            labels[0] = Label.label("VirtualCourse");
-//            id = (String) props.getOrDefault("id", "failure");
-//        }
-//        else {
-//            labels[0] = Label.label("VirtualEnd");
-//            id = "-1";
-//        }
-//        // This need to be retrieved from config, type-checked, etc.
-//        return new VirtualNode(labels, props, db);
-//    }
-
-
-//    // TODO: Arguably belongs in a factory class but OK
-//    public void makeRelationship(Node start, Node end)
-//    {
-//        VirtualNode vStart = realToVirtual.get(start.getId());
-//        if (vStart == null) {
-//            vStart = addToResultNodes(start);
-//        }
-//
-//        // TODO: This should never be happening, maybe throw
-//        VirtualNode vEnd = realToVirtual.get(end.getId());
-//        if (vEnd == null) {
-//            vEnd = addToResultNodes(end);
-//        }
-//
-//        RelationshipType type = RelationshipType.withName("NEXT");
-//        VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
-//
-//        // Need this because otherwise can't comfortably navigate the virtual graph
-//        vEnd.createRelationshipFrom(vStart, type);
-//        addToResultRels(vr);
-//    }
-
-
+    /**
+     * Creates a virtual relationship between two nodes, and adds it to the final results
+     * @param start  The starting node; a prereq in the course model
+     * @param end    The end node
+     */
     public void makeRelationship(ResultNode start, ResultNode end)
     {
         long startID = start.getOriginalID();
@@ -132,33 +60,19 @@ public class Tracker
         addToResultRels(vr);
     }
 
-//    public boolean checkIfCycle(Node start, Node end) throws Exception
-//    {
-//        // TODO: Type check, etc.
-////        String endCourseID = (String) end.getProperty("id", "endNode");
-//        VirtualNode virtualEnd = realToVirtual.get(end.getId());
-//        VirtualNode virtualStart = realToVirtual.get(start.getId());
-//
-//        // The virtual end should always be in the solution space
-//        if (virtualEnd == null) {
-//            throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
-//        }
-//
-//        // If the virtualStart is not in the solution space,
-//        // then it's not possible to create a cycle
-//        if (virtualStart == null) {
-//            return false;
-//        }
-//
-//        boolean hasCycle = checkIfCycleIn(virtualEnd, virtualStart);
-//
-//        return hasCycle;
-//    }
 
+    /**
+     * Checks if adding a node to the virtual set will cause a cycle
+     * @param start      The prereq
+     * @param end        The course the prereq links to
+     * @return           True if cycle, false otherwise
+     * @throws Exception If a prereq is not in the solutions
+     */
     public boolean checkIfCycle(ResultNode start, ResultNode end) throws Exception
     {
         long startID = start.getOriginalID();
         long endID = end.getOriginalID();
+
         // The virtual end should always be in the solution space
         if (!resultNodes.containsKey(endID)) {
             throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
@@ -177,19 +91,21 @@ public class Tracker
     }
 
 
+    /**
+     * Navigates through the solution tree to check if linking the target node will cause a cycle
+     * @param target   The course we'd like to link to
+     * @param current  The current course in recursion
+     * @return         True if cycle, false if not
+     */
     private boolean checkIfCycleIn(VirtualNode target, VirtualNode current)
     {
-        // TODO: Debug remove
-        String curName = (String) current.getProperty("name", null);
-        Iterator<Relationship> it = current.getRelationships(RelationshipType.withName("NEXT"), Direction.INCOMING).iterator();
+        Iterator<Relationship> it = current
+                .getRelationships(RelationshipType.withName("NEXT"), Direction.INCOMING).iterator();
 
 
         while(it.hasNext()) {
             Relationship rel = it.next();
             Node incoming = rel.getOtherNode(current);
-            // TODO: Debug remove
-            String preName = (String) incoming.getProperty("name", null);
-            // TODO: Merge this
             if (incoming.getId() == target.getId()) {
                 return true;
             }
@@ -203,102 +119,32 @@ public class Tracker
     }
 
 
-
+    /**
+     * Builds heads of result tree before returning results
+     * @param db  Database context
+     */
 
     public void buildHead(GraphDatabaseService db) {
+        // TODO: This builds two virtual nodes in succession, should clean up
         VirtualNode head = new VirtualNode(Long.MIN_VALUE, db);
         head.addLabel(Label.label("VirtualPathStart"));
         head.setProperty("name", "VirtualPathStart");
-
-        // This is quite unclean
         ResultNode rn = new ResultNode(head, config, db);
-//        VirtualNode vn = rn.getVirtualNode();
 
         resultNodes.put(rn.getOriginalID(), rn);
         for (ResultNode node : heads) {
             makeRelationship(rn, node);
-//            VirtualRelationship rel = vn.createRelationshipTo(node.getVirtualNode(), RelationshipType.withName("NEXT"));
-//            addToResultRels(rel);
         }
     }
 
-    private void addToResultRels(Relationship rel)
-    {
-        resultRels.add(rel);
-    }
 
-
-//    public void addToHeads(Node node)
-//    {
-//        VirtualNode vn = realToVirtual.get(node.getId());
-//        if (vn != null) {
-//            heads.add(vn);
-//        }
-//    }
-
-    public void addToHeads(ResultNode node)
-    {
-        heads.add(node);
-    }
-
-    public void removeFromHeads(ResultNode node)
-    {
-        heads.remove(node);
-    }
-
-
-//    public void removeFromHeads(Node node)
-//    {
-//        VirtualNode vn = realToVirtual.get(node.getId());
-//        if (vn != null) {
-//            heads.remove(vn);
-//        }
-//    }
-
-    // TODO: Type check, remove etc.
-    // We shouldn't need this method at all if cycle checking works
-//    public boolean isInResultNodes(Node node)
-//    {
-//        return resultNodes.containsKey(node.getId());
-//    }
-//
-    public int getResultNodesSize()
-    {
-        return resultNodes.size();
-    }
-
-    public List<Node> getResultNodesList()
-    {
-        List<Node> list = new ArrayList<>();
-        for (ResultNode r : resultNodes.values()) {
-            list.add(r.getVirtualNode());
-        }
-        return list;
-    }
-
-    public List<Relationship> getResultRelsList()
-    {
-        ArrayList<Relationship> list = new ArrayList<>();
-        list.addAll(resultRels);
-        return list;
-    }
-
-    public boolean hasUserCompleted(Node course)
-    {
-        return userCompleted.contains(course);
-    }
-
-
-    public ResultNode makeResultNode(Node node) {
-        return new ResultNode(node, this.config, this.db);
-    }
-
-    public Course makeCourse(Node node)
-            throws Exception
-    {
-        return new Course(node, this.config, this.db);
-    }
-
+    /**
+     * Checks if a user has completed a similar course
+     * We don't want to add courses that are too similar to the result collection
+     * @param course
+     * @param similarityThreshold
+     * @return
+     */
     public boolean hasUserCompletedSimilar(Course course, double similarityThreshold)
     {
         if (userCompleted.contains(course)) {
@@ -314,11 +160,13 @@ public class Tracker
         return false;
     }
 
-//    public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
-//    {
-//        return checkIfSimilar(course, similarityThreshold, resultNodes);
-//    }
 
+    /**
+     * Check if the the result set includes a similar course
+     * @param course
+     * @param similarityThreshold
+     * @return
+     */
     public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
     {
         // We are looking for similar courses; this is to avoid
@@ -343,5 +191,88 @@ public class Tracker
     }
 
 
+    /**
+     * Transforms the result nodes collection to a list, as required by the Neo4j API
+     * @return  The list of nodes
+     */
+    public List<Node> getResultNodesList()
+    {
+        List<Node> list = new ArrayList<>();
+        for (ResultNode r : resultNodes.values()) {
+            list.add(r.getVirtualNode());
+        }
+        return list;
+    }
 
+
+    /**
+     * Transforms the result relationships to a list, as required by the Neo4j API
+     * @return The list of relationships
+     */
+    public List<Relationship> getResultRelsList()
+    {
+        ArrayList<Relationship> list = new ArrayList<>();
+        list.addAll(resultRels);
+        return list;
+    }
+
+
+    public boolean hasUserCompleted(Node course)
+    {
+        return userCompleted.contains(course);
+    }
+
+
+    public ResultNode makeResultNode(Node node) {
+        return new ResultNode(node, this.config, this.db);
+    }
+
+
+    public Course makeCourse(Node node)
+            throws Exception
+    {
+        return new Course(node, this.config, this.db);
+    }
+
+
+    public void addToVisited(ResultNode n)
+    {
+        visited.add(n);
+    }
+
+
+    public boolean hasBeenVisited(ResultNode n)
+    {
+        return visited.contains(n);
+    }
+
+
+    public void addToResultNodes(ResultNode node)
+    {
+        resultNodes.putIfAbsent(node.getOriginalID(), node);
+    }
+
+
+    private void addToResultRels(Relationship rel)
+    {
+        resultRels.add(rel);
+    }
+
+
+    public void addToHeads(ResultNode node)
+    {
+        heads.add(node);
+    }
+
+
+    public void removeFromHeads(ResultNode node)
+    {
+        heads.remove(node);
+    }
+
+
+    public int getResultNodesSize()
+    {
+        return resultNodes.size();
+    }
 }
