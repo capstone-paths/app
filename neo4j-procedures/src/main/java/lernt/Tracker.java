@@ -321,21 +321,23 @@ public class Tracker
 
     public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
     {
-//        if (resultNodes.contains(course)) {
-//            return true;
-//        }
-//
-//        for (ResultNode completed : resultNodes) {
-//            if (!(completed instanceof Course)) {
-//                continue;
-//            }
-//
-//            Course c = (Course) completed;
-//
-//            if (c.getSimilarityCoefficient(course) > similarityThreshold) {
-//                return true;
-//            }
-//        }
+        // We are looking for similar courses; this is to avoid
+        // the same course being flagged as similar
+        if (resultNodes.containsKey(course.getOriginalID())) {
+            return false;
+        }
+
+        for (ResultNode completed : resultNodes.values()) {
+            if (!(completed instanceof Course)) {
+                continue;
+            }
+
+            Course c = (Course) completed;
+
+            if (c.getSimilarityCoefficient(course) > similarityThreshold) {
+                return true;
+            }
+        }
 
         return false;
     }
