@@ -16,16 +16,25 @@ class User {
     return users;
   }
 
-  static async findById(session, userID) {
-    const query = 'MATCH (user: User { userID: {userID} }) RETURN user';
+  static async findById(session, id) {
+    const query = `
+    MATCH (u: User {userID: $id})
+    MATCH ()-[:INTERESTED]->(interested_skills: Skill)
+    MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
+    MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
+    RETURN u as user, collect(DISTINCT interested_skills) AS interested_skills, collect(DISTINCT experienced_skills) AS experienced_skills, collect(DISTINCT learning_style) AS learning_style`;
     // TODO: Think of an abstraction layer to get properties easily
     // This is going to get tiring quickly
-    const results = await session.run(query, { userID });
+    const results = await session.run(query, { id });
     const records = results.records;
     if (records.length === 0) {
       return undefined;
     }
-    return new User(records[0].get('user'));
+    let result = records[0];
+    var user = result.get('user').properties;
+    user.interest = records[0].get('interested_skills').map((s) => s.properties);
+    user.experience = records[0].get('experienced_skills').map((s) => s.properties);
+    return user;
   }
 }
 
