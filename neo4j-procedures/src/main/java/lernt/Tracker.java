@@ -12,7 +12,8 @@ public class Tracker
 {
     private GraphDatabaseService db;
 //    private Map<Long, VirtualNode> resultNodes;
-    private Set<ResultNode> resultNodes;
+//    private Set<ResultNode> resultNodes;
+    private Map<Long, ResultNode> resultNodes;
     private Set<Relationship> resultRels;
     private Set<ResultNode> visited;
 //    private Set<Node> heads;
@@ -25,7 +26,8 @@ public class Tracker
     public Tracker(GraphDatabaseService db, ConfigObject config, Set<Course> userCompleted)
     {
         this.db = db;
-        this.resultNodes = new HashSet<>();
+//        this.resultNodes = new HashSet<>();
+        this.resultNodes = new HashMap<>();
         this.resultRels = new HashSet<>();
         this.visited = new HashSet<>();
         this.heads = new HashSet<>();
@@ -65,7 +67,8 @@ public class Tracker
 
     public void addToResultNodes(ResultNode node)
     {
-        resultNodes.add(node);
+//        resultNodes.add(node);
+        resultNodes.putIfAbsent(node.getOriginalID(), node);
     }
 
 
@@ -113,8 +116,13 @@ public class Tracker
 
     public void makeRelationship(ResultNode start, ResultNode end)
     {
-        VirtualNode vStart = start.getVirtualNode();
-        VirtualNode vEnd = end.getVirtualNode();
+        long startID = start.getOriginalID();
+        VirtualNode vStart = resultNodes.containsKey(startID) ?
+                resultNodes.get(startID).getVirtualNode() : start.getVirtualNode();
+
+        long endID = end.getOriginalID();
+        VirtualNode vEnd = resultNodes.containsKey(endID) ?
+                resultNodes.get(endID).getVirtualNode() : start.getVirtualNode();
 
         RelationshipType type = RelationshipType.withName("NEXT");
         VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
@@ -149,19 +157,21 @@ public class Tracker
 
     public boolean checkIfCycle(ResultNode start, ResultNode end) throws Exception
     {
+        long startID = start.getOriginalID();
+        long endID = end.getOriginalID();
         // The virtual end should always be in the solution space
-        if (!resultNodes.contains(end)) {
+        if (!resultNodes.containsKey(endID)) {
             throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
         }
 
         // If the virtualStart is not in the solution space,
         // then it's not possible to create a cycle
-        if (!resultNodes.contains(start)) {
+        if (!resultNodes.containsKey(startID)) {
             return false;
         }
 
-        VirtualNode virtualEnd = end.getVirtualNode();
-        VirtualNode virtualStart = start.getVirtualNode();
+        VirtualNode virtualEnd = resultNodes.get(endID).getVirtualNode();
+        VirtualNode virtualStart = resultNodes.get(startID).getVirtualNode();
 
         return checkIfCycleIn(virtualEnd, virtualStart);
     }
@@ -204,7 +214,7 @@ public class Tracker
         ResultNode rn = new ResultNode(head, config, db);
 //        VirtualNode vn = rn.getVirtualNode();
 
-        resultNodes.add(rn);
+        resultNodes.put(rn.getOriginalID(), rn);
         for (ResultNode node : heads) {
             makeRelationship(rn, node);
 //            VirtualRelationship rel = vn.createRelationshipTo(node.getVirtualNode(), RelationshipType.withName("NEXT"));
@@ -260,7 +270,7 @@ public class Tracker
     public List<Node> getResultNodesList()
     {
         List<Node> list = new ArrayList<>();
-        for (ResultNode r : resultNodes) {
+        for (ResultNode r : resultNodes.values()) {
             list.add(r.getVirtualNode());
         }
         return list;
@@ -311,21 +321,21 @@ public class Tracker
 
     public boolean resultsIncludeSimilar(Course course, double similarityThreshold)
     {
-        if (resultNodes.contains(course)) {
-            return true;
-        }
-
-        for (ResultNode completed : resultNodes) {
-            if (!(completed instanceof Course)) {
-                continue;
-            }
-
-            Course c = (Course) completed;
-
-            if (c.getSimilarityCoefficient(course) > similarityThreshold) {
-                return true;
-            }
-        }
+//        if (resultNodes.contains(course)) {
+//            return true;
+//        }
+//
+//        for (ResultNode completed : resultNodes) {
+//            if (!(completed instanceof Course)) {
+//                continue;
+//            }
+//
+//            Course c = (Course) completed;
+//
+//            if (c.getSimilarityCoefficient(course) > similarityThreshold) {
+//                return true;
+//            }
+//        }
 
         return false;
     }

@@ -63,6 +63,8 @@ public class CoursePath
 
         for (Course candidate : candidateSet)
         {
+            String candName = (String) candidate.getNode().getProperty("name", null);
+
             if (!tracker.checkIfCycle(candidate, current)) {
                 // TODO: Abstract into a single method
                 tracker.addToResultNodes(candidate);
@@ -78,6 +80,7 @@ public class CoursePath
 
         ResultNode next;
         while ((next = q.poll()) != null) {
+            String nextName = (String) next.getNode().getProperty("name", null);
             // TODO: Debug remove
 //            String nextName = (String) next.getProperty("name", null);
             findCoursePathPrivate(next, tracker, config, q);

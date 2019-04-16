@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ba7137c7-b2ba-434a-8ceb-e2a4f53f81c1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lernt/Tracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lernt/Tracker.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -77,7 +79,7 @@
           <entry key="bm-000-test-full" value="589" />
           <entry key="bm-000-test-single-node" value="144" />
           <entry key="dummy" value="26" />
-          <entry key="java" value="84587" />
+          <entry key="java" value="85704" />
           <entry key="small-test-000" value="32" />
           <entry key="small-test-0011" value="21" />
           <entry key="small-test-002" value="60" />
@@ -88,7 +90,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="84587" />
+          <entry key="JAVA" value="85704" />
           <entry key="PLAIN_TEXT" value="10328" />
           <entry key="XML" value="48" />
         </counts>
@@ -103,7 +105,7 @@
           <entry key="bm--000-test-cycle-three-complex" value="1" />
           <entry key="bm-000" value="6" />
           <entry key="bm-000-multi-path-start" value="2" />
-          <entry key="bm-000-test-common-a" value="4" />
+          <entry key="bm-000-test-common-a" value="5" />
           <entry key="bm-000-test-common-b" value="2" />
           <entry key="bm-000-test-common-clockwise" value="1" />
           <entry key="bm-000-test-common-counter-clockwise" value="1" />
@@ -134,7 +136,7 @@
         <counts>
           <entry key="CLASS" value="47" />
           <entry key="JAVA" value="84" />
-          <entry key="PLAIN_TEXT" value="73" />
+          <entry key="PLAIN_TEXT" value="74" />
           <entry key="XML" value="8" />
         </counts>
       </usages-collector>
@@ -148,7 +150,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
+            <state relative-caret-position="246">
               <caret line="65" selection-start-line="65" selection-end-line="65" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -157,11 +159,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1713">
-              <caret line="241" column="43" selection-start-line="241" selection-start-column="43" selection-end-line="241" selection-end-column="43" />
+            <state relative-caret-position="162">
+              <caret line="424" selection-start-line="424" selection-end-line="424" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -172,8 +174,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CandidateDecider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="83" selection-start-line="83" selection-end-line="83" />
+            <state relative-caret-position="-558">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -181,23 +183,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Tracker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1699">
-              <caret line="324" selection-start-line="324" selection-end-line="324" />
+            <state relative-caret-position="728">
+              <caret line="195" column="32" selection-start-line="195" selection-start-column="32" selection-end-line="195" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1099#1100#0" expanded="true" />
-                <element signature="e#1137#1138#0" expanded="true" />
-                <element signature="e#1186#1187#0" expanded="true" />
-                <element signature="e#1236#1237#0" expanded="true" />
-                <element signature="e#6941#6942#0" expanded="true" />
-                <element signature="e#6972#6973#0" expanded="true" />
-                <element signature="e#7031#7032#0" expanded="true" />
-                <element signature="e#7060#7061#0" expanded="true" />
-                <element signature="e#7578#7579#0" expanded="true" />
-                <element signature="e#7619#7620#0" expanded="true" />
+                <element signature="e#1152#1153#0" expanded="true" />
+                <element signature="e#1182#1183#0" expanded="true" />
+                <element signature="e#1238#1239#0" expanded="true" />
+                <element signature="e#1280#1281#0" expanded="true" />
+                <element signature="e#6873#6874#0" expanded="true" />
+                <element signature="e#6908#6909#0" expanded="true" />
+                <element signature="e#7146#7147#0" expanded="true" />
+                <element signature="e#7177#7178#0" expanded="true" />
+                <element signature="e#7233#7234#0" expanded="true" />
+                <element signature="e#7267#7268#0" expanded="true" />
+                <element signature="e#7733#7734#0" expanded="true" />
+                <element signature="e#7774#7775#0" expanded="true" />
+                <element signature="e#8222#8223#0" expanded="true" />
+                <element signature="e#8275#8276#0" expanded="true" />
+                <element signature="e#8327#8328#0" expanded="true" />
+                <element signature="e#8392#8393#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -206,8 +214,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/lernt/ResultNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="40" column="3" selection-start-line="40" selection-start-column="3" selection-end-line="40" selection-end-column="3" />
+            <state relative-caret-position="162">
+              <caret line="44" column="27" selection-start-line="44" selection-start-column="27" selection-end-line="44" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -234,20 +242,7 @@
               <caret line="63" column="12" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2627#2628#0" expanded="true" />
-                <element signature="e#2658#2659#0" expanded="true" />
-                <element signature="e#2695#2696#0" expanded="true" />
-                <element signature="e#2722#2723#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/neo4j/neo4j-kernel/3.5.2/neo4j-kernel-3.5.2.jar!/org/neo4j/kernel/impl/proc/ReflectiveProcedureCompiler.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="572" selection-start-line="572" selection-end-line="572" />
             </state>
           </provider>
         </entry>
@@ -340,9 +335,9 @@
         <option value="$PROJECT_DIR$/src/test/java/lernt/CourseTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/lernt/CandidateDecider.java" />
         <option value="$PROJECT_DIR$/src/main/java/lernt/ResultNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/lernt/Tracker.java" />
         <option value="$PROJECT_DIR$/src/main/java/lernt/Course.java" />
         <option value="$PROJECT_DIR$/src/main/java/lernt/CoursePath.java" />
+        <option value="$PROJECT_DIR$/src/main/java/lernt/Tracker.java" />
       </list>
     </option>
   </component>
@@ -428,6 +423,14 @@
             <path>
               <item name="procedure-template" type="b2602c69:ProjectViewProjectNode" />
               <item name="neo4j-procedures" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="lernt" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="procedure-template" type="b2602c69:ProjectViewProjectNode" />
+              <item name="neo4j-procedures" type="462c0819:PsiDirectoryNode" />
               <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -439,7 +442,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555345449752" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555428029075" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -610,39 +613,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Run_All - 2019.04.15 at 17h 55m 35s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 18h 49m 23s.xml">
+      <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 18h 56m 49s.xml">
+      <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="Run_All - 2019.04.15 at 18h 58m 00s.xml">
       <configuration name="Run All" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldReturnSingleNode - 2019.04.15 at 17h 55m 36s.xml">
-      <configuration name="CourseTest.shouldReturnSingleNode" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 17h 56m 58s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 19h 05m 44s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 17h 58m 24s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.16 at 16h 44m 31s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 17h 59m 14s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.16 at 16h 50m 48s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 18h 00m 00s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.16 at 17h 04m 39s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 18h 00m 51s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.16 at 17h 09m 34s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 18h 05m 51s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.16 at 17h 11m 54s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.15 at 18h 12m 31s.xml">
+    <history-entry file="CourseTest_shouldHandleCommonPrereqsA - 2019.04.16 at 17h 12m 18s.xml">
       <configuration name="CourseTest.shouldHandleCommonPrereqsA" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="Run_All - 2019.04.15 at 18h 15m 25s.xml">
-      <configuration name="Run All" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183249000" />
+    <option name="totallyTimeSpent" value="187137000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -667,8 +670,8 @@
       <window_info id="Favorites" order="7" sideWeight="0.5045872" side_tool="true" weight="0.13681948" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32881773" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.44717446" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.34520885" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32309583" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.32309583" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32881773" />
@@ -739,22 +742,10 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java</url>
-          <line>424</line>
+          <url>file://$PROJECT_DIR$/src/main/java/lernt/Tracker.java</url>
+          <line>175</line>
           <properties />
-          <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/lernt/CandidateDecider.java</url>
-          <line>72</line>
-          <properties />
-          <option name="timeStamp" value="97" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java</url>
-          <line>36</line>
-          <properties />
-          <option name="timeStamp" value="98" />
+          <option name="timeStamp" value="102" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -763,8 +754,23 @@
         <watch expression="record" />
         <watch expression="curNode" />
         <watch expression="current" />
+        <watch expression="tracker.heads" language="JAVA" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>tracker.heads</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>heads</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-similar">
@@ -867,13 +873,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-a">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
@@ -1048,64 +1047,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CandidateDecider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="83" selection-start-line="83" selection-end-line="83" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Course.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="79">
           <caret line="63" column="12" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2627#2628#0" expanded="true" />
-            <element signature="e#2658#2659#0" expanded="true" />
-            <element signature="e#2695#2696#0" expanded="true" />
-            <element signature="e#2722#2723#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/lernt/bm-000-test-common-a">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/lernt/ResultNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" column="3" selection-start-line="40" selection-start-column="3" selection-end-line="40" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Tracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1699">
-          <caret line="324" selection-start-line="324" selection-end-line="324" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1099#1100#0" expanded="true" />
-            <element signature="e#1137#1138#0" expanded="true" />
-            <element signature="e#1186#1187#0" expanded="true" />
-            <element signature="e#1236#1237#0" expanded="true" />
-            <element signature="e#6941#6942#0" expanded="true" />
-            <element signature="e#6972#6973#0" expanded="true" />
-            <element signature="e#7031#7032#0" expanded="true" />
-            <element signature="e#7060#7061#0" expanded="true" />
-            <element signature="e#7578#7579#0" expanded="true" />
-            <element signature="e#7619#7620#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        <state relative-caret-position="162">
+          <caret line="44" column="27" selection-start-line="44" selection-start-column="27" selection-end-line="44" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1114,10 +1076,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/lernt/CourseTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1713">
-          <caret line="241" column="43" selection-start-line="241" selection-start-column="43" selection-end-line="241" selection-end-column="43" />
+        <state relative-caret-position="162">
+          <caret line="424" selection-start-line="424" selection-end-line="424" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CandidateDecider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-558">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/CoursePath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/lernt/Tracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="728">
+          <caret line="195" column="32" selection-start-line="195" selection-start-column="32" selection-end-line="195" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1152#1153#0" expanded="true" />
+            <element signature="e#1182#1183#0" expanded="true" />
+            <element signature="e#1238#1239#0" expanded="true" />
+            <element signature="e#1280#1281#0" expanded="true" />
+            <element signature="e#6873#6874#0" expanded="true" />
+            <element signature="e#6908#6909#0" expanded="true" />
+            <element signature="e#7146#7147#0" expanded="true" />
+            <element signature="e#7177#7178#0" expanded="true" />
+            <element signature="e#7233#7234#0" expanded="true" />
+            <element signature="e#7267#7268#0" expanded="true" />
+            <element signature="e#7733#7734#0" expanded="true" />
+            <element signature="e#7774#7775#0" expanded="true" />
+            <element signature="e#8222#8223#0" expanded="true" />
+            <element signature="e#8275#8276#0" expanded="true" />
+            <element signature="e#8327#8328#0" expanded="true" />
+            <element signature="e#8392#8393#0" expanded="true" />
           </folding>
         </state>
       </provider>
