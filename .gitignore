@@ -34,3 +34,6 @@ __pycache__/
 
 # Python Virtual Environments
 env/
+
+# Intellij Idea Folder
+.idea
