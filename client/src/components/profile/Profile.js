@@ -19,8 +19,10 @@ class Profile extends Component {
         this.api = new LerntApi();
         this.api.getUser(props.match.params.userId)
             .then((response) => {
-                console.log(response.data)
-                this.setState({ loaded: true, user: response.data })
+                var user = response.data; 
+                user.interest = user.interest.map(skill => skill.skillID);
+                user.experience = user.experience.map(skill => skill.skillID);
+                this.setState({ loaded: true, user: user })
             });
         // this.state = {user: {username:'Sam Chao', 
         //               bio:"I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations. ",

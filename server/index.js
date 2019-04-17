@@ -16,6 +16,8 @@ const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 const learningPaths = require('./routes/learning-paths');
 const courses = require('./routes/courses');
 const users = require('./routes/users');
+const skills = require('./routes/skills');
+
 
 
 const app = express();
@@ -33,6 +35,7 @@ app.use(neo4jSessionCleanup);
 app.use('/api/learning-paths', learningPaths);
 app.use('/api/courses', courses);
 app.use('/api/users', users);
+app.use('/api/skills', skills);
 
 
 // Serve static content from React app build

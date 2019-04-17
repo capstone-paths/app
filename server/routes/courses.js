@@ -12,7 +12,6 @@ const Course = require('../models/Course');
  * @route  GET /api/courses
  * @access Public
  * @desc   Retrieves all courses
- * @param  id (in-path, mandatory, id)
  */
 router.get('/', (req, res, next) => {
   const session = utils.getDBSession(req);
