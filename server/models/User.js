@@ -34,6 +34,8 @@ class User {
     var user = result.get('user').properties;
     user.interest = records[0].get('interested_skills').map((s) => s.properties);
     user.experience = records[0].get('experienced_skills').map((s) => s.properties);
+    user.learningType = records[0].get('learning_style').map((s) => s.properties);
+
     return user;
   }
 }
