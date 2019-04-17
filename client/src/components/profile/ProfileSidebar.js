@@ -41,12 +41,12 @@ class ProfileSidebar extends Component {
                             <Header as='h3'>Learning Style </Header>
                             {console.log(this.props.user.learningType)}
                             {this.props.user.learningType.map((value) => {
-                                return <Label> {value} </Label>
+                                return <Label> {value.name} </Label>
                             })}
                             <br></br>
                             <Header as='h3'>Areas of Interest </Header>
                             {this.props.user.interest.map((value) => {
-                                return <Label> {value} </Label>
+                                return <Label> {value.name} </Label>
                             })}
                             <br></br>
                         </Card.Content>
@@ -54,7 +54,7 @@ class ProfileSidebar extends Component {
                             
                             <Header as='h3'>Knows</Header>
                             {this.props.user.experience.map((value) => {
-                                return <Label> {value} </Label>
+                                return <Label> {value.name} </Label>
                             })}
                         </Card.Content>
         </Card> )
