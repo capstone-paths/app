@@ -1,5 +1,0 @@
-CREATE ( ml: Course { name: 'Machine Learning', category: 'Machine Learning', recommendations: 100 } )
-CREATE ( algs: Course { name: 'Algorithms', category: 'Algorithms', recommendations: 100 } )
-
-CREATE
-    (algs)-[:REQUIRED_BY { recommendations: 100 }]->(ml)

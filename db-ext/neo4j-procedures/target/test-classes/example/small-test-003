@@ -1,8 +1,0 @@
-CREATE ( ml: Course { name: 'Machine Learning', category: 'Machine Learning', recommendations: 100 } )
-CREATE ( algs: Course { name: 'Algorithms', category: 'Algorithms', recommendations: 100 } )
-CREATE ( prob: Course { name: 'Probability', category: 'Probability', recommendations: 100 } )
-
-CREATE
-    (algs)-[:REQUIRED_BY { recommendations: 100 }]->(ml),
-    (algs)-[:REQUIRED_BY { recommendations: 100 }]->(prob),
-    (prob)-[:REQUIRED_BY { recommendations: 100 }]->(ml)
