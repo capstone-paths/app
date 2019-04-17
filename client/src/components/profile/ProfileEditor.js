@@ -15,18 +15,30 @@ class ProfileEditor extends Component {
         this.state = { loaded: false };
         this.api = new LerntApi();
         this.api.getSkills()
-            .then((response) => {
-                console.log(response.data)
-                //map the skill options to work well with the semantic drop downs
-                let skillOptions = response.data.skills.map(skill => {
-                    return {
-                        key: skill.skillID,
-                        text: skill.name,
-                        value: skill.skillID
-                    } 
-                });
-                this.setState({ loaded: true, skillOptions: skillOptions, user: this.props.user })
+            .then((skillResponse) => {
+                this.api.getLearningStyles()
+                    .then((styleResponse) => {
+                        console.log(styleResponse);
+                        //map the style options to work well with the semantic drop downs
+                        let styleOptions = styleResponse.data.learningStyles.map(style => {
+                            return {
+                                key: style.learningStyleID,
+                                text: style.name + ' - ' + style.description,
+                                value: style.learningStyleID
+                            }
+                        });
+                        //map the skill options to work well with the semantic drop downs
+                        let skillOptions = skillResponse.data.skills.map(skill => {
+                            return {
+                                key: skill.skillID,
+                                text: skill.name,
+                                value: skill.skillID
+                            }
+                        });
+                        this.setState({ loaded: true, skillOptions: skillOptions, styleOptions: styleOptions, user: this.props.user })
+                    });
             });
+
     }
 
     render() {
@@ -64,7 +76,7 @@ class ProfileEditor extends Component {
                             <p>What do you do now and what do you want to do?</p>
                             <TextArea name='bio' value={this.state.user.bio} placeholder='Tell us more' onChange={handleChange} />
                             <p>I would describe my learning style as</p>
-                            <Dropdown name='learningType' value={this.state.user.learningType} placeholder='None Selected' fluid multiple selection options={styles} onChange={handleChange} />
+                            <Dropdown name='learningType' value={this.state.user.learningType} placeholder='None Selected' fluid multiple selection options={this.state.styleOptions} onChange={handleChange} />
                             <p>I'm interested in...</p>
                             <Dropdown name='interest' value={this.state.user.interest} placeholder='None Selected' fluid multiple selection options={this.state.skillOptions} onChange={handleChange} />
                             <p>I have experience in...</p>

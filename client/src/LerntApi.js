@@ -22,4 +22,7 @@ export default class LerntApi{
     getSkills(){
         return axios.get('/api/skills/')
     }
+    getLearningStyles(){
+        return axios.get('/api/learning-styles/')
+    }
 }

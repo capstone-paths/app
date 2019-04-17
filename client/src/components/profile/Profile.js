@@ -20,6 +20,7 @@ class Profile extends Component {
         this.api.getUser(props.match.params.userId)
             .then((response) => {
                 var user = response.data; 
+                user.learningType = user.learningType.map(type => type.learningStyleID);
                 user.interest = user.interest.map(skill => skill.skillID);
                 user.experience = user.experience.map(skill => skill.skillID);
                 this.setState({ loaded: true, user: user })
