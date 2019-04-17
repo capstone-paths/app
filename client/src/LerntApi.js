@@ -16,4 +16,7 @@ export default class LerntApi{
     getCourses(){
         return axios.get('/api/courses/')
     }
+    getUser(id){
+        return axios.get('/api/users/'+ id)
+    }
 }
