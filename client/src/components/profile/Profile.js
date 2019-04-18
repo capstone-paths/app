@@ -60,7 +60,7 @@ class Profile extends Component {
                         <Grid.Row>
                             <Card style={{ width: '100%' }} >
                                 <Card.Content>
-                                    <Card.Header>Enrolled Paths</Card.Header>
+                                    <Card.Header>Active Paths</Card.Header>
                                     <SequenceList />
                                 </Card.Content>
                             </Card>
@@ -77,8 +77,6 @@ class Profile extends Component {
         } else {
             return (<div>loading </div>);
         }
-
-
     }
 }
 
