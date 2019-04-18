@@ -29,8 +29,8 @@ class LoginForm extends Component {
                   placeholder='Password'
                   type='password'
                 />
-
-                <Button color='yellow' fluid size='large' as={ Link } to="/profile">
+               {/* TODO Make the link to profile dynamic on the context of currently signed in user */}
+                <Button color='yellow' fluid size='large' as={ Link } to="/profile/2">
                   Login
                 </Button>
               </Segment>

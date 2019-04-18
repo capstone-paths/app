@@ -22,7 +22,7 @@ class App extends Component {
       }}>
         <Route exact path="/" component={HomePage}/>
         <Route exact path="/login" component={LoginForm}/>
-        <Route exact path="/profile" component={Profile}/>
+        <Route exact path="/profile/:userId" component={Profile}/>
         <Route exact path="/learning-path-discovery" component={LearningPathDiscoveryPage}/>
         <Route path="/learning-path/:sequenceId" component={SequencePage}/>
         <Route path="/course/:courseId" component={CoursePage}/>

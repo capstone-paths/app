@@ -20,7 +20,8 @@ export default class Nav extends Component {
           <Icon color='yellow' name='graduation cap' size='big' />
           Lernt.io
         </Menu.Item>
-        <Menu.Item as={ Link } to="/profile"> Profile</Menu.Item>
+        {/* TODO Make the link to profile dynamic on the context of currently signed in user */}
+        <Menu.Item as={ Link } to="/profile/2"> Profile</Menu.Item>
 
         <Dropdown item simple text="Browse Offerings">
           <Dropdown.Menu>
