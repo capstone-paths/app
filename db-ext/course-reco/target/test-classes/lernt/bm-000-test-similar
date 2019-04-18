@@ -1,0 +1,10 @@
+// Simple test to check that the algorithm does not recommend similar courses
+// Create one link Stanford Algos -> Track 1
+// Create one link Princeton Algos -> Track 1
+// Should only recommend Stanford
+
+:Course 3, :NEXT, :Track 1, 1
+:Course 4, :NEXT, :Track 1, 1
+
+
+

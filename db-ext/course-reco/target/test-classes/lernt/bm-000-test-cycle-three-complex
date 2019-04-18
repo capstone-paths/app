@@ -1,0 +1,18 @@
+// Tests for a complex three way cycle where all nodes
+// are interconnected
+// CS50 -> Algorithms
+// Algorithms -> CS50
+// CS50 -> Probability
+// Probability -> CS50
+// Algorithms -> Probability
+// Probability -> Algorithms
+// Probability -> Machine Learning Track
+
+:Course 1, :NEXT, :Course 3, 1
+:Course 3, :NEXT, :Course 1, 1
+:Course 1, :NEXT, :Course 5, 1
+:Course 5, :NEXT, :Course 1, 1
+:Course 3, :NEXT, :Course 5, 1
+:Course 5, :NEXT, :Course 3, 1
+:Course 5, :NEXT, :Track 1, 1
+
