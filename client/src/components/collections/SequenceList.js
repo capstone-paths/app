@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Icon,  Item, Label } from 'semantic-ui-react';
+import { Button, Icon,  Item} from 'semantic-ui-react';
 
 class SequenceList extends Component {
     render() {
@@ -26,14 +26,13 @@ class SequenceList extends Component {
                         <Item.Content>
                             <Item.Header as='a'>{value.name}</Item.Header>
                             <Item.Meta>
-                                <span>{value.author}</span>
+                                <strong>Author: </strong> <span>{value.author}</span>
                             </Item.Meta>
                             <Item.Extra>
                             <Button color='yellow' floated='right' as={ Link } to={courseLink}>
                                 Edit Sequence
                                 <Icon name='right chevron' />
                             </Button>
-                            <Label> {value.domain}</Label>
                             </Item.Extra>
                         </Item.Content>
                     </Item>
