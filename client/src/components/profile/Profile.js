@@ -20,25 +20,19 @@ class Profile extends Component {
         this.api.getUser(props.match.params.userId)
             .then((response) => {
                 var user = response.data; 
-                user.learningType = user.learningType.map(type => type.learningStyleID);
-                user.interest = user.interest.map(skill => skill.skillID);
-                user.experience = user.experience.map(skill => skill.skillID);
                 this.setState({ loaded: true, user: user })
             });
-        // this.state = {user: {username:'Sam Chao', 
-        //               bio:"I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations. ",
-        //               learningType:["Activist - Learn by doing"],
-        //               interest:["angular","design", "css"],
-        //               experience:["data"]
-        //             }}
     }
     state = { openModal: false }
     closeModal = () => this.setState({ openModal: false })
     openModal = () => this.setState({ openModal: true })
     editProfile = () => { this.openModal(); }
     onFinish = (user) => {
-        console.log(user)
-        this.setState({ user: user });
+        this.api.saveUser(user)
+            .then((response) => {
+                var user = response.data; 
+                this.setState({ loaded: true, user: user })
+            });
     }
     render() {
         const { openModal } = this.state

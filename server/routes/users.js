@@ -36,7 +36,7 @@ router.get('/', (req, res, next) => {
 /**
  * @route  GET /api/users/:id
  * @access Public
- * @desc   Retrieves a learning path by id
+ * @desc   Retrieves a user by id
  * @param  id (in-path, mandatory, id)
  */
 router.get('/:id', (req, res, next) => {
@@ -56,6 +56,32 @@ router.get('/:id', (req, res, next) => {
       })
       .catch(next)
   });
+
+
+  /**
+ * @route  POST /api/users/:id
+ * @access Public
+ * @desc   Saves a user by id
+ * @param  id (in-path, mandatory, id)
+ */
+router.post('/:id', (req, res, next) => {
+  //TODO this needs to be properly secured. 
+  if (!req.params.id) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  User
+    .save(session, req.body)
+    .then((result) => {
+      if (!result) {
+        res.status(400);
+      }
+      res.json(result);
+    })
+    .catch(next)
+});
+
 
  
   module.exports = router;

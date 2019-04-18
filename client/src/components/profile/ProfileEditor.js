@@ -2,13 +2,6 @@ import React, { Component } from 'react'
 import { Button, Dropdown, Form, Header, Icon, Input, Modal, TextArea } from 'semantic-ui-react'
 import LerntApi from '../../LerntApi'
 
-const styles = [
-    { key: 'activist', text: 'Activist - Learn by doing', value: 'Activist - Learn by doing' },
-    { key: 'theorist', text: 'Theorist - Want to undstand the theory behind it', value: 'Theorist - Want to undstand the theory behind it' },
-    { key: 'Pragmatist', text: 'Pragmatist - Want the real world application', value: 'Pragmatist - Want the real world application' },
-    { key: 'Reflector', text: 'Reflector - Learn by observing', value: 'Reflector - Learn by observing' }
-]
-
 class ProfileEditor extends Component {
     constructor(props) {
         super(props);
@@ -44,8 +37,16 @@ class ProfileEditor extends Component {
     render() {
         console.log(this.state)
         const handleChange = (event, data) => {
-            console.log(data);
-            this.setState({ [data.name]: data.value });
+            //todo this is a bit messy. There is likely a better way to handle user state changes other than filtering and mapping all the time
+            var state = this.state;
+            if(['interest','experience'].includes(data.name) ){
+                state.user[data.name] = state.skillOptions.filter(s => data.value.includes(s.key)).map(s=> {return {name: s.text, skillID: s.key}});
+            }else if(['learningType'].includes(data.name)){
+                state.user[data.name] = state.styleOptions.filter(s => data.value.includes(s.key)).map(s=> {return {name: s.text, learningStyleID: s.key}});
+            }else{
+                state.user[data.name] = data.value; 
+            }
+            this.setState(state);
         }
 
         const closeModal = () => {
@@ -53,13 +54,7 @@ class ProfileEditor extends Component {
         }
 
         const onFinish = () => {
-            const user = {
-                bio: this.state.bio,
-                username: this.state.username,
-                learningType: this.state.learningType,
-                interest: this.state.interest,
-                experience: this.state.experience
-            }
+            const user = this.state.user;
             this.props.onFinish(user);
             this.props.closeModal();
         }
@@ -76,11 +71,11 @@ class ProfileEditor extends Component {
                             <p>What do you do now and what do you want to do?</p>
                             <TextArea name='bio' value={this.state.user.bio} placeholder='Tell us more' onChange={handleChange} />
                             <p>I would describe my learning style as</p>
-                            <Dropdown name='learningType' value={this.state.user.learningType} placeholder='None Selected' fluid multiple selection options={this.state.styleOptions} onChange={handleChange} />
+                            <Dropdown name='learningType' value={this.state.user.learningType.map(type => type.learningStyleID)} placeholder='None Selected' fluid multiple selection options={this.state.styleOptions} onChange={handleChange} />
                             <p>I'm interested in...</p>
-                            <Dropdown name='interest' value={this.state.user.interest} placeholder='None Selected' fluid multiple selection options={this.state.skillOptions} onChange={handleChange} />
+                            <Dropdown name='interest' value={this.state.user.interest.map(skill => skill.skillID)} placeholder='None Selected' fluid multiple selection options={this.state.skillOptions} onChange={handleChange} />
                             <p>I have experience in...</p>
-                            <Dropdown name='experience' value={this.state.user.experience} placeholder='None Selected' fluid multiple selection options={this.state.skillOptions} onChange={handleChange} />
+                            <Dropdown name='experience' value={ this.state.user.experience.map(skill => skill.skillID)} placeholder='None Selected' fluid multiple selection options={this.state.skillOptions} onChange={handleChange} />
                         </Form>
                     </Modal.Content>
                     <Modal.Actions>
