@@ -49,6 +49,44 @@ router.get('/:id', (req, res, next) => {
     .catch(next)
 });
 
+/**
+ * @route  GET /api/learning-paths/subscribe/:sequenceID/:userID
+ * @access Private
+ * @desc   Retrieves whether a learning path is subscribed to by user id
+ * @param  id (in-path, mandatory, id)
+ */
+router.get('/is-subscribed/:sequenceID/:userID', (req, res, next) => {
+  if ((!req.params.sequenceID) || (!req.params.userID)) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  LearningPath
+    .isSubscribed(session, req.params.sequenceID, req.params.userID)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch(next)
+});
+/**
+ * @route  POST /toggle-subscribe/:sequenceID/:userID
+ * @access Private
+ * @desc   Subscribes or unsubscribes from the sequence
+ * @param  id (in-path, mandatory, id)
+ */
+router.post('/toggle-subscribe/:sequenceID/:userID', (req, res, next) => {
+  if ((!req.params.sequenceID) || (!req.params.userID)) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  LearningPath
+    .toggleSubscribe(session, req.params.sequenceID, req.params.userID)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch(next)
+});
 
 /**
  * @route    POST /api/learning-paths

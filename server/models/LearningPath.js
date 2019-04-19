@@ -48,10 +48,10 @@ class LearningPath {
     return this;
   }
 
- /**
-   * Finds all paths
-   * @param {Session} session 
-   */
+  /**
+    * Finds all paths
+    * @param {Session} session 
+    */
   static async findAll(session) {
     const query = `
       MATCH (s: PathStart)
@@ -66,8 +66,8 @@ class LearningPath {
     let sequenceData = results.records.map((sequence) => {
       return sequence.get("s").properties;
     });
-    
-    return { 
+
+    return {
       sequences: sequenceData
     };
   }
@@ -94,7 +94,53 @@ class LearningPath {
     }
 
     let records = results.records[0];
-    return  records.get('sequenceData');
+    return records.get('sequenceData');
+  }
+
+  /**
+    * subscribe to a sequence by id
+    * @param {Session} session 
+    * @param {Integer} sequenceID 
+    * @param {Integer} userID 
+   */
+  static async toggleSubscribe(session, sequenceID, userID) {
+    let isSubscribed = await this.isSubscribed(session, sequenceID, userID);
+    let query = '';
+    if (isSubscribed) {
+      query = `
+      MATCH (u: User {userID: $userID})-[r:SUBSCRIBED]->(ps: PathStart {pathID: $sequenceID})
+      DELETE r
+    `;
+    }
+    else {
+      query = `
+      MATCH (u: User {userID: $userID})
+      MATCH (ps: PathStart {pathID: $sequenceID})
+      MERGE (u)-[:SUBSCRIBED]->(ps)
+    `;
+    }
+    await session.run(query, { userID, sequenceID });
+    return await this.isSubscribed(session, sequenceID, userID);
+  }
+  /**
+     * Returns whether the sequence is already subscribed to by the user or not 
+     * 
+     * @param {Session} session 
+     * @param {Integer} sequenceID 
+     * @param {Integer} userID 
+    */
+  static async isSubscribed(session, sequenceID, userID) {
+    const query = `
+    MATCH  (u:User {userID: $userID}), (ps:PathStart {pathID: $sequenceID}) 
+    RETURN EXISTS( (u)-[:SUBSCRIBED]-(ps) ) 
+    `;
+
+    const results = await session.run(query, { userID, sequenceID });
+    if (results.records.length === 0) {
+      return undefined;
+    }
+
+    return results.records[0].get(0);
   }
 
   // TODO: Need to think about this
