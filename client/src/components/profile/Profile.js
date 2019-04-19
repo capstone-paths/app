@@ -61,7 +61,7 @@ class Profile extends Component {
                             <Card style={{ width: '100%' }} >
                                 <Card.Content>
                                     <Card.Header>Active Paths</Card.Header>
-                                    <SequenceList />
+                                    <SequenceList sequences={this.state.user.learningPaths} />
                                 </Card.Content>
                             </Card>
                         </Grid.Row>

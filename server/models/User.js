@@ -19,10 +19,16 @@ class User {
   static async findById(session, id) {
     const query = `
     MATCH (u: User {userID: $id})
-    MATCH ()-[:INTERESTED]->(interested_skills: Skill)
-    MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
-    MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
-    RETURN u as user, collect(DISTINCT interested_skills) AS interested_skills, collect(DISTINCT experienced_skills) AS experienced_skills, collect(DISTINCT learning_style) AS learning_style`;
+    OPTIONAL MATCH ()-[:INTERESTED]->(interested_skills: Skill)
+    OPTIONAL MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
+    OPTIONAL MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
+    OPTIONAL MATCH ()-[:SUBSCRIBED]->(path_start: PathStart)
+    RETURN u as user,
+    collect(DISTINCT interested_skills) AS interested_skills,
+    collect(DISTINCT experienced_skills) AS experienced_skills,
+    collect(DISTINCT learning_style) AS learning_styles,
+    collect(DISTINCT path_start) AS path_starts
+    `;
     // TODO: Think of an abstraction layer to get properties easily
     // This is going to get tiring quickly
     const results = await session.run(query, { id });
@@ -34,8 +40,8 @@ class User {
     var user = result.get('user').properties;
     user.interest = records[0].get('interested_skills').map((s) => s.properties);
     user.experience = records[0].get('experienced_skills').map((s) => s.properties);
-    user.learningType = records[0].get('learning_style').map((s) => s.properties);
-
+    user.learningType = records[0].get('learning_styles').map((s) => s.properties);
+    user.learningPaths = records[0].get('path_starts').map((s) => s.properties);
     return user;
   }
 
