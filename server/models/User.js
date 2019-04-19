@@ -26,6 +26,7 @@ class User {
     WITH {
     	  userID : u.userID,
         username : u.username,
+        bio : u.bio,
         interest: collect(DISTINCT {skillID: interested_skills.skillID, name: interested_skills.name}), 
         experience:collect(DISTINCT {skillID: experienced_skills.skillID, name: experienced_skills.name}),
         learningType: collect(DISTINCT {learningStyleID : learning_style.learningStyleID, name : learning_style.name, description : learning_style.description}),
