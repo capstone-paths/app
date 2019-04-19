@@ -65,11 +65,11 @@ class CourseTable extends Component {
             <Table compact celled >
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Source</Table.HeaderCell>
                 <Table.HeaderCell>Rating</Table.HeaderCell>
                 <Table.HeaderCell>What are you learning?</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
         
@@ -77,13 +77,14 @@ class CourseTable extends Component {
                 {this.courses.map((course) => {
                     return (
                         <Table.Row>
-                            <Table.Cell >
-                            <Checkbox name={course.courseID} checked={course.completed} onClick={this.toggle}/>
-                            </Table.Cell>
                             <Table.Cell><a href={getLink(course.courseID)}>{course.name}</a></Table.Cell>
                             <Table.Cell>{course.provider}</Table.Cell>
                             <Table.Cell>N/A</Table.Cell>
                             <Table.Cell>N/A</Table.Cell>
+                            <Table.Cell >
+                                N/A
+                            {/* <Checkbox name={course.courseID} checked={course.completed} onClick={this.toggle}/> */}
+                            </Table.Cell>
                         </Table.Row>
                     )
 
