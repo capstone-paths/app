@@ -30,7 +30,7 @@ class SequenceList extends Component {
                         <Item.Content>
                             <Item.Header as='a'>{value.name}</Item.Header>
                             <Item.Meta>
-                                {/* <strong>Author: </strong> <span>{value.author}</span> */}
+                                <strong>Author: </strong> <span>{value.creator.username}</span>
                             </Item.Meta>
                             <Item.Extra>
                             <Button color='yellow' floated='right' as={ Link } to={courseLink}>

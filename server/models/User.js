@@ -27,10 +27,10 @@ class User {
     	  userID : u.userID,
         username : u.username,
         bio : u.bio,
-        interest: collect(DISTINCT {skillID: interested_skills.skillID, name: interested_skills.name}), 
-        experience:collect(DISTINCT {skillID: experienced_skills.skillID, name: experienced_skills.name}),
-        learningType: collect(DISTINCT {learningStyleID : learning_style.learningStyleID, name : learning_style.name, description : learning_style.description}),
-    	  learningPaths : collect(distinct({name: path_start.name, pathID:path_start.pathID, creator:path_creator}))
+        interest: collect(DISTINCT  PROPERTIES(interested_skills)), 
+        experience: collect(DISTINCT PROPERTIES(experienced_skills)),
+        learningType: collect(DISTINCT PROPERTIES(learning_style)),
+    	  learningPaths : collect(distinct({name: path_start.name, pathID:path_start.pathID, creator: PROPERTIES(path_creator)}))
         } as returnUser
     RETURN returnUser as user
     `;
