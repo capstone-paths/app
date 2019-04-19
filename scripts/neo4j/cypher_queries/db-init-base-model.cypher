@@ -46,7 +46,7 @@ WITH count(*) as dummy
 
 // Sam Sequence #1 Courses
 MATCH (pfjs: Course) WHERE toLower(pfjs.name) CONTAINS 'programming foundations with javascript'
-MATCH (gitv: Course) WHERE toLower(gitv.name) CONTAINS 'version control with git' AND toLower(gitv.institution) CONTAINS 'udacity'
+MATCH (gitv: Course) WHERE toLower(gitv.name) CONTAINS 'version control with git' AND toLower(gitv.institution) CONTAINS 'atlassian'
 MATCH (acss: Course) WHERE toLower(acss.name) CONTAINS 'advanced css concepts'
 MATCH (pwjs: Course) WHERE toLower(pwjs.name) CONTAINS 'programming for the web with javascript'
 MATCH (feui: Course) WHERE toLower(feui.name) ENDS WITH 'front-end web ui frameworks and tools'
