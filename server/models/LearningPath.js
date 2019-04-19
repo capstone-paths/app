@@ -80,7 +80,12 @@ class LearningPath {
     const query = `
       MATCH (s: PathStart {pathID: $id})
       MATCH ()-[rel :NEXT {pathID: $id}]->(c: Course)
-      RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).courseID, endNode(rel).courseID]) as rels
+      WITH { 
+        sequence : PROPERTIES(s),
+        courseNodes : COLLECT(DISTINCT(PROPERTIES(c))),
+        rels : COLLECT(DISTINCT ({start : startNode(rel).courseID, end: endNode(rel).courseID }))
+      } as sequenceData
+      RETURN sequenceData
     `;
 
     const results = await session.run(query, { id });
@@ -88,29 +93,8 @@ class LearningPath {
       return undefined;
     }
 
-
-    // TODO: Create a generic serialization layer that does this
-    // It should be able to pull it from a schema and do it for any object
-    let courseNodes, rels;
-
     let records = results.records[0];
-
-    let sequence = records.get('sequence');
-    let sequenceData = sequence.properties;
-
-    courseNodes = records.get('courses').map((course) => {
-      return course.properties
-    });
-
-    rels = records.get('rels').map((rel) => {
-      return { start: rel[0], end: rel[1] };
-    });
-
-    return { 
-      sequence: sequenceData,
-      courseNodes, 
-      rels 
-    };
+    return  records.get('sequenceData');
   }
 
   // TODO: Need to think about this
