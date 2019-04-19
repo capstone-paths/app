@@ -8,19 +8,6 @@ class SequenceList extends Component {
         this.sequences = props.sequences;
     }
     render() {
-        // const sequences = [{
-        //     id: 1,
-        //     name: "Sam Chao's Front End Development Path",
-        //     author: "Sam Chao",
-        //     domain: "Front-End Development"
-        // },
-        // {
-        //     id: 2,
-        //     name: "Sam Chao's Full Stack Development Path",
-        //     author: "Sam Chao",
-        //     domain: "Full Stack Development"
-        // }];
-        
         return (
             <Item.Group divided>
             {this.sequences.map((value) => {
