@@ -48,7 +48,7 @@ class Profile extends Component {
                             <Card style={{ width: '100%', marginBottom: '2em' }} >
                                 <Card.Content>
                                     <Card.Header>Current Courses</Card.Header>
-                                    <CourseTable />
+                                    <CourseTable courses={this.state.user.currentCourses}/>
                                 </Card.Content>
                                 <Card.Content extra>
                                     <Button color='yellow' fluid size='large' as={Link} to="/profile">

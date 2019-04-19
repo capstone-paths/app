@@ -22,6 +22,7 @@ class User {
     OPTIONAL MATCH ()-[:INTERESTED]->(interested_skills: Skill)
     OPTIONAL MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
     OPTIONAL MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
+    OPTIONAL MATCH ()-[:IN_PROGRESS]->(current_courses: Course)
     OPTIONAL MATCH ()-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
     WITH {
     	  userID : u.userID,
@@ -30,6 +31,7 @@ class User {
         interest: collect(DISTINCT  PROPERTIES(interested_skills)), 
         experience: collect(DISTINCT PROPERTIES(experienced_skills)),
         learningType: collect(DISTINCT PROPERTIES(learning_style)),
+        currentCourses: collect(DISTINCT PROPERTIES(current_courses)),
     	  learningPaths : collect(distinct({name: path_start.name, pathID:path_start.pathID, creator: PROPERTIES(path_creator)}))
         } as returnUser
     RETURN returnUser as user

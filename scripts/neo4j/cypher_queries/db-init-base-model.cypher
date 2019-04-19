@@ -99,10 +99,8 @@ MERGE (test)-[:NEXT {pathID: '2'}]->(secu)
 MERGE (secu)-[:NEXT {pathID: '2'}]->(tr02)
 MERGE (sam)-[:CREATED]->(st02)
 MERGE (sam)-[:SUBSCRIBED]->(st02)
-
-
-
-
+MERGE (sam)-[:IN_PROGRESS]->(pfjs)
+MERGE (sam)-[:IN_PROGRESS]->(feui)
 
 
 // This is a trick to separate commands
