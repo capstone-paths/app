@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Checkbox,  Label, Modal, Rating, Table } from 'semantic-ui-react';
+import {Modal, Table } from 'semantic-ui-react';
 import CourseRater from '../profile/CourseRater'
 
 class CourseTable extends Component {
