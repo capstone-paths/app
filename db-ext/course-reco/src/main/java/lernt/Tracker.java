@@ -129,8 +129,8 @@ public class Tracker
     public void buildHead(GraphDatabaseService db) {
         // TODO: This builds two virtual nodes in succession, should clean up
         VirtualNode head = new VirtualNode(Long.MIN_VALUE, db);
-        head.addLabel(Label.label("VirtualPathStart"));
-        head.setProperty("name", "VirtualPathStart");
+        head.addLabel(Label.label("PathStart"));
+        head.setProperty("name", "Start");
         ResultNode rn = new ResultNode(head, config, db);
 
         resultNodes.put(rn.getOriginalID(), rn);
