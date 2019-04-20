@@ -54,6 +54,8 @@ public class Tracker
 
         RelationshipType type = RelationshipType.withName("NEXT");
         VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
+        vr.setProperty("originalStartID", startID);
+        vr.setProperty("originalEndID", endID);
 
         // Need this because otherwise can't comfortably navigate the virtual graph
         vEnd.createRelationshipFrom(vStart, type);
