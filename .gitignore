@@ -37,3 +37,15 @@ env/
 
 # Intellij Idea Folder
 .idea
+
+# VSCode java artifacts
+.classpath
+.factorypath
+.project
+.settings
+
+# Java and Maven builds
+*.class
+*.jar
+target/
+

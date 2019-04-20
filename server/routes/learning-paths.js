@@ -104,4 +104,34 @@ router.get('/:id/recommendation', (req, res, next) => {
     .then(() => session.close());
   });
 
+
+/**
+ * @route  GET /api/learning-paths/:id/recommendation
+ * @access Public
+ * @desc   Returns system-wide recommendation for a given track
+ *         (Invokes Neo4j custom procedure)
+ * @param  trackID (in-path, mandatory, id)
+ */
+router.get('/system-recommendation/:id', (req, res, next) => {
+  // get the track id
+  // invoke the custom procedure
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).send({ error: 'missing id' });
+  }
+
+  const session = utils.getDBSession(req);
+
+  LearningPath
+    .getSystemRecommendation(session, id)
+    .then((result) => {
+      if (!result) {
+        res.status(400).send({ error: `No recommendations for id: ${id}` });
+      } 
+
+      res.json(result);
+    })
+    .catch(next);
+});
+
 module.exports = router;
