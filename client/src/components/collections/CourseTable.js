@@ -57,7 +57,7 @@ class CourseTable extends Component {
     }
     render() {
         const {openModal} = this.state
-        const courses = this.state.courses;
+        // const courses = this.state.courses;
         function getLink(id){
             return '/course/'+id;
         }
