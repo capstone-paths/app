@@ -113,11 +113,49 @@ class LearningPath {
     };
   }
 
+  /**
+   * Obtains a system-wide recommendation for a given track
+   * Calls the custom Neo4j procedure and returns the results
+   * @param {Session} session Neo4j session context
+   * @param {uuid} trackID The track for which to obtain the recommendation 
+   */
+  static async getSystemRecommendation(session, id) {
+    const query = `
+    MATCH (t: Track) WHERE t.trackID=$trackID
+    CALL lernt.findCoursePath(t, {})
+    YIELD nodes, relationships
+    RETURN nodes, relationships
+    `
+
+    const results = await session.run(query, { id });
+    if (results.records.length === 0) {
+      return undefined;
+    }
+
+    let nodes, rels;
+
+    let records = results.records[0];
+
+    nodes = records.get('courses').map((course) => {
+      return course.properties
+    });
+
+    rels = records.get('rels').map((rel) => {
+      // map start originalID and end originalID
+    });
+
+    // TODO: Need to do something about the path start
+    return { nodes, rels };
+  }
+  
+
   // TODO: Need to think about this
   toJSON() {
     const { authorID, pathStartData, relationships } = this;
     return { authorID, pathStartData, relationships };
   }
+
+
 }
 
 module.exports = LearningPath;
