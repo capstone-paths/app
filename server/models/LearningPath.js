@@ -145,6 +145,8 @@ class LearningPath {
     });
 
     // TODO: Need to do something about the path start
+    // Deliver it exactly in the same shape as findById
+    // Easier on the front end
     return { nodes, rels };
   }
   
