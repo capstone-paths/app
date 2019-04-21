@@ -1,4 +1,4 @@
-// Server .env is expected at server root 
+// Server .env is expected at server root
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
@@ -15,6 +15,13 @@ const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 // Import routers
 const learningPaths = require('./routes/learning-paths');
 const courses = require('./routes/courses');
+const users = require('./routes/users');
+const skills = require('./routes/skills');
+const learningStyles = require('./routes/learning-styles');
+const authREST = require('./routes/auth-rest')
+
+
+
 
 const app = express();
 
@@ -30,6 +37,12 @@ app.use(neo4jSessionCleanup);
 // Plug in routers
 app.use('/api/learning-paths', learningPaths);
 app.use('/api/courses', courses);
+app.use('/api/users', users);
+app.use('/api/skills', skills);
+app.use('/api/learning-styles', learningStyles);
+app.use('/auth', authREST);
+
+
 
 // Serve static content from React app build
 const publicPath = path.join(__dirname, '..', 'client/build');

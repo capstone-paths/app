@@ -14,7 +14,7 @@ class LoginForm extends Component {
           }
         `}
         </style>
-        <Grid textAlign='center' style={{ height: '80%' }} verticalAlign='middle'>
+        <Grid style={{ height: '80%', marginLeft:'25%'}} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 600 }}>
             <Header as='h2' color='yellow' textAlign='center'>
               Login to your learning space
@@ -29,8 +29,8 @@ class LoginForm extends Component {
                   placeholder='Password'
                   type='password'
                 />
-
-                <Button color='yellow' fluid size='large' as={ Link } to="/profile">
+               {/* TODO Make the link to profile dynamic on the context of currently signed in user */}
+                <Button color='yellow' fluid size='large' as={ Link } to="/profile/2">
                   Login
                 </Button>
               </Segment>

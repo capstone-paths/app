@@ -48,7 +48,29 @@ class LearningPath {
     return this;
   }
 
+  /**
+    * Finds all paths
+    * @param {Session} session 
+    */
+  static async findAll(session) {
+    const query = `
+      MATCH (s: PathStart)
+      RETURN s 
+    `;
 
+    const results = await session.run(query);
+    if (results.records.length === 0) {
+      return undefined;
+    }
+
+    let sequenceData = results.records.map((sequence) => {
+      return sequence.get("s").properties;
+    });
+
+    return {
+      sequences: sequenceData
+    };
+  }
   /**
    * Finds a sequence by id
    * @param {Session} session 
@@ -58,7 +80,12 @@ class LearningPath {
     const query = `
       MATCH (s: PathStart {pathID: $id})
       MATCH ()-[rel :NEXT {pathID: $id}]->(c: Course)
-      RETURN s as sequence, collect(DISTINCT c) AS courses,COLLECT(distinct [startNode(rel).courseID, endNode(rel).courseID]) as rels
+      WITH { 
+        sequence : PROPERTIES(s),
+        courseNodes : COLLECT(DISTINCT(PROPERTIES(c))),
+        rels : COLLECT(DISTINCT ({start : startNode(rel).courseID, end: endNode(rel).courseID }))
+      } as sequenceData
+      RETURN sequenceData
     `;
 
     const results = await session.run(query, { id });
@@ -66,56 +93,54 @@ class LearningPath {
       return undefined;
     }
 
-
-    // TODO: Create a generic serialization layer that does this
-    // It should be able to pull it from a schema and do it for any object
-    let courseNodes, rels;
-
     let records = results.records[0];
-
-    let sequence = records.get('sequence');
-    let sequenceData = sequence.properties;
-
-    courseNodes = records.get('courses').map((course) => {
-      return course.properties
-    });
-
-    rels = records.get('rels').map((rel) => {
-      return { start: rel[0], end: rel[1] };
-    });
-
-    return { 
-      sequence: sequenceData,
-      courseNodes, 
-      rels 
-    };
+    return records.get('sequenceData');
   }
 
-    /**
-   * Finds a sequence by id
-   * @param {Session} session 
-   * @param {Integer} id 
+  /**
+    * subscribe to a sequence by id
+    * @param {Session} session 
+    * @param {Integer} sequenceID 
+    * @param {Integer} userID 
    */
-  static async findAll(session, id) {
+  static async toggleSubscribe(session, sequenceID, userID) {
+    let isSubscribed = await this.isSubscribed(session, sequenceID, userID);
+    let query = '';
+    if (isSubscribed) {
+      query = `
+      MATCH (u: User {userID: $userID})-[r:SUBSCRIBED]->(ps: PathStart {pathID: $sequenceID})
+      DELETE r
+    `;
+    }
+    else {
+      query = `
+      MATCH (u: User {userID: $userID})
+      MATCH (ps: PathStart {pathID: $sequenceID})
+      MERGE (u)-[:SUBSCRIBED]->(ps)
+    `;
+    }
+    await session.run(query, { userID, sequenceID });
+    return await this.isSubscribed(session, sequenceID, userID);
+  }
+  /**
+     * Returns whether the sequence is already subscribed to by the user or not 
+     * 
+     * @param {Session} session 
+     * @param {Integer} sequenceID 
+     * @param {Integer} userID 
+    */
+  static async isSubscribed(session, sequenceID, userID) {
     const query = `
-      MATCH (s: Sequence)
-      RETURN s as sequence
+    MATCH  (u:User {userID: $userID}), (ps:PathStart {pathID: $sequenceID}) 
+    RETURN EXISTS( (u)-[:SUBSCRIBED]-(ps) ) 
     `;
 
-    const results = await session.run(query, { id });
+    const results = await session.run(query, { userID, sequenceID });
     if (results.records.length === 0) {
       return undefined;
     }
 
-    let records = results.records[0];
-
-    let sequenceData = records.get('sequence').map((sequence) => {
-      return sequence.properties
-    });
-    
-    return { 
-      sequences: sequenceData
-    };
+    return results.records[0].get(0);
   }
 
   // TODO: Need to think about this

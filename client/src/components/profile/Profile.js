@@ -3,116 +3,80 @@ import {
     Button,
     Card,
     Grid,
-    Header,
-    Icon, 
-    Label, 
     Modal
-  } from 'semantic-ui-react'
+} from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import SequenceList from '../collections/SequenceList';
 import ProfileEditor from './ProfileEditor';
 import CourseTable from '../collections/CourseTable';
+import ProfileSideBar from './ProfileSidebar';
+import LerntApi from '../../LerntApi'
 
 class Profile extends Component {
-    state = {openModal:false}
+    constructor(props) {
+        super(props);
+        this.state = { loaded: false };
+        this.api = new LerntApi();
+        this.api.getUser(props.match.params.userId)
+            .then((response) => {
+                var user = response.data; 
+                this.setState({ loaded: true, user: user })
+            });
+    }
+    state = { openModal: false }
     closeModal = () => this.setState({ openModal: false })
     openModal = () => this.setState({ openModal: true })
-    editProfile = () => {this.openModal();}
+    editProfile = () => { this.openModal(); }
+    onFinish = (user) => {
+        this.api.saveUser(user)
+            .then((response) => {
+                var user = response.data; 
+                this.setState({ loaded: true, user: user })
+            });
+    }
+    render() {
+        const { openModal } = this.state
+        console.log(this.state.user)
+        if (this.state.loaded) {
+            return (
+                <Grid >
+                    <Grid.Column width={6}>
+                        <ProfileSideBar modalControl={this.editProfile} user={this.state.user} />
+                    </Grid.Column>
+                    <Grid.Column width={10} >
+                        <Grid.Row >
+                            <Card style={{ width: '100%', marginBottom: '2em' }} >
+                                <Card.Content>
+                                    <Card.Header>Current Courses</Card.Header>
+                                    <CourseTable courses={this.state.user.currentCourses}/>
+                                </Card.Content>
+                                <Card.Content extra>
+                                    <Button color='yellow' fluid size='large' as={Link} to="/profile">
+                                        View All Courses
+                                    </Button>
+                                </Card.Content>
+                            </Card>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Card style={{ width: '100%' }} >
+                                <Card.Content>
+                                    <Card.Header>Active Paths</Card.Header>
+                                    <SequenceList sequences={this.state.user.learningPaths} />
+                                </Card.Content>
+                            </Card>
+                        </Grid.Row>
+                    </Grid.Column>
 
-    render (){
-        const editButton = <Button 
-                                id="editButton" 
-                                floated='right' 
-                                color='black'
-                                onClick={this.editProfile}
-                                content='Update your profile'> 
-                            </Button>
-        const {openModal} = this.state
+                    <Modal
+                        open={openModal}
+                        onClose={this.close}>
+                        <ProfileEditor onFinish={this.onFinish} user={this.state.user} closeModal={this.closeModal} />
 
-        return (
-            <Grid >
-                <Grid.Column width={6}>
-                    <Card textAlign='center'>
-                        <Icon color='yellow' name='user circle' size='massive' style={{ margin: '.25em', marginLeft:'.70em' }} /> 
-                        {editButton}
-                         
-                        <Card.Content>
-                            <Card.Header>Sam Chao</Card.Header>
-                            <Card.Meta>
-                                    <span className='date'>Lerner since 2019</span>
-                            </Card.Meta>
-                            <Card.Description> I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.   </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <Icon name='map outline' /> 2 Active Paths
-                            <br></br>
-                            <Icon name='certificate' /> 1 Path Completed
-                        </Card.Content>
-                        <Card.Content >
-                            <Header as='h3'>Learning Style </Header>
-                            <Label> Pragmatist  </Label>
-                            <br></br>
-
-                            <Header as='h3'>Areas of Interest </Header>
-                            <Label> Front End </Label> <Label> Full Stack</Label>
-                            <br></br>
-                        </Card.Content>
-                        <Card.Content >
-                            <Header as='h3'>Expert At </Header>
-                             <Label> Data </Label> <Label> Analytics </Label> <Label> R </Label> <Label> SQL </Label>
-                            <br></br>
-                            <Header as='h3'>Proficient In</Header>
-                            <Label>Java</Label> <Label>C</Label>
-                            <br></br>
-                            <Header as='h3'>Experinece With</Header>
-                            <Label>Web Development</Label>
-                        </Card.Content>
-                    </Card>
-                </Grid.Column>
-                <Grid.Column width={10} >
-                    <Grid.Row >
-                        <Card style={{ width: '100%', marginBottom: '2em'}} >
-                            <Card.Content>
-                                <Card.Header>Current Courses</Card.Header> 
-                                <CourseTable/>
-                            </Card.Content>
-                            <Card.Content extra> 
-                                <Button color='yellow' fluid size='large' as={ Link } to="/profile">
-                                    View All Courses
-                                </Button>
-                            </Card.Content>
-                        </Card>
-                    </Grid.Row>
-                    <Grid.Row>
-                    <Card style={{ width: '100%' }} >
-                            <Card.Content>
-                                <Card.Header>Enrolled Paths</Card.Header> 
-                                <SequenceList/>
-                            </Card.Content>
-                        </Card>
-                    </Grid.Row>
-                </Grid.Column>
-        
-                <Modal 
-                    open={openModal}
-                    onClose={this.close}>
-                    <Modal.Header>Tell Us About You</Modal.Header>
-                    <Modal.Content >
-                        <ProfileEditor/>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button color='red' onClick={this.closeModal}>
-                            <Icon name='remove' /> Cancel edit, I'd like to come back to this later
-                        </Button>
-                        <Button color='green' onClick={this.closeModal}>
-                            <Icon name='checkmark' /> I'm done sharing!
-                        </Button>
-                    </Modal.Actions>
-                </Modal>
-          </Grid>
-
-          
-        )
+                    </Modal>
+                </Grid>);
+        } else {
+            return (<div>loading </div>);
+        }
     }
 }
 

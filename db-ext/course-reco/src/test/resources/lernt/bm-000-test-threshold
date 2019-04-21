@@ -1,0 +1,9 @@
+// Tests that course under a certain threshold are not recommended
+// 100 links between cs50 -> track 1
+// 40  links between probability -> track 1
+// 200 links between machine learning -> track 1
+// should not recommend probability
+
+:Course 1, :NEXT, :Track 1, 100
+:Course 5, :NEXT, :Track 1, 40
+:Course 7, :NEXT, :Track 1, 200

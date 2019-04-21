@@ -5,7 +5,7 @@ import {
   Header,
   Icon
 } from 'semantic-ui-react'
-
+import { Link } from 'react-router-dom';
 class HomePage extends Component {
     render() {
         let bigFont = {fontSize : '3em'};
@@ -30,8 +30,8 @@ class HomePage extends Component {
         marginTop: '1em',
       }}
     />
-    <Button color='yellow' size='huge'>
-       I'd like to recieve my custom syllabus.
+    <Button as={ Link } to="/login" color='yellow' size='huge'>
+       I'd like to receive my custom Learning Path
       <Icon name='right arrow' /> 
     </Button>
   </Container>

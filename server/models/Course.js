@@ -2,7 +2,6 @@ class Course {
   /**
    * Finds all courses
    * @param {Session} session 
-   * @param {Integer} id 
    */
   static async findAll(session) {
     const query = `
