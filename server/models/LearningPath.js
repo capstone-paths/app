@@ -132,22 +132,37 @@ class LearningPath {
       return undefined;
     }
 
-    let nodes, rels;
+    let sequence, nodes, rels;
 
     let records = results.records[0];
 
-    nodes = records.get('courses').map((course) => {
-      return course.properties
-    });
+    // It would be much cleaner to do all this filtering and mapping
+    // directly in the Cypher query; however, due to the usage of
+    // VirtualNodes in the custom procedures (probably), regular Cypher filter
+    // functions do not seem to work properly, so have to do it in code
 
-    rels = records.get('rels').map((rel) => {
-      // map start originalID and end originalID
-    });
+    sequence = records
+                .get('nodes')
+                .filter(n => n.labels.includes('PathStart'))
+                .map(n => n.properties);
+
+    nodes = records
+              .get('nodes')
+              .filter(n => n.labels.includes('Course'))
+              .map(n => n.properties);
+
+
+    rels = records
+              .get('rels')
+              .map(rel => ({ 
+                start: rel.properties.originalStartID,
+                end: rel.properties.originalEndID
+              }));
 
     // TODO: Need to do something about the path start
     // Deliver it exactly in the same shape as findById
     // Easier on the front end
-    return { nodes, rels };
+    return { sequence, nodes, rels };
   }
   
 
