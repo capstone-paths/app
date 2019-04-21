@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import {Checkbox,  Label, Modal, Rating, Table } from 'semantic-ui-react';
+import {Modal, Table } from 'semantic-ui-react';
 import CourseRater from '../profile/CourseRater'
 
 class CourseTable extends Component {
+    constructor(props) {
+        super(props);
+        this.courses = props.courses;
+    }
     state = {openModal:false,
             courses: [{
                 id: "6af67908-3910-4742-90cd-bede5fc1c0ff",
@@ -53,7 +57,7 @@ class CourseTable extends Component {
     }
     render() {
         const {openModal} = this.state
-        const courses = this.state.courses;
+        // const courses = this.state.courses;
         function getLink(id){
             return '/course/'+id;
         }
@@ -61,29 +65,26 @@ class CourseTable extends Component {
             <Table compact celled >
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Completed?</Table.HeaderCell>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Source</Table.HeaderCell>
                 <Table.HeaderCell>Rating</Table.HeaderCell>
                 <Table.HeaderCell>What are you learning?</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
         
             <Table.Body>
-                {courses.map((value) => {
+                {this.courses.map((course) => {
                     return (
                         <Table.Row>
+                            <Table.Cell><a href={getLink(course.courseID)}>{course.name}</a></Table.Cell>
+                            <Table.Cell>{course.provider}</Table.Cell>
+                            <Table.Cell>N/A</Table.Cell>
+                            <Table.Cell>N/A</Table.Cell>
                             <Table.Cell >
-                            <Checkbox name={value.id} checked={value.completed} onClick={this.toggle}/>
+                                N/A
+                            {/* <Checkbox name={course.courseID} checked={course.completed} onClick={this.toggle}/> */}
                             </Table.Cell>
-                            <Table.Cell><a href={getLink(value.id)}>{value.name}</a></Table.Cell>
-                            <Table.Cell>{value.source}</Table.Cell>
-                            <Table.Cell><Rating icon='star' defaultRating={value.rating} maxRating={5} disabled /> </Table.Cell>
-                            <Table.Cell>{value.grants.map((value) => {
-                                return (
-                                    <Label> {value}</Label>
-                                )
-                            })}</Table.Cell>
                         </Table.Row>
                     )
 

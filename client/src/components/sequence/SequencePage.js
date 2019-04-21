@@ -4,6 +4,7 @@ import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
 import { Icon } from 'semantic-ui-react'
 import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
+import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSequenceButton'
 
 class SequencePage extends Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class SequencePage extends Component {
         return (
             <div style={{ fontSize: '2em' }}>
                 <Header as='h1' attached='top'>
-                    {this.state.loaded ? this.state.data.sequence.name : ''}
+                    {this.state.loaded ? this.state.data.sequence.name : ''} <SubscribeToSequenceButton sequenceID ={this.props.match.params.sequenceId}></SubscribeToSequenceButton>
                 </Header>
                 <Segment attached style={{ padding: "0em" }}>
                     <Grid celled='internally'>

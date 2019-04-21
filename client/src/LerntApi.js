@@ -10,6 +10,12 @@ export default class LerntApi{
     getSequenceNodeRecommendation(id){
         return axios.get('/api/learning-paths/' + id + '/recommendation')
     }
+    isSubscribed(userId, sequenceId){
+        return axios.get('/api/learning-paths/is-subscribed/' + sequenceId + '/' + userId)
+    }
+    toggleSubscribe(userId, sequenceId){
+        return axios.post('/api/learning-paths/toggle-subscribe/' + sequenceId + '/' + userId)
+    }
     getCourse(id){
         return axios.get('/api/courses/'+ id)
     }

@@ -19,10 +19,23 @@ class User {
   static async findById(session, id) {
     const query = `
     MATCH (u: User {userID: $id})
-    MATCH ()-[:INTERESTED]->(interested_skills: Skill)
-    MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
-    MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
-    RETURN u as user, collect(DISTINCT interested_skills) AS interested_skills, collect(DISTINCT experienced_skills) AS experienced_skills, collect(DISTINCT learning_style) AS learning_style`;
+    OPTIONAL MATCH ()-[:INTERESTED]->(interested_skills: Skill)
+    OPTIONAL MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
+    OPTIONAL MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
+    OPTIONAL MATCH ()-[:IN_PROGRESS]->(current_courses: Course)
+    OPTIONAL MATCH ()-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
+    WITH {
+    	  userID : u.userID,
+        username : u.username,
+        bio : u.bio,
+        interest: collect(DISTINCT  PROPERTIES(interested_skills)), 
+        experience: collect(DISTINCT PROPERTIES(experienced_skills)),
+        learningType: collect(DISTINCT PROPERTIES(learning_style)),
+        currentCourses: collect(DISTINCT PROPERTIES(current_courses)),
+    	  learningPaths : collect(distinct({name: path_start.name, pathID:path_start.pathID, creator: PROPERTIES(path_creator)}))
+        } as returnUser
+    RETURN returnUser as user
+    `;
     // TODO: Think of an abstraction layer to get properties easily
     // This is going to get tiring quickly
     const results = await session.run(query, { id });
@@ -31,12 +44,7 @@ class User {
       return undefined;
     }
     let result = records[0];
-    var user = result.get('user').properties;
-    user.interest = records[0].get('interested_skills').map((s) => s.properties);
-    user.experience = records[0].get('experienced_skills').map((s) => s.properties);
-    user.learningType = records[0].get('learning_style').map((s) => s.properties);
-
-    return user;
+    return result.get('user');
   }
 
   static async save(session, user) {
