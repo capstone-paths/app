@@ -8,14 +8,17 @@ class CourseDetailsMini extends Component {
         super(props);
         console.log(props);
         this.state = { loaded: false };
-        
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
         this.api = new LerntApi();
-        this.api.getCourse(props.courseId)
+    
+        this.api.getCourse(this.props.courseId)
             .then((response) => {
                 this.setState({ loaded: true, course: response.data.course })
             });
+    
     }
-
     render() {
         let courseHeader;
         if (this.state.loaded) {
@@ -29,7 +32,7 @@ class CourseDetailsMini extends Component {
                     <Grid.Column>
                         <List>
                             <List.Item>
-                            <List.Header>Completed?</List.Header>
+                            <List.Header>Status</List.Header>
                             <Checkbox slider/>
                             </List.Item>
                             <List.Item>

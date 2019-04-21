@@ -107,7 +107,7 @@ export default class CouseNetworkVis extends Component {
         }
       },
       edges: {
-        length: 235,
+        length: 335,
         smooth: {
             type: 'cubicBezier',
             forceDirection: 'horizontal',
