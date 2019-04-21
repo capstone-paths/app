@@ -1,2 +1,0 @@
-CREATE ( ml: Course { name: 'Machine Learning', category: 'Machine Learning', recommendations: 100 } )
-RETURN ml
