@@ -1,4 +1,4 @@
-// Server .env is expected at server root 
+// Server .env is expected at server root
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
@@ -18,6 +18,7 @@ const courses = require('./routes/courses');
 const users = require('./routes/users');
 const skills = require('./routes/skills');
 const learningStyles = require('./routes/learning-styles');
+const authREST = require('./routes/auth-rest')
 
 
 
@@ -39,6 +40,7 @@ app.use('/api/courses', courses);
 app.use('/api/users', users);
 app.use('/api/skills', skills);
 app.use('/api/learning-styles', learningStyles);
+app.use('/auth', authREST);
 
 
 
