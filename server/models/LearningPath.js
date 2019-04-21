@@ -119,7 +119,7 @@ class LearningPath {
    * @param {Session} session Neo4j session context
    * @param {uuid} trackID The track for which to obtain the recommendation 
    */
-  static async getSystemRecommendation(session, id) {
+  static async getSystemRecommendation(session, trackID) {
     const query = `
     MATCH (t: Track) WHERE t.trackID=$trackID
     CALL lernt.findCoursePath(t, {})
@@ -127,7 +127,7 @@ class LearningPath {
     RETURN nodes, relationships
     `
 
-    const results = await session.run(query, { id });
+    const results = await session.run(query, { trackID });
     if (results.records.length === 0) {
       return undefined;
     }
@@ -137,8 +137,8 @@ class LearningPath {
     let records = results.records[0];
 
     // It would be much cleaner to do all this filtering and mapping
-    // directly in the Cypher query; however, due to the usage of
-    // VirtualNodes in the custom procedures (probably), regular Cypher filter
+    // directly in the Cypher query; however, (probably) due to the usage of
+    // VirtualNodes in the custom procedures, regular Cypher filter
     // functions do not seem to work properly, so have to do it in code
 
     sequence = records
@@ -153,15 +153,12 @@ class LearningPath {
 
 
     rels = records
-              .get('rels')
+              .get('relationships')
               .map(rel => ({ 
-                start: rel.properties.originalStartID,
-                end: rel.properties.originalEndID
+                start: rel.properties.originalStartID.toNumber(),
+                end: rel.properties.originalEndID.toNumber()
               }));
 
-    // TODO: Need to do something about the path start
-    // Deliver it exactly in the same shape as findById
-    // Easier on the front end
     return { sequence, nodes, rels };
   }
   
