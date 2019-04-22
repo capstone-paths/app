@@ -154,7 +154,10 @@ def get_sequence_info(sequence_data):
     else:
         sequence_data['sequence_name'] = sequence_name #capture sequence name
         current_max_sequence_id = get_max_sequence_id(import_params.driver).single()
-        sequence_data['sequence_id'] = int(current_max_sequence_id.value()) + 1
+        if ( current_max_sequence_id.value() == None):
+            sequence_data['sequence_id'] = 1 # set to 1 if no sequences available
+        else:
+            sequence_data['sequence_id'] = int(current_max_sequence_id.value()) + 1
 
 
 # function gets track name from user
@@ -171,7 +174,10 @@ def get_track_info(sequence_data):
     else:
         sequence_data['track_name'] = track_name # capture input track name
         current_max_track_id = get_max_track_id(import_params.driver).single()
-        sequence_data['track_id'] = str(int(current_max_track_id.value()) + 1)
+        if ( current_max_track_id.value() == None):
+            sequence_data['track_id'] = 1
+        else:
+            sequence_data['track_id'] = str(int(current_max_track_id.value()) + 1)
 
 
 # function gets user name from user
@@ -181,8 +187,8 @@ def get_user_info(sequence_data):
     #check if user already exits
     if check_if_user_exists(import_params.driver, user_name).single():
         sequence_data['username'] = user_name #capture user name
-        current_max_sequence_id = get_max_sequence_id(import_params.driver).single()
-        sequence_data['sequence_id'] = str(int(current_max_sequence_id.value()) + 1)
+        #current_max_sequence_id = get_max_sequence_id(import_params.driver).single()
+        #sequence_data['sequence_id'] = str(int(current_max_sequence_id.value()) + 1)
         print('Success! User with user name "{0}" already exists'.format(user_name))
         return True
     else:
