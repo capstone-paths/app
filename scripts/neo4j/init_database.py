@@ -19,11 +19,14 @@ def main():
     if (status):                                     # successfully verified connection to database
         from wipe_data import wipe_data              # lazy loading modules
         from course_loader import course_loader
+        from custom_tags import load_custom_tags     # load custom tags
         from read_query import load_cypher_query
 
         wipe_data.delete_database()                  # wipe clean database if needed
         print("\n")
         course_loader.load_scraped_courses_data()    # load course from scrapped json data
+        print("\n")
+        load_custom_tags.load_custom_tags_for_courses()    # load course tags
         print("\n")
         load_cypher_query.process_query_file()       # load sequences from file
         print("\n")
