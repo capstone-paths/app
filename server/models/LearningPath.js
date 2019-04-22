@@ -142,7 +142,26 @@ class LearningPath {
 
     return results.records[0].get(0);
   }
+  /**
+     * Finds a course by id
+     * @param {Session} session 
+     * @param {Integer} id 
+     */
+  static async findRecommendations(session, userId, sequenceId, courseId) {
+    //todo expand on this. This is a most popular search
+    const query = `
+    MATCH (c: Course {courseID : $courseId})-[:NEXT]->(nextC)
+    RETURN PROPERTIES(nextC) as course, count(c)
+    ORDER BY count(c) desc
+    LIMIT 3
+    `;
+    const results = await session.run(query, { courseId });
+    if (results.records.length === 0) {
+      return undefined;
+    }
 
+    return results.records.map(r => r.get('course'));
+  }
   // TODO: Need to think about this
   toJSON() {
     const { authorID, pathStartData, relationships } = this;

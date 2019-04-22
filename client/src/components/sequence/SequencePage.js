@@ -26,10 +26,15 @@ class SequencePage extends Component {
         }
         let onCourseSelect = (course) => {
             var state = this.state;
-            console.log(state);
             state.currentCourse = course.selectedCourse;
             this.setState(state);
-            console.log(course);
+            this.api.getSequenceCourseRecommendation('2', this.state.data.pathID, course.selectedCourse)
+            .then(response => {
+                var state = this.state;
+                state.courseRecommendations = response.data;
+                this.setState(state);
+                console.log(response);
+            });
         }
         let  getCourseDetails = () => {
             console.log('asdasdasd');
@@ -69,8 +74,9 @@ class SequencePage extends Component {
 
                                     <Menu.Item>
                                         <Header as='h4'>Recommended Courses</Header>
-                                        <Menu.Item name='test' onClick={onclick}>AWS Security Fundamentals</Menu.Item>
-                                        <Menu.Item name='test' onClick={onclick}>The Unix Workbench</Menu.Item>
+                                        {this.state.courseRecommendations != undefined ? this.state.courseRecommendations.map((course) => {
+                                return <Menu.Item name='test' onClick={onclick}>{course.name}</Menu.Item>
+                                        }):''}                                        
                                     </Menu.Item>
                                     <Menu.Item>
                                         <Header as='h4'>Sequence Statistics</Header>
