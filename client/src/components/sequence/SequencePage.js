@@ -10,7 +10,7 @@ import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSe
 class SequencePage extends Component {
 
   state = {
-    loaded: true,
+    loaded: false,
     sequenceData: undefined,
     currentCourse: undefined,
     courseRecommendations: undefined,
@@ -22,10 +22,15 @@ class SequencePage extends Component {
   }
 
   componentDidMount() {
+    const { sequenceId } = this.props.match.params;
     LerntApi
-      .getSequence(this.props.match.params.sequenceId)
+      .getSequence(sequenceId)
       .then(response => {
         this.setState({ loaded: true, sequenceData: response.data })
+      })
+      .catch(e => {
+        // TODO: We need error handling
+        console.log('error: ', e);
       });
   }
 
@@ -51,42 +56,72 @@ class SequencePage extends Component {
   };
 
   getCourseDetails = () => {
-    if (this.state.currentCourse) {
-      return (
-        <CourseDetailsMini
-          courseId ={this.state.currentCourse}
-        />
-      )
+    const { currentCourse } = this.state;
+    if (!currentCourse) {
+      return '';
     }
 
-    return '';
+    return (
+      <CourseDetailsMini
+        courseId ={currentCourse}
+      />
+    )
+  };
+
+  getCourseRecommendations = () => {
+    const { courseRecommendations } = this.state;
+    if (!courseRecommendations) {
+      return '';
+    }
+
+    return (
+      courseRecommendations.map(course => (
+        <Menu.Item
+          name='test'
+          onClick={this.onClick}>{course.name}
+        </Menu.Item>
+      ))
+    )
   };
 
   render() {
     let vis;
 
     if (this.state.loaded) {
-      vis = <CouseNetworkVis ref={this.visRef} sequenceId={this.props.match.params.sequenceId}  onCourseSelect={this.onCourseSelect}></CouseNetworkVis>
+      vis = <CouseNetworkVis
+              ref={this.visRef}
+              sequenceId={this.props.match.params.sequenceId}
+              onCourseSelect={this.onCourseSelect}
+            />
     } else {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>
     }
 
     return (
       <div style={{ fontSize: '2em' }}>
+
         <Header as='h1' attached='top'>
           {this.state.loaded ? this.state.sequenceData.sequence.name : ''}
-          <SubscribeToSequenceButton sequenceID ={this.props.match.params.sequenceId}></SubscribeToSequenceButton>
-          <Button color="green" style={{float: 'right'}} onClick={this.saveSequence}>
-            Save
-            <Icon name='right chevron' />
+          <SubscribeToSequenceButton
+            sequenceID ={this.props.match.params.sequenceId}
+          />
+          <Button
+            color="green"
+            style={{float: 'right'}}
+            onClick={this.saveSequence}>
+              Save
+              <Icon name='right chevron' />
           </Button>
         </Header>
+
         <Segment attached style={{ padding: "0em" }}>
           <Grid celled='internally'>
             <Grid.Row>
+
               <Grid.Column width={12}>
                 {vis}
               </Grid.Column>
+
               <Grid.Column width={4} style={{ padding: "0em" }}>
                 <Menu fluid vertical >
                   <Menu.Item>
@@ -96,18 +131,19 @@ class SequencePage extends Component {
 
                   <Menu.Item>
                     <Header as='h4'>Recommended Courses</Header>
-                    {this.state.courseRecommendations !== undefined ? this.state.courseRecommendations.map((course) => {
-                      return <Menu.Item name='test' onClick={this.onClick}>{course.name}</Menu.Item>
-                    }):''}
+                    {this.getCourseRecommendations()}
                   </Menu.Item>
+
                   <Menu.Item>
                     <Header as='h4'>Sequence Statistics</Header>
                     <p>100% Awesome</p>
                   </Menu.Item>
+
                   <Menu.Item>
                     {this.getCourseDetails()}
                   </Menu.Item>
                 </Menu>
+
               </Grid.Column>
             </Grid.Row>
           </Grid>

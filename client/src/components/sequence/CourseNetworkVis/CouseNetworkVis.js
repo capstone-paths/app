@@ -21,9 +21,9 @@ export default class CouseNetworkVis extends Component {
   constructor(props) {
     super(props);
     this.onCourseSelect = props.onCourseSelect;
-    this.api = new LerntApi();
+    // this.api = new LerntApi();
     this.sequenceId = props.sequenceId;
-    this.api.getSequence(props.sequenceId)
+    LerntApi.getSequence(props.sequenceId)
       .then((response) => {
         var nodes = response.data.courseNodes.map((course) => {
           return {
