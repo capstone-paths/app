@@ -11,6 +11,7 @@ import SequencePage from './components/sequence/SequencePage';
 import { Container } from 'semantic-ui-react';
 import CoursePage from './components/course/CoursePage';
 import LearningPathDiscoveryPage from './components/sequence/SequenceDiscoveryPage'
+import SysRecommendationPage from './components/sequence/SysRecommendationPage';
 
 class App extends Component {
   render() {
@@ -23,7 +24,15 @@ class App extends Component {
         <Route exact path="/" component={HomePage}/>
         <Route exact path="/login" component={LoginForm}/>
         <Route exact path="/profile/:userId" component={Profile}/>
-        <Route exact path="/learning-path-discovery" component={LearningPathDiscoveryPage}/>
+        <Route exact
+               path="/learning-path-discovery"
+               component={LearningPathDiscoveryPage}
+        />
+        <Route
+            exact
+            path="/learning-path/system-recommendation"
+            component={SysRecommendationPage}
+        />
         <Route path="/learning-path/:sequenceId" component={SequencePage}/>
         <Route path="/course/:courseId" component={CoursePage}/>
 
