@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, forwardRef, useRef, useImperativeHandle  } from 'react';
 import LerntApi from '../../LerntApi'
 import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
-import { Icon } from 'semantic-ui-react'
+import { Icon, Button } from 'semantic-ui-react'
 import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
 import CourseDetailsMini from '../course/CourseDetailsMini';
@@ -16,6 +16,7 @@ class SequencePage extends Component {
             .then((response) => {
                 this.setState({ loaded: true, data: response.data })
             });
+        this.visRef = React.createRef();
     }
 
     render() {
@@ -23,6 +24,10 @@ class SequencePage extends Component {
 
         function onclick() {
             alert('Add course to sequence');
+        }
+        let saveSequence = () => {
+            console.log(this.visRef);
+            alert('saved');
         }
         let onCourseSelect = (course) => {
             var state = this.state;
@@ -45,7 +50,7 @@ class SequencePage extends Component {
         }
 
         if (this.state.loaded) {
-            vis = <CouseNetworkVis sequenceId={this.props.match.params.sequenceId} selectedCourse={this.state.currentCourse} onCourseSelect={onCourseSelect}></CouseNetworkVis>
+            vis = <CouseNetworkVis ref={this.visRef} sequenceId={this.props.match.params.sequenceId} selectedCourse={this.state.currentCourse} onCourseSelect={onCourseSelect}></CouseNetworkVis>
         } else {
             //This will block out the page, which sucks. Working on it. 
             // vis =  <Dimmer active>
@@ -57,7 +62,12 @@ class SequencePage extends Component {
         return (
             <div style={{ fontSize: '2em' }}>
                 <Header as='h1' attached='top'>
-                    {this.state.loaded ? this.state.data.sequence.name : ''} <SubscribeToSequenceButton sequenceID ={this.props.match.params.sequenceId}></SubscribeToSequenceButton>
+                    {this.state.loaded ? this.state.data.sequence.name : ''}
+                <SubscribeToSequenceButton sequenceID ={this.props.match.params.sequenceId}></SubscribeToSequenceButton>
+                <Button color="green" style={{float: 'right'}} onClick={saveSequence}>
+                Save
+                                    <Icon name='right chevron' />
+            </Button>
                 </Header>
                 <Segment attached style={{ padding: "0em" }}>
                     <Grid celled='internally'>
