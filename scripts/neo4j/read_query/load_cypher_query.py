@@ -56,6 +56,11 @@ def execute_query(driver,query):
 
 # function to process query file line by line
 def process_query_file():
+
+    des = input("Do you want to process file with cypher queries? [y or n only]")
+
+    if (des.lower()=='n'):
+        return
     # get query file
     query_file = get_query_file()
 

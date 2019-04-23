@@ -21,6 +21,7 @@ def main():
         from course_loader import course_loader
         from custom_tags import load_custom_tags     # load custom tags
         from read_query import load_cypher_query
+        from load_path_jsons import load_path_jsons
 
         wipe_data.delete_database()                  # wipe clean database if needed
         print("\n")
@@ -29,6 +30,8 @@ def main():
         load_custom_tags.load_custom_tags_for_courses()    # load course tags
         print("\n")
         load_cypher_query.process_query_file()       # load sequences from file
+        print("\n")
+        load_path_jsons.load_path_jsons()            # load path jsons 
         print("\n")
 
     else:
