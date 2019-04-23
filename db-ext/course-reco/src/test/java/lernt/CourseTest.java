@@ -69,7 +69,7 @@ public class CourseTest
         int expectedRels = 2;
 
         String[] expectedValues = {
-                "VirtualPathStart -> CS50x",
+                "Start -> CS50x",
                 "CS50x -> Track: Machine Learning"
         };
 
@@ -88,7 +88,7 @@ public class CourseTest
         int expectedRels = 2;
 
         String[] expectedValues = {
-                "VirtualPathStart -> Algorithms",
+                "Start -> Algorithms",
                 "Algorithms -> Track: Machine Learning"
         };
 
@@ -122,7 +122,7 @@ public class CourseTest
         int expectedRels = 2;
 
         String[] expectedValues = {
-                "VirtualPathStart -> CS50x",
+                "Start -> CS50x",
                 "CS50x -> Track: Machine Learning"
         };
 
@@ -155,7 +155,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-common-a");
 
         String[] expectedValues = {
-                "VirtualPathStart -> CS50x",
+                "Start -> CS50x",
                 "CS50x -> Algorithms",
                 "CS50x -> Probability",
                 "Algorithms -> Probability",
@@ -176,7 +176,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-common-b");
 
         String[] expectedValues = {
-                "VirtualPathStart -> Algorithms",
+                "Start -> Algorithms",
                 "Algorithms -> CS50x",
                 "CS50x -> Probability",
                 "Algorithms -> Probability",
@@ -197,7 +197,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-three-clockwise");
 
         String[] expectedValues = {
-//                "VirtualPathStart -> CS50x",
+//                "Start -> CS50x",
                 "CS50x -> Algorithms",
                 "Algorithms -> Probability",
                 "Probability -> Track: Machine Learning"
@@ -217,7 +217,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-three-counter");
 
         String[] expectedValues = {
-//                "VirtualPathStart -> Algorithms",
+//                "Start -> Algorithms",
                 "Algorithms -> CS50x",
                 "CS50x -> Probability",
                 "Probability -> Track: Machine Learning"
@@ -236,7 +236,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-cycle-three-complex");
 
         String[] expectedValues = {
-                "VirtualPathStart -> CS50x",
+                "Start -> CS50x",
                 "CS50x -> Algorithms",
                 "CS50x -> Probability",
                 "Algorithms -> Probability",
@@ -258,9 +258,9 @@ public class CourseTest
 
         String[] expectedValues = {
 //                "CS50x -> Algorithms",
-                // TODO: PathStart here can be any of two options
+                // TODO: Start here can be any of two options
                 // Need to find a way to test it
-//                "VirtualPathStart -> CS50x",
+//                "Start -> CS50x",
                 // Same with Algorithms, could go either way
 //                "Algorithms -> Probability",
 //                "Machine Learning -> Track: Machine Learning",
@@ -287,8 +287,8 @@ public class CourseTest
         int expectedRels = 8;
 
         String[] expectedValues = {
-                "VirtualPathStart -> Discrete Math",
-                "VirtualPathStart -> Probability",
+                "Start -> Discrete Math",
+                "Start -> Probability",
                 "Discrete Math -> CS50x",
                 "Probability -> CS50x",
                 "CS50x -> Machine Learning",
@@ -301,7 +301,7 @@ public class CourseTest
     }
 
     @Test
-    public void shouldHandleMultiPathStarts() throws Throwable
+    public void shouldHandleMultiStarts() throws Throwable
     {
         setDBInitStateFromFile("bm-000");
         processRelationshipsFile("bm-000-test-multi-path-start");
@@ -310,9 +310,9 @@ public class CourseTest
         int expectedRels = 6;
 
         String[] expectedValues = {
-                "VirtualPathStart -> CS50x",
-                "VirtualPathStart -> Algorithms",
-                "VirtualPathStart -> Machine Learning",
+                "Start -> CS50x",
+                "Start -> Algorithms",
+                "Start -> Machine Learning",
                 "CS50x -> Track: Machine Learning",
                 "Algorithms -> Track: Machine Learning",
                 "Machine Learning -> Track: Machine Learning"
@@ -340,8 +340,8 @@ public class CourseTest
                 +  "RETURN nodes, relationships";
 
         String[] expectedValues = {
-                "VirtualPathStart -> Algorithms",
-                "VirtualPathStart -> Probability",
+                "Start -> Algorithms",
+                "Start -> Probability",
                 "Algorithms -> Machine Learning",
                 "Probability -> Machine Learning",
                 "Machine Learning -> Track: Machine Learning"

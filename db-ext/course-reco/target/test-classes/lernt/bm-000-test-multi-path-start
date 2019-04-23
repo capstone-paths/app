@@ -1,9 +1,0 @@
-// Tests whether a sequence with multiple starts
-// Is returned correctly
-// cs50 -> ML track
-// algos -> ML track
-// ML -> ML track
-
-:Course 1, :NEXT, :Track 1, 1
-:Course 3, :NEXT, :Track 1, 1
-:Course 7, :NEXT, :Track 1, 1

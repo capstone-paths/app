@@ -1,6 +1,0 @@
-// Simple test to check that algorithm breaks out of simple cycles
-// Create two way cycle between CS50 and Machine Learning Track
-// Should be able to break out
-
-:Course 1, :NEXT, :Track 1, 1
-:Track 1, :NEXT, :Course 1, 1

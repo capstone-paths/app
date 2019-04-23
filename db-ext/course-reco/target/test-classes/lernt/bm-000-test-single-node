@@ -1,4 +1,0 @@
-// simple test to check that a path with the correct shape is returned
-// should just return CS50
-
-:Course 1, :NEXT, :Track 1, 1
