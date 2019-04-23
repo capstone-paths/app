@@ -116,31 +116,19 @@ router.post('/', (req, res, next) => {
  * @desc   Suggests a new node for the learning path
  * @param  id (in-path, mandatory, id)
  */
-router.get('/:id/recommendation', (req, res, next) => {
-  const id = req.params.id;
-
-  const query = `
-    MATCH (c: Course) RETURN c as course, rand() as r order by r limit 1
-  `;
+router.get('/recommendations/:sequenceID/:userID/:courseID', (req, res, next) => {
+  if ((!req.params.sequenceID) || (!req.params.userID)) {
+    res.status(400);
+  }
 
   const session = utils.getDBSession(req);
-  session
-    .run(query)
-    .then((results) => {
-      if (results.records.length === 0) {
-        res.status(404).send(`course id ${id} not found`);
-      }
-
-      let records = results.records[0];
-      let node = records.get('course');
-      let courseData = node.properties;
-
-      // We are done, return the results, up to the client to represent them :)
-      res.json({ data: { course: courseData }});
+  LearningPath
+    .findRecommendations(session,  req.params.userID, req.params.sequenceID, req.params.courseID)
+    .then((result) => {
+      res.json(result);
     })
     .catch(next)
-    .then(() => session.close());
-  });
+});
 
 
 /**

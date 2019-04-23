@@ -11,7 +11,6 @@ class ProfileEditor extends Component {
             .then((skillResponse) => {
                 this.api.getLearningStyles()
                     .then((styleResponse) => {
-                        console.log(styleResponse);
                         //map the style options to work well with the semantic drop downs
                         let styleOptions = styleResponse.data.learningStyles.map(style => {
                             return {
@@ -35,7 +34,6 @@ class ProfileEditor extends Component {
     }
 
     render() {
-        console.log(this.state)
         const handleChange = (event, data) => {
             //todo this is a bit messy. There is likely a better way to handle user state changes other than filtering and mapping all the time
             var state = this.state;

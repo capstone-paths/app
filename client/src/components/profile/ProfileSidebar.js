@@ -12,7 +12,6 @@ import {
 class ProfileSidebar extends Component {
     
     render (){
-        console.log(this.props.user)
         return (
             
                     <Card>
@@ -39,7 +38,6 @@ class ProfileSidebar extends Component {
                         </Card.Content>
                         <Card.Content >
                             <Header as='h3'>Learning Style </Header>
-                            {console.log(this.props.user.learningType)}
                             {this.props.user.learningType.map((value) => {
                                 return <Label> {value.name} </Label>
                             })}

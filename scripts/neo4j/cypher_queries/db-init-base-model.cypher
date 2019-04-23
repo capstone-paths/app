@@ -61,6 +61,8 @@ MATCH (secu: Course) WHERE toLower(secu.name) CONTAINS 'software security'
 MATCH (mobi: Course) WHERE toLower(mobi.name) CONTAINS 'multiplatform mobile app development with react'
 
 MATCH (sam: User { username: 'Sam' })
+MATCH (ajay: User { username: 'Ajay' })
+
 
 // Sam Sequence #1 Relationships
 MERGE (st01: PathStart { pathID: '1', name: "Sam Chao's Front End Development" })-[:BELONGS_TO {trackID: '1'}]->(tr01: Track { trackID: '1', name: 'Front End Development' })
@@ -77,6 +79,8 @@ MERGE (reac)-[:NEXT {pathID: '1'}]->(mobi)
 MERGE (mobi)-[:NEXT {pathID: '1'}]->(tr01)
 MERGE (sam)-[:CREATED]->(st01)
 MERGE (sam)-[:SUBSCRIBED]->(st01)
+MERGE (ajay)-[:SUBSCRIBED]->(st01)
+
 
 
 // Sam Sequence #2 Relationships
@@ -99,6 +103,7 @@ MERGE (test)-[:NEXT {pathID: '2'}]->(secu)
 MERGE (secu)-[:NEXT {pathID: '2'}]->(tr02)
 MERGE (sam)-[:CREATED]->(st02)
 MERGE (sam)-[:SUBSCRIBED]->(st02)
+MERGE (ajay)-[:SUBSCRIBED]->(st02)
 MERGE (sam)-[:IN_PROGRESS]->(pfjs)
 MERGE (sam)-[:IN_PROGRESS]->(feui)
 
@@ -108,7 +113,7 @@ WITH count(*) as dummy
 
 //Register Sam's learning style 
 MATCH (u:User),(ls:LearningStyle)
-WHERE u.userID = "2" AND ls.learningStyleID = "1"
+WHERE u.userID in ["1","2"] AND ls.learningStyleID = "1"
 CREATE (u)-[:LEARNS_BY]->(ls)
 
 // This is a trick to separate commands
@@ -116,7 +121,7 @@ WITH count(*) as dummy
 
 // Register Sam's Experience relationships to Skill nodes
 MATCH (u:User),(s:Skill)
-WHERE u.userID = "2" AND s.skillID in [ "5","2"]
+WHERE u.userID in ["1","2"] AND s.skillID in [ "5","2"]
 CREATE (u)-[:EXPERIENCED]->(s)
 
 // This is a trick to separate commands
@@ -124,5 +129,5 @@ WITH count(*) as dummy
 
 //Register Sam's Interests relationships to Skill Nodes
 MATCH (u:User),(s:Skill)
-WHERE u.userID = "2" AND s.skillID in [ "7","15","18"]
+WHERE u.userID in ["1","2"] AND s.skillID in [ "7","15","18"]
 CREATE (u)-[:INTERESTED]->(s)
