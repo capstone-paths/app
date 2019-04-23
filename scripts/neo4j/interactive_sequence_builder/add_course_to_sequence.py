@@ -13,6 +13,18 @@ from db_conn import import_params # import neo4j driver, credentials
 import uuid
 import json
 
+# function gets the maximum path id from the database to be used to generate the next id
+def get_max_sequence_id_query(driver):
+        with driver.session() as session:
+            return session.run("MATCH (s:PathStart) "
+                               "RETURN max(toInt(s.pathID))")
+
+# function gets the maximum track id from the database to be used to generate the next id
+def get_max_track_id_query(driver):
+        with driver.session() as session:
+            return session.run("MATCH (t:Track) "
+                               "RETURN max(toInt(t.trackID))")
+
 # function checks if a sequence exists in the database
 def check_if_sequence_exists(driver,sequence_name):
         with driver.session() as session:
@@ -39,7 +51,7 @@ def add_courses_to_sequence(driver, sequence_id, sequence_name, track_id, track_
 
         #get max sequence id if passed in id is 0, this is identifying loading saved json objects whose id may not be relevant anymore
         if (sequence_id == '0'):
-            sequence_id = get_max_sequence_id()
+            sequence_id = get_max_sequence_id(sequence_name)
 
             if sequence_id == 0:
                 return 0 # pass control back if sequence with same name already exits
@@ -99,7 +111,7 @@ def add_courses_to_sequence(driver, sequence_id, sequence_name, track_id, track_
             return True
 
 # function gets the max id to be used for sequence
-def get_max_sequence_id():
+def get_max_sequence_id(sequence_name):
     #check if sequence already exits
     if check_if_sequence_exists(import_params.driver, sequence_name).single():
         print('Sequence/Path "{0}" already exists'.format(sequence_name))
@@ -116,9 +128,9 @@ def get_max_sequence_id():
 def get_max_track_id():
     current_max_track_id = get_max_track_id_query(import_params.driver).single()
     if ( current_max_track_id.value() == None):
-        sequence_data['track_id'] = '1'
+        return '1'
     else:
-        sequence_data['track_id'] = str(int(current_max_track_id.value()) + 1)
+        return str(int(current_max_track_id.value()) + 1)
 
 
 
