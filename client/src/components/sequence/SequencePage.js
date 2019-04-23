@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
-import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
+import CourseNetworkVis from './CourseNetworkVis/CourseNetworkVis';
 import { Icon, Button } from 'semantic-ui-react'
 import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
@@ -9,15 +9,15 @@ import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSe
 
 class SequencePage extends Component {
 
-  state = {
-    loaded: false,
-    sequenceData: undefined,
-    currentCourse: undefined,
-    courseRecommendations: undefined,
-  };
 
   constructor(props) {
     super(props);
+    this.state = {
+      loaded: false,
+      sequenceData: undefined,
+      currentCourse: undefined,
+      courseRecommendations: undefined,
+    };
     this.visRef = React.createRef();
   }
 
@@ -26,11 +26,11 @@ class SequencePage extends Component {
     LerntApi
       .getSequence(sequenceId)
       .then(response => {
-        this.setState({ loaded: true, sequenceData: response.data })
+        this.setState({ loaded: true, sequenceData: response.data });
       })
       .catch(e => {
         // TODO: We need error handling
-        console.log('error: ', e);
+        console.log('SequencePage error: ', e);
       });
   }
 
@@ -88,13 +88,13 @@ class SequencePage extends Component {
     let vis;
 
     if (this.state.loaded) {
-      vis = <CouseNetworkVis
+      vis = <CourseNetworkVis
               ref={this.visRef}
-              sequenceId={this.props.match.params.sequenceId}
+              sequenceData={this.state.sequenceData}
               onCourseSelect={this.onCourseSelect}
             />
     } else {
-      vis = <div>Loading ... <Icon loading name='spinner' /></div>
+      vis = <div>Loading ... <Icon loading name='spinner' /></div>;
     }
 
     return (
