@@ -1,6 +1,6 @@
 // Test case for triangle with common ancestor
 // Cycle-breaking mechanism should not break this model
-// VirtualPathStart -> CS50x
+// Start -> CS50x
 // Algorithms -> CS50x
 // Algorithms -> Probability
 // CS50x -> Probability
