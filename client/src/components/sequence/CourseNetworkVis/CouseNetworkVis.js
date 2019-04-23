@@ -17,12 +17,9 @@ function findLevel(nodeId, edges) {
   }
 }
 
-var network = null;
-
 export default class CouseNetworkVis extends Component {
   constructor(props) {
     super(props);
-    this.network = 'lasklaskdlas';
     this.onCourseSelect = props.onCourseSelect;
     this.api = new LerntApi();
     this.sequenceId = props.sequenceId;
@@ -118,10 +115,10 @@ export default class CouseNetworkVis extends Component {
         }
     },
     };
-    network = new vis.Network(container, data, options);
+    this.network = new vis.Network(container, data, options);
 
     //when a node is selected, communicate to parent page
-    network.on("selectNode", (params) => {
+    this.network.on("selectNode", (params) => {
       this.selectedCourse = params.nodes[0];
       this.onCourseSelect({ selectedCourse: params.nodes[0] });
     });

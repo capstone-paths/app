@@ -1,4 +1,4 @@
-import React, { Component, forwardRef, useRef, useImperativeHandle  } from 'react';
+import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
 import { Icon, Button } from 'semantic-ui-react'
@@ -18,7 +18,7 @@ class SequencePage extends Component {
             });
         this.visRef = React.createRef();
     }
-
+   
     render() {
         let vis;
 
@@ -26,7 +26,6 @@ class SequencePage extends Component {
             alert('Add course to sequence');
         }
         let saveSequence = () => {
-            console.log(this.visRef);
             alert('saved');
         }
         let onCourseSelect = (course) => {
@@ -38,11 +37,9 @@ class SequencePage extends Component {
                 var state = this.state;
                 state.courseRecommendations = response.data;
                 this.setState(state);
-                console.log(response);
             });
         }
         let  getCourseDetails = () => {
-            console.log('asdasdasd');
             if(this.state.currentCourse !== null){
                 return  <CourseDetailsMini courseId ={this.state.currentCourse} ></CourseDetailsMini>
             }
@@ -50,7 +47,7 @@ class SequencePage extends Component {
         }
 
         if (this.state.loaded) {
-            vis = <CouseNetworkVis ref={this.visRef} sequenceId={this.props.match.params.sequenceId} selectedCourse={this.state.currentCourse} onCourseSelect={onCourseSelect}></CouseNetworkVis>
+            vis = <CouseNetworkVis ref={this.visRef} sequenceId={this.props.match.params.sequenceId}  onCourseSelect={onCourseSelect}></CouseNetworkVis>
         } else {
             //This will block out the page, which sucks. Working on it. 
             // vis =  <Dimmer active>
@@ -58,7 +55,6 @@ class SequencePage extends Component {
             //         </Dimmer>
             vis = <div>Loading ... <Icon loading name='spinner' /></div>
         }
-        console.log('render');
         return (
             <div style={{ fontSize: '2em' }}>
                 <Header as='h1' attached='top'>
@@ -84,7 +80,7 @@ class SequencePage extends Component {
 
                                     <Menu.Item>
                                         <Header as='h4'>Recommended Courses</Header>
-                                        {this.state.courseRecommendations != undefined ? this.state.courseRecommendations.map((course) => {
+                                        {this.state.courseRecommendations !== undefined ? this.state.courseRecommendations.map((course) => {
                                 return <Menu.Item name='test' onClick={onclick}>{course.name}</Menu.Item>
                                         }):''}                                        
                                     </Menu.Item>

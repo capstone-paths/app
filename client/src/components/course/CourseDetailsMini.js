@@ -6,18 +6,19 @@ import { Header, Grid, List, Checkbox } from 'semantic-ui-react'
 class CourseDetailsMini extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = { loaded: false };
     }
-
+    shouldComponentUpdate(nextProps, nextState) {
+     return true;
+    }
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.api = new LerntApi();
-    
+        if(this.state.course === undefined || this.state.course.courseID !== this.props.courseId){
         this.api.getCourse(this.props.courseId)
             .then((response) => {
                 this.setState({ loaded: true, course: response.data.course })
             });
-    
+        }
     }
     render() {
         let courseHeader;
