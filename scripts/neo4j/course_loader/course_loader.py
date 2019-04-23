@@ -66,6 +66,11 @@ def parse_date(date_str):
     else:
         return datetime.strptime(cln_date_str, '%d %b %Y')
 
+# parse no of reviews
+def parse_no_reviews(no_review_str):
+    return int(no_review_str.split()[0])
+
+
 # function to parse scrapped json file
 def process_course_json(json_file_wPath):
     LERNTIO_NAMESPACE_DNS = uuid.uuid3(uuid.NAMESPACE_DNS, 'lernt.io') # UUID for the lernt.io domain
@@ -76,7 +81,10 @@ def process_course_json(json_file_wPath):
         print("Loading courses as nodes into neo4j database...")
         for course in data:
             modCourse = dict()
-            modCourse['courseID'] = str(uuid.uuid3(LERNTIO_NAMESPACE_DNS, course['Provider'].strip() + course['Title'].strip() ))     # course reproducible unique identifier
+            if (course.get('courseID',"None") == "None"):         # add ID if not already in the file (to handle V1)
+                modCourse['courseID'] = str(uuid.uuid3(LERNTIO_NAMESPACE_DNS, course['Provider'].strip() + course['Title'].strip() ))     # course reproducible unique identifier
+            else:
+                modCourse['courseID'] = course['courseID']
             modCourse['name']     = course['Title'].strip()         # name of course
             modCourse['effort']   = parse_effort(course['Effort'])  # course effort
             modCourse['cost']     = parse_cost(course['Cost'])      # cost
@@ -92,22 +100,34 @@ def process_course_json(json_file_wPath):
             modCourse['institution']  = course['Partner'].strip()      # institution
             modCourse['overview']  = course['Overview'].strip()      # overview
 
+            # V3 fields
+            modCourse['relatedCoursesURL']  = course['CC_Related_Courses']                     # related courses list
+            modCourse['relatedCoursesIds']  = course['CC_Related_Courses_IDs']                 # related Course IDs
+            modCourse['noReviews']          = parse_no_reviews(course['CC_Number_Of_Reviews']) # No of Reviews
+            modCourse['cc_tags']            = course['CC_Tags']                                # class central tags
+            modCourse['tags']               = []                                               # placeholder for custom list
+            modCourse['rating']             = int(course['CC_Rating'])                         # course rating
+
             add_course(import_params.driver, modCourse)              # write to database
         print("Course loading complete.")
 
 # function to load scrapped data as course nodes
 def load_scraped_courses_data():
-    file_choice = input("Use file found at ./scraped_data/moocdata.json as source of course nodes [ y or n only] ? " )
+    load_course_choice = input("Load course data [ y or n only] ? " ) # making course load optional
+    if ( load_course_choice.lower() == 'y' ):
+        file_choice = input("Use file found at ./scraped_data/moocdataV3.json as source of course nodes [ y or n only] ? " )
 
-    if ( file_choice.lower() == 'y' ):
-        process_course_json('./scraped_data/moocdata.json')
-    else:
-        jFilePath = input("Enter full path of JSON file you want to use? ")
-        fileExists = os.path.isfile(jFilePath.strip())
-        if fileExists:
-            process_course_json(jFilePath)
+        if ( file_choice.lower() == 'y' ):
+            process_course_json('./scraped_data/moocdataV3.json')
         else:
-            print('{0} file not found '.format(jFilePath))
+            jFilePath = input("Enter full path of JSON file you want to use? ")
+            fileExists = os.path.isfile(jFilePath.strip())
+            if fileExists:
+                process_course_json(jFilePath)
+            else:
+                print('{0} file not found '.format(jFilePath))
+    else:
+        print("Proceeding without loading course data.")
 
 
 #comment

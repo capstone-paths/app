@@ -58,7 +58,7 @@ def get_course(driver,course_name):
         with driver.session() as session:
             return session.run("MATCH (c:Course) "
                                "WHERE toLower(c.name) CONTAINS $course_name "
-                               "RETURN c.name as name, c.courseID as courseID", course_name=course_name.strip().lower())
+                               "RETURN c.name as name, c.courseID as courseID, c.provider as Provider, c.rating as Rating", course_name=course_name.strip().lower())
 
 # function creates a sequence node
 def create_sequence(driver, sequence_name, sequence_id):
@@ -109,7 +109,9 @@ def add_courses_to_sequence(driver, sequence_id, sequence_name, track_id, track_
 
                 elif (relationship[1] == (no_nodes-1)): #check if tracknode
                     tx.run("MATCH (a:Course {courseID:$start_course_id}) "
-                                       "MERGE (b:PathStart{pathID:$sequence_id})-[:BELONGS_TO]->(t:Track{name:$track_name}) "
+                           "MATCH (b:PathStart{pathID:$sequence_id}) "
+                           "MATCH (t:Track{name:$track_name}) "
+                                       "MERGE (b)-[:BELONGS_TO]->(t) " # handling unbound node issue
                                        "WITH a,t "
                                        "MERGE (a)-[:NEXT {pathID:$sequence_id}]->(t)"
                                        "RETURN id(a)", sequence_id=sequence_id, start_course_id=course_list[relationship[0]], track_name=course_list[relationship[1]])
@@ -154,7 +156,10 @@ def get_sequence_info(sequence_data):
     else:
         sequence_data['sequence_name'] = sequence_name #capture sequence name
         current_max_sequence_id = get_max_sequence_id(import_params.driver).single()
-        sequence_data['sequence_id'] = int(current_max_sequence_id.value()) + 1
+        if ( current_max_sequence_id.value() == None):
+            sequence_data['sequence_id'] = '1' # set to 1 if no sequences available
+        else:
+            sequence_data['sequence_id'] = int(current_max_sequence_id.value()) + 1
 
 
 # function gets track name from user
@@ -171,7 +176,10 @@ def get_track_info(sequence_data):
     else:
         sequence_data['track_name'] = track_name # capture input track name
         current_max_track_id = get_max_track_id(import_params.driver).single()
-        sequence_data['track_id'] = str(int(current_max_track_id.value()) + 1)
+        if ( current_max_track_id.value() == None):
+            sequence_data['track_id'] = '1'
+        else:
+            sequence_data['track_id'] = str(int(current_max_track_id.value()) + 1)
 
 
 # function gets user name from user
@@ -181,8 +189,8 @@ def get_user_info(sequence_data):
     #check if user already exits
     if check_if_user_exists(import_params.driver, user_name).single():
         sequence_data['username'] = user_name #capture user name
-        current_max_sequence_id = get_max_sequence_id(import_params.driver).single()
-        sequence_data['sequence_id'] = str(int(current_max_sequence_id.value()) + 1)
+        #current_max_sequence_id = get_max_sequence_id(import_params.driver).single()
+        #sequence_data['sequence_id'] = str(int(current_max_sequence_id.value()) + 1)
         print('Success! User with user name "{0}" already exists'.format(user_name))
         return True
     else:
@@ -220,7 +228,7 @@ def get_course4sequence(sequence_data):
 
         if ( isResultRecord(recs) ):
             for i,r in enumerate(recs):
-                print(i+1,'.', r.get('name'))
+                print("{0}. {1} [ Provider : {2}, Rating : {3} ]".format(i+1, r.get('name'), r.get('Provider'), r.get('Rating')))
                 tempCourseList.append(r.get('name'))
                 tempCourseIDList.append(r.get('courseID'))
 
