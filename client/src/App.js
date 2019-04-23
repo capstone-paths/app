@@ -30,11 +30,14 @@ class App extends Component {
           component={LearningPathDiscoveryPage}
         />
         <Route
-          exact
-          path="/system-recommendation"
+          path="/learning-path/system-recommendation/:trackId"
           component={SysRecommendationPage}
         />
-        <Route path="/learning-path/:sequenceId" component={SequencePage}/>
+        <Route
+          exact
+          path="/learning-path/:sequenceId"
+          component={SequencePage}
+        />
         <Route path="/course/:courseId" component={CoursePage}/>
 
         </Container>
