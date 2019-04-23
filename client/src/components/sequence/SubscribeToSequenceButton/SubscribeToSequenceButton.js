@@ -36,7 +36,6 @@ export default class SubscribeToSequenceButton extends Component {
     render() {
         let toggleSubscribe = () => {
             this.api.toggleSubscribe(this.userId, this.sequenceId).then((response) => {
-                console.log(response);
                 var state = this.state;
                 state.isSubscribed = response.data;
                 this.setState(

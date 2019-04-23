@@ -142,6 +142,34 @@ class LearningPath {
 
     return results.records[0].get(0);
   }
+  /**
+     * Finds a course by id
+     * @param {Session} session 
+     * @param {Integer} id 
+     */
+  static async findRecommendations(session, userId, sequenceId, courseId) {
+    //todo expand on this. This is a most popular search
+    const query = `
+    MATCH (p1:User {userID: $userId})-[:EXPERIENCED]->(skill1)
+    WITH p1, collect(id(skill1)) AS p1Skill
+    MATCH (p2:User)-[:EXPERIENCED]->(skill2)
+    WHERE p2.userID <> p1.userID
+    WITH p1, p1Skill, p2, collect(id(skill2)) AS p2Skill
+    WHERE algo.similarity.jaccard(p1Skill, p2Skill) > $similarityThreshold 
+    MATCH (p2)-[:SUBSCRIBED]->(paths: PathStart)
+    MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse)
+    RETURN PROPERTIES(nextCourse) as course,
+           count(course)
+    ORDER BY count(course) desc
+    LIMIT 3
+    `;
+    let similarityThreshold = .25;
+    const results = await session.run(query, { courseId, userId, similarityThreshold });
+    if (results.records.length === 0) {
+      return undefined;
+    }
+    return results.records.map(r => r.get('course'));
+  }
 
   /**
    * Obtains a system-wide recommendation for a given track
@@ -172,26 +200,25 @@ class LearningPath {
     // functions do not seem to work properly, so have to do it in code
 
     sequence = records
-                .get('nodes')
-                .filter(n => n.labels.includes('PathStart'))
-                .map(n => n.properties);
+      .get('nodes')
+      .filter(n => n.labels.includes('PathStart'))
+      .map(n => n.properties);
 
     nodes = records
-              .get('nodes')
-              .filter(n => n.labels.includes('Course'))
-              .map(n => n.properties);
+      .get('nodes')
+      .filter(n => n.labels.includes('Course'))
+      .map(n => n.properties);
 
 
     rels = records
-              .get('relationships')
-              .map(rel => ({ 
-                start: rel.properties.originalStartID.toNumber(),
-                end: rel.properties.originalEndID.toNumber()
-              }));
+      .get('relationships')
+      .map(rel => ({
+        start: rel.properties.originalStartID.toNumber(),
+        end: rel.properties.originalEndID.toNumber()
+      }));
 
-    return { sequence, nodes, rels };
+    return { sequence, nodes, rels };
   }
-  
 
   // TODO: Need to think about this
   toJSON() {

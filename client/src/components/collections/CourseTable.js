@@ -28,7 +28,6 @@ class CourseTable extends Component {
             }]}
     closeModal = () => this.setState({ openModal: false })
     toggle = (event, data) => {
-        console.log(data)
         if (!data.checked){
             const course = this.state.courses.find((course) => { return course.id === data.name; })
             course.completed = false;

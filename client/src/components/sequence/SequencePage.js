@@ -1,31 +1,53 @@
 import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import CouseNetworkVis from './CourseNetworkVis/CouseNetworkVis';
-import { Icon } from 'semantic-ui-react'
+import { Icon, Button } from 'semantic-ui-react'
 import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
+import CourseDetailsMini from '../course/CourseDetailsMini';
 import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSequenceButton'
 
 class SequencePage extends Component {
     constructor(props) {
         super(props);
-        this.state = { loaded: false };
+        this.state = { loaded: false, currentCourse: null };
         this.api = new LerntApi();
         this.api.getSequence(props.match.params.sequenceId)
             .then((response) => {
                 this.setState({ loaded: true, data: response.data })
             });
+        this.visRef = React.createRef();
     }
+   
     render() {
         let vis;
+
         function onclick() {
             alert('Add course to sequence');
         }
-        function onCourseSelect(course){
-            console.log('parent sees' + course);
+        let saveSequence = () => {
+            alert('saved');
         }
+        let onCourseSelect = (course) => {
+            var state = this.state;
+            state.currentCourse = course.selectedCourse;
+            this.setState(state);
+            this.api.getSequenceCourseRecommendation('2', this.state.data.pathID, course.selectedCourse)
+            .then(response => {
+                var state = this.state;
+                state.courseRecommendations = response.data;
+                this.setState(state);
+            });
+        }
+        let  getCourseDetails = () => {
+            if(this.state.currentCourse !== null){
+                return  <CourseDetailsMini courseId ={this.state.currentCourse} ></CourseDetailsMini>
+            }
+            return ''
+        }
+
         if (this.state.loaded) {
-            vis = <CouseNetworkVis sequenceId={this.props.match.params.sequenceId} onCourseSelect={onCourseSelect}></CouseNetworkVis>
+            vis = <CouseNetworkVis ref={this.visRef} sequenceId={this.props.match.params.sequenceId}  onCourseSelect={onCourseSelect}></CouseNetworkVis>
         } else {
             //This will block out the page, which sucks. Working on it. 
             // vis =  <Dimmer active>
@@ -33,11 +55,15 @@ class SequencePage extends Component {
             //         </Dimmer>
             vis = <div>Loading ... <Icon loading name='spinner' /></div>
         }
-      
         return (
             <div style={{ fontSize: '2em' }}>
                 <Header as='h1' attached='top'>
-                    {this.state.loaded ? this.state.data.sequence.name : ''} <SubscribeToSequenceButton sequenceID ={this.props.match.params.sequenceId}></SubscribeToSequenceButton>
+                    {this.state.loaded ? this.state.data.sequence.name : ''}
+                <SubscribeToSequenceButton sequenceID ={this.props.match.params.sequenceId}></SubscribeToSequenceButton>
+                <Button color="green" style={{float: 'right'}} onClick={saveSequence}>
+                Save
+                                    <Icon name='right chevron' />
+            </Button>
                 </Header>
                 <Segment attached style={{ padding: "0em" }}>
                     <Grid celled='internally'>
@@ -54,12 +80,16 @@ class SequencePage extends Component {
 
                                     <Menu.Item>
                                         <Header as='h4'>Recommended Courses</Header>
-                                        <Menu.Item name='test' onClick={onclick}>AWS Security Fundamentals</Menu.Item>
-                                        <Menu.Item name='test' onClick={onclick}>The Unix Workbench</Menu.Item>
+                                        {this.state.courseRecommendations !== undefined ? this.state.courseRecommendations.map((course) => {
+                                return <Menu.Item name='test' onClick={onclick}>{course.name}</Menu.Item>
+                                        }):''}                                        
                                     </Menu.Item>
                                     <Menu.Item>
                                         <Header as='h4'>Sequence Statistics</Header>
                                         <p>100% Awesome</p>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        {getCourseDetails()}
                                     </Menu.Item>
                                 </Menu>
                             </Grid.Column>

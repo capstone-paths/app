@@ -36,7 +36,6 @@ class Profile extends Component {
     }
     render() {
         const { openModal } = this.state
-        console.log(this.state.user)
         if (this.state.loaded) {
             return (
                 <Grid >
