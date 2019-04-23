@@ -163,7 +163,7 @@ class LearningPath {
     ORDER BY count(course) desc
     LIMIT 3
     `;
-    let similarityThreshold = .5; 
+    let similarityThreshold = .25; 
     const results = await session.run(query, { courseId, userId, similarityThreshold });
     if (results.records.length === 0) {
       return undefined;
