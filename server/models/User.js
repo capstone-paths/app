@@ -19,11 +19,11 @@ class User {
   static async findById(session, id) {
     const query = `
     MATCH (u: User {userID: $id})
-    OPTIONAL MATCH ()-[:INTERESTED]->(interested_skills: Skill)
-    OPTIONAL MATCH ()-[:EXPERIENCED]->(experienced_skills: Skill)
-    OPTIONAL MATCH ()-[:LEARNS_BY]->(learning_style: LearningStyle)
-    OPTIONAL MATCH ()-[:IN_PROGRESS]->(current_courses: Course)
-    OPTIONAL MATCH ()-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
+    OPTIONAL MATCH (User {userID: $id})-[:INTERESTED]->(interested_skills: Skill)
+    OPTIONAL MATCH (User {userID: $id})-[:EXPERIENCED]->(experienced_skills: Skill)
+    OPTIONAL MATCH (User {userID: $id})-[:LEARNS_BY]->(learning_style: LearningStyle)
+    OPTIONAL MATCH (User {userID: $id})-[:IN_PROGRESS]->(current_courses: Course)
+    OPTIONAL MATCH (User {userID: $id})-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
     WITH {
     	  userID : u.userID,
         username : u.username,
@@ -36,15 +36,18 @@ class User {
         } as returnUser
     RETURN returnUser as user
     `;
-    // TODO: Think of an abstraction layer to get properties easily
-    // This is going to get tiring quickly
     const results = await session.run(query, { id });
     const records = results.records;
     if (records.length === 0) {
       return undefined;
     }
     let result = records[0];
-    return result.get('user');
+    var user =  result.get('user');
+    //todo there is likely a better way around this. Not sure how to null check in cypher
+    if(user.learningPaths[0].pathID == null){
+      user.learningPaths = []; 
+    }
+    return user;
   }
 
   static async save(session, user) {
