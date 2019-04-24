@@ -108,6 +108,10 @@ def process_course_json(json_file_wPath):
             modCourse['tags']               = []                                               # placeholder for custom list
             modCourse['rating']             = int(course['CC_Rating'])                         # course rating
 
+
+            modCourse['categories_awsc']  = map(str.lower, course.get('categories_awsc')) # categories AWS C
+            modCourse['key_phrases_awsc'] = map(str.lower, course.get('key_phrases_awsc')) # key phrases AWS C
+
             add_course(import_params.driver, modCourse)              # write to database
         print("Course loading complete.")
 
@@ -115,10 +119,10 @@ def process_course_json(json_file_wPath):
 def load_scraped_courses_data():
     load_course_choice = input("Load course data [ y or n only] ? " ) # making course load optional
     if ( load_course_choice.lower() == 'y' ):
-        file_choice = input("Use file found at ./scraped_data/moocdataV3.json as source of course nodes [ y or n only] ? " )
+        file_choice = input("Use file found at ./scraped_data/moocdataV4.json as source of course nodes [ y or n only] ? " )
 
         if ( file_choice.lower() == 'y' ):
-            process_course_json('./scraped_data/moocdataV3.json')
+            process_course_json('./scraped_data/moocdataV4.json')
         else:
             jFilePath = input("Enter full path of JSON file you want to use? ")
             fileExists = os.path.isfile(jFilePath.strip())
