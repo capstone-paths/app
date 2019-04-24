@@ -16,6 +16,7 @@ public class ConfigObject
     private String courseLabelName;
     private String courseCategoryPropName;
     private String courseTagsPropName;
+    private String courseIDPropName;
     private String prereqWeightPropName;
     private String prereqLabelName;
     private Object similarityThreshold;
@@ -27,6 +28,7 @@ public class ConfigObject
         // TODO: I think these casts are not safe
         this.userID = (String) config.getOrDefault("userID", null);
         this.userIDPropName = (String) config.getOrDefault("userIDPropName", "userID");
+        this.courseIDPropName = (String) config.getOrDefault("courseIDPropName", "courseID");
         this.userLabelName = (String) config.getOrDefault("userLabelName", "User");
         this.completedCourseRelName = (String) config.getOrDefault("completedCourseRelName", "COMPLETED");
         this.courseWeightPropName = (String) config.getOrDefault("courseWeightPropName", "recommendations");
@@ -39,6 +41,10 @@ public class ConfigObject
         this.similarityThreshold = config.getOrDefault("similarityThreshold", 0.5);
     }
 
+    public String getCourseIDPropName()
+    {
+        return courseIDPropName;
+    }
 
     public String getCourseWeightPropName()
     {

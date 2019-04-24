@@ -54,7 +54,7 @@ public class CourseTest
     }
 
     String baseWorkingQuery = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
-            +  "CALL lernt.findCoursePath(t, {}) "
+            +  "CALL lernt.findCoursePath(t, { courseIDPropName: 'id' }) "
             +  "YIELD nodes, relationships "
             +  "RETURN nodes, relationships";
 
@@ -103,7 +103,7 @@ public class CourseTest
         processRelationshipsFile("bm-000-test-user");
 
         String query = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
-                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id'}) "
+                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id', courseIDPropName: 'id'}) "
                 +  "YIELD nodes, relationships "
                 +  "RETURN nodes, relationships";
 
@@ -335,7 +335,7 @@ public class CourseTest
         int expectedRels = 5;
 
         String query = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
-                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id'}) "
+                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id', courseIDPropName: 'id'}) "
                 +  "YIELD nodes, relationships "
                 +  "RETURN nodes, relationships";
 
