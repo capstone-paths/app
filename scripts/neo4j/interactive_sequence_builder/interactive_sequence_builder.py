@@ -83,7 +83,7 @@ def write_sequence_to_json(sequence):
 # function gets sequence name from user
 def get_sequence_info(sequence_data):
     # get sequence name from user
-    sequence_name = input("Enter name of sequence (node : PathStart) : ")
+    sequence_name = input("\n\nEnter name of sequence (node : PathStart) : ")
 
     #check if sequence already exits
     if check_if_sequence_exists(import_params.driver, sequence_name).single():
@@ -190,6 +190,7 @@ def get_course4sequence(sequence_data):
     sequence_data['master_list_display'] = master_list_display.copy()
 
 
+
 # function gets relationship for courses in the sequence
 def get_relationships(sequence_data):
     print("Let's Build relationship between courses.......")
@@ -238,9 +239,13 @@ def get_relationships(sequence_data):
 
             if status == 'n':
                 rel_done = True # marking completion of inputing relationship
+                # checking if enough relationship exists
+                if ( (rel_ctr-1) < (len(sequence_data['master_list'])-1) ):
+                    print("Not enough relationships established, aborting")
+                    exit(0)
 
 
-        if (len(rel_item)<2):
+        if (len(rel_item)<2): # less than two relationships entered
             valid = 'n' # repeat process
         elif (rel_item[1] != i):
             print("Last Node entered was not the  Track Node index, restarting...") #invalid repeat
