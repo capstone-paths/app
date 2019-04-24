@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 export default class LerntApi {
-    getSequence(id){
+    getSequence(id) {
         return axios.get('/api/learning-paths/' + id)
     }
     getSequences() {
         return axios.get('/api/learning-paths/')
     }
-    getSequenceCourseRecommendation(userId, sequenceId, courseId) {
+    static getSequenceCourseRecommendation(userId, sequenceId, courseId) {
         return axios.get('/api/learning-paths/recommendations/' + sequenceId + '/' + userId + '/' + courseId)
     }
     isSubscribed(userId, sequenceId) {
