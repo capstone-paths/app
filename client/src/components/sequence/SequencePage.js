@@ -96,7 +96,7 @@ class SequencePage extends Component {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
     }
 
-    return (
+   return (
       <div style={{ fontSize: '2em' }}>
 
         <Header as='h1' attached='top'>

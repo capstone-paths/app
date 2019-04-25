@@ -189,9 +189,6 @@ class LearningPath {
     if (results.records.length === 0) {
       return undefined;
     }
-
-    let sequence, nodes, rels;
-
     let records = results.records[0];
 
     // It would be much cleaner to do all this filtering and mapping
@@ -199,25 +196,25 @@ class LearningPath {
     // VirtualNodes in the custom procedures, regular Cypher filter
     // functions do not seem to work properly, so have to do it in code
 
-    sequence = records
+    let sequence = records
       .get('nodes')
       .filter(n => n.labels.includes('PathStart'))
       .map(n => n.properties);
 
-    nodes = records
+    let courseNodes = records
       .get('nodes')
       .filter(n => n.labels.includes('Course'))
       .map(n => n.properties);
 
 
-    rels = records
+    let rels = records
       .get('relationships')
       .map(rel => ({
         start: rel.properties.originalStartID.toNumber(),
         end: rel.properties.originalEndID.toNumber()
       }));
 
-    return { sequence, nodes, rels };
+    return { sequence, courseNodes, rels };
   }
 
   // TODO: Need to think about this

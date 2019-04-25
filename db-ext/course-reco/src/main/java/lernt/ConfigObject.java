@@ -14,9 +14,11 @@ public class ConfigObject
     private String completedCourseRelName;
     private String courseWeightPropName;
     private String courseLabelName;
+    private String trackLabelName;
     private String courseCategoryPropName;
     private String courseTagsPropName;
     private String courseIDPropName;
+    private String trackIDPropName;
     private String prereqWeightPropName;
     private String prereqLabelName;
     private Object similarityThreshold;
@@ -35,11 +37,15 @@ public class ConfigObject
         this.courseCategoryPropName = (String) config.getOrDefault("courseCategoryPropName", "subject");
         this.courseTagsPropName = (String) config.getOrDefault("courseTagsPropName", "tags");
         this.courseLabelName = (String) config.getOrDefault("courseLabelName", "Course");
+        this.trackLabelName = (String) config.getOrDefault("trackLabelName", "Track");
+        this.trackIDPropName = (String) config.getOrDefault("trackIDPropName", "trackID");
         this.prereqWeightPropName = (String) config.getOrDefault("prereqWeightPropName", "recommendations");
         this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "NEXT");
         this.frequencyThreshold = config.getOrDefault("frequencyThreshold", 0.2);
         this.similarityThreshold = config.getOrDefault("similarityThreshold", 0.5);
     }
+
+    public String getTrackIDPropName() { return trackIDPropName; }
 
     public String getCourseIDPropName()
     {
@@ -50,6 +56,8 @@ public class ConfigObject
     {
         return courseWeightPropName;
     }
+
+    public String getTrackLabelName() { return trackLabelName; }
 
 
     public String getCourseLabelName()

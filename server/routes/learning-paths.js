@@ -142,6 +142,7 @@ router.get('/system-recommendation/:id', (req, res, next) => {
   // get the track id
   // invoke the custom procedure
   const { id } = req.params;
+  console.log('system-recommendation called, id: ', id);
   if (!id) {
     res.status(400).send({ error: 'missing id' });
   }
