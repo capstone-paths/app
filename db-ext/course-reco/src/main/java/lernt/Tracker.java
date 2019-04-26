@@ -59,15 +59,19 @@ public class Tracker
         String startId;
         if (start.getNode().hasLabel(c)) {
             startId = (String) start.getNode().getProperty(config.getCourseIDPropName());
-        } else {
+        } else if (start.getNode().hasLabel(t)) {
             startId = (String) start.getNode().getProperty(config.getTrackIDPropName());
+        } else {
+            startId = "-1";
         }
 
         String endId;
         if (end.getNode().hasLabel(c)) {
             endId = (String) end.getNode().getProperty(config.getCourseIDPropName());
-        } else {
+        } else if (start.getNode().hasLabel(t)) {
             endId = (String) end.getNode().getProperty(config.getTrackIDPropName());
+        } else {
+            endId = "-1";
         }
 
         RelationshipType type = RelationshipType.withName("NEXT");

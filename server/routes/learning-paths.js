@@ -33,6 +33,8 @@ router.get('/', (req, res, next) => {
  * @param  id (in-path, mandatory, id)
  */
 router.get('/:id', (req, res, next) => {
+  console.log('learning-paths called, id: ', req.params.id);
+
   if (!req.params.id) {
     res.status(400);
   }

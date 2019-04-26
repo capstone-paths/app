@@ -88,12 +88,14 @@ class LearningPath {
       RETURN sequenceData
     `;
 
+    console.log('findById model, about to execute query, id: ', id);
     const results = await session.run(query, { id });
     if (results.records.length === 0) {
       return undefined;
     }
 
     let records = results.records[0];
+    console.log('findById model, return results, id: ', id);
     return records.get('sequenceData');
   }
 
@@ -210,8 +212,8 @@ class LearningPath {
     let rels = records
       .get('relationships')
       .map(rel => ({
-        start: rel.properties.originalStartID.toNumber(),
-        end: rel.properties.originalEndID.toNumber()
+        start: rel.properties.originalStartID,
+        end: rel.properties.originalEndID,
       }));
 
     return { sequence, courseNodes, rels };
