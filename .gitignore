@@ -48,4 +48,5 @@ env/
 *.class
 *.jar
 !lernt-neo4j-procedures.jar
+!graph-algorithms-algo.jar
 target/
