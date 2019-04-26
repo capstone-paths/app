@@ -47,5 +47,5 @@ env/
 # Java and Maven builds
 *.class
 *.jar
+!lernt-neo4j-procedures.jar
 target/
-
