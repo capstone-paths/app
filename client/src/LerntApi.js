@@ -4,6 +4,9 @@ export default class LerntApi {
     static getSequence(id) {
         return axios.get('/api/learning-paths/' + id)
     }
+    static saveSequence(sequence) {
+        return axios.post('/api/learning-paths/', sequence)
+    }
     getSequences() {
         return axios.get('/api/learning-paths/')
     }

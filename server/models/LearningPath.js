@@ -16,36 +16,28 @@ class LearningPath {
    * Saves a LearningPath to the database
    * @param {Session} session 
    */
-  async save(session) {
-    const { authorID, pathStartData, relationships } = this;
+  static async save(session, userID, pathID, name, relationships) {
+    // await checkIfAllCoursesExist(session, relationships);
 
-    const user = await User.findById(session, authorID);
-    if (!user) {
-      throw new ValidationError(`User does not exist: ${authorID}`);
-    }
-
-    await checkIfAllCoursesExist(session, relationships);
-
-    const pathStart = new PathStart(pathStartData);
-    await pathStart.validate();
-    this.id = pathStart.id;
+    // const pathStart = new PathStart(pathStartData);
+    // await pathStart.validate();
+    // this.id = pathStart.id;
 
     const query = `
-      MATCH (author: User { userID: {authorID} } )
-      CREATE (start: PathStart)
-      SET start = {pathStartData}
-      CREATE (author)-[:CREATED]->(start)
+      MATCH (author: User { userID: {userID} } )
+      MERGE (start: PathStart {pathID: {pathID} })
+      SET start.name = {name}
+      MERGE (author)-[:CREATED]->(start)
       WITH author, start
       UNWIND {relationships} AS rel
       MATCH (c1: Course) WHERE c1.courseID = rel.start
       MATCH (c2: Course) WHERE c2.courseID = rel.end
-      CREATE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
+      MERGE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
       RETURN author, start
     `;
 
-    const pathID = this.id;
-    await session.run(query, { authorID, pathID, pathStartData, relationships });
-    return this;
+    await session.run(query, { userID, pathID, name, relationships });
+    return true;
   }
 
   /**
