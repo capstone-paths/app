@@ -17,13 +17,14 @@ class LearningPath {
    * @param {Session} session 
    */
   static async save(session, userID, pathID, name, relationships) {
-    // await checkIfAllCoursesExist(session, relationships);
+    await checkIfAllCoursesExist(session, relationships);
 
+    // TODO: Not sure if this makes sense at the model layer. Commenting out for now  
     // const pathStart = new PathStart(pathStartData);
     // await pathStart.validate();
-    // this.id = pathStart.id;
 
     const query = `
+      OPTIONAL MATCH (c: Course)-[oldR:NEXT { pathID: {pathID} }]->() DELETE oldR WITH oldR
       MATCH (author: User { userID: {userID} } )
       MERGE (start: PathStart {pathID: {pathID} })
       SET start.name = {name}

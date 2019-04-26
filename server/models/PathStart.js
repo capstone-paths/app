@@ -7,7 +7,7 @@ class PathStart {
 
   constructor(pathStartData) {
     const { name } = pathStartData;
-    this.id = uuid();
+    this.pathID = uuid();
     this.name = name;
   }
 
