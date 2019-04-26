@@ -44,6 +44,9 @@ class SequencePage extends Component {
     console.log(this.state);
     const { pathID } = this.state.sequenceData;
     const { selectedCourse } = course;
+    var state = this.state;
+    state.currentCourse = course.selectedCourse;
+    this.setState(state);
     LerntApi
       .getSequenceCourseRecommendation('2', pathID, selectedCourse)
       .then(response => {
