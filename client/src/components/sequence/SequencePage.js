@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import CourseNetworkVis from './CourseNetworkVis/CourseNetworkVis';
 import { Icon, Button } from 'semantic-ui-react'
-import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
+import { Header, Menu, Grid, Segment, Input } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
 import CourseDetailsMini from '../course/CourseDetailsMini';
 import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSequenceButton'
@@ -23,15 +23,17 @@ class SequencePage extends Component {
 
   componentDidMount() {
     const { sequenceId } = this.props.match.params;
-    LerntApi
-      .getSequence(sequenceId)
-      .then(response => {
-        this.setState({ loaded: true, sequenceData: response.data });
-      })
-      .catch(e => {
-        // TODO: We need error handling
-        console.log('SequencePage error: ', e);
-      });
+    if(sequenceId !== 'new'){
+      LerntApi
+        .getSequence(sequenceId)
+        .then(response => {
+          this.setState({ loaded: true, sequenceData: response.data });
+        })
+        .catch(e => {
+          // TODO: We need error handling
+          console.log('SequencePage error: ', e);
+        });
+    }
   }
 
   // Arrow functions allow to access 'this' without binding
@@ -40,15 +42,15 @@ class SequencePage extends Component {
     alert('Add course to sequence');
   };
 
-  saveSequence = () => {
-    alert('saved');
-  };
-
   onCourseSelect = (course) => {
-    const { pathId } = this.state;
+    console.log(this.state);
+    const { pathID } = this.state.sequenceData !== undefined ? this.state.sequenceData  :  {pathID: 'new'};
     const { selectedCourse } = course;
+    var state = this.state;
+    state.currentCourse = course.selectedCourse;
+    this.setState(state);
     LerntApi
-      .getSequenceCourseRecommendation('2', pathId, selectedCourse)
+      .getSequenceCourseRecommendation('2', pathID, selectedCourse)
       .then(response => {
         this.setState({ courseRecommendations: response.data });
       });
@@ -56,6 +58,7 @@ class SequencePage extends Component {
 
   getCourseDetails = () => {
     const { currentCourse } = this.state;
+    console.log(this.state);
     if (!currentCourse) {
       return '';
     }
@@ -64,7 +67,32 @@ class SequencePage extends Component {
       <CourseDetailsMini
         courseId ={currentCourse}
       />
-    )
+    );
+  };
+
+  saveSequence = () => {
+    let edges = this.visRef.current.network.body.data.edges._data;
+    let rels = Object.keys(edges).map(key => {
+      let edge = edges[key];
+      return {
+        start: edge.from,
+        end: edge.to
+      }
+    });
+    let sequence = {
+      pathID : this.state.sequenceData !== undefined ? this.state.sequenceData.sequence.pathID : null,
+      name :  document.getElementById('nameInput').value,
+      rels : rels,
+      //todo replace with context of user 
+      userID: '2'
+    };
+    LerntApi.saveSequence(sequence)
+    .then(response=>{
+      this.setState({ loaded: true, sequenceData: response.data });
+      this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+    })
+    console.log(edges);
+    console.log(rels);
   };
 
   getCourseRecommendations = () => {
@@ -86,8 +114,9 @@ class SequencePage extends Component {
   render() {
     let vis;
 
-    if (this.state.loaded) {
+    if (this.state.loaded || ( this.props.match.params.sequenceId === 'new') ) {
       vis = <CourseNetworkVis
+
               ref={this.visRef}
               sequenceData={this.state.sequenceData}
               onCourseSelect={this.onCourseSelect}
@@ -101,15 +130,15 @@ class SequencePage extends Component {
       <div style={{ fontSize: '2em' }}>
 
         <Header as='h1' attached='top'>
-          {this.state.loaded ? this.state.sequenceData.sequence.name : ''}
+          <Input id="nameInput" style={{width:'20em'}} defaultValue={this.state.loaded ? this.state.sequenceData.sequence.name : ''} />
           <SubscribeToSequenceButton
-            sequenceID ={this.props.match.params.sequenceId}
+            sequenceID={this.props.match.params.sequenceId}
           />
           <Button
             color="green"
-            style={{float: 'right'}}
+            style={{ float: 'right' }}
             onClick={this.saveSequence}>
-              Save
+            Save
               <Icon name='right chevron' />
           </Button>
         </Header>

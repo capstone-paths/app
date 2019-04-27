@@ -2,6 +2,7 @@ const { checkIfAllCoursesExist } = require('./validation/LearningPathValidation'
 const ValidationError = require('./validation/ValidationError');
 const User = require('./User');
 const PathStart = require('./PathStart');
+const uuidv1 = require('uuid/v1');
 
 class LearningPath {
   constructor(properties) {
@@ -16,36 +17,38 @@ class LearningPath {
    * Saves a LearningPath to the database
    * @param {Session} session 
    */
-  async save(session) {
-    const { authorID, pathStartData, relationships } = this;
-
-    const user = await User.findById(session, authorID);
-    if (!user) {
-      throw new ValidationError(`User does not exist: ${authorID}`);
-    }
-
+  static async save(session, userID, pathID, name, relationships) {
     await checkIfAllCoursesExist(session, relationships);
 
-    const pathStart = new PathStart(pathStartData);
-    await pathStart.validate();
-    this.id = pathStart.id;
+
+    // TODO: Not sure if this makes sense at the model layer. Commenting out for now  
+    // const pathStart = new PathStart(pathStartData);
+    // await pathStart.validate();
+
+    let firstNext = relationships.find(r => r.start == undefined).end
 
     const query = `
-      MATCH (author: User { userID: {authorID} } )
-      CREATE (start: PathStart)
-      SET start = {pathStartData}
-      CREATE (author)-[:CREATED]->(start)
+      OPTIONAL MATCH (c: Course)-[oldR:NEXT { pathID: {pathID} }]->() DELETE oldR WITH oldR
+      MATCH (author: User { userID: {userID} } )
+      MERGE (start: PathStart {pathID: {pathID} })
+      SET start.name = {name}
+      MERGE (author)-[:CREATED]->(start) 
+      WITH start, author 
+      MATCH(firstCourse: Course {courseID: {firstNext}})
+      MERGE (start)-[:NEXT { pathID: {pathID} }]->(firstCourse)
       WITH author, start
       UNWIND {relationships} AS rel
       MATCH (c1: Course) WHERE c1.courseID = rel.start
       MATCH (c2: Course) WHERE c2.courseID = rel.end
-      CREATE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
+      MERGE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
       RETURN author, start
     `;
-
-    const pathID = this.id;
-    await session.run(query, { authorID, pathID, pathStartData, relationships });
-    return this;
+  
+    if(pathID === null){
+      pathID = uuidv1()
+    }
+    await session.run(query, { userID, pathID, name, relationships, firstNext });
+    return this.findById(session, pathID);
   }
 
   /**
