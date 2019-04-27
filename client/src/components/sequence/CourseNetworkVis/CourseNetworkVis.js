@@ -83,10 +83,20 @@ class CourseNetworkVis extends Component {
         }
       },
       layout: {
-        randomSeed: 2,
+        // TODO: I believe this only applies when no hierarchy
+        improvedLayout: true,
         hierarchical: {
-          direction: "LR"
+          nodeSpacing: 300,
+          direction: "UD",
+          sortMethod: 'directed',
+          blockShifting: true,
+          parentCentralization: true,
+          edgeMinimization: true,
         }
+      },
+
+      physics : {
+        enabled: true,
       },
 
       nodes: {
@@ -97,15 +107,24 @@ class CourseNetworkVis extends Component {
         }
       },
       edges: {
-        length: 335,
         smooth: {
           type: 'cubicBezier',
-          forceDirection: 'horizontal',
-          roundness: 0.4
+          roundness: 0.2,
         }
       },
     };
     this.network = new vis.Network(container, data, options);
+
+    this.network.once('stabilized', () => {
+      this.network.moveTo({
+        position: { x: 0, y: -400},
+        scale: 0.9,
+      });
+    });
+
+    // this.network.fit();
+
+    console.log('scale: ' + this.network.getScale());
 
     // TODO: This should be decoupled from the vis module
     if (this.props.onCourseSelect) {
