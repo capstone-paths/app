@@ -11,7 +11,6 @@ import './SequencePage.css';
 
 class SequencePage extends Component {
 
-
   constructor(props) {
     super(props);
     this.state = {

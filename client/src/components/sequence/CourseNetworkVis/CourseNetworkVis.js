@@ -117,28 +117,14 @@ class CourseNetworkVis extends Component {
     };
     this.network = new vis.Network(container, data, options);
 
-    // Get the y-coordinate of the top node, so that we can center
-    // the view around it
-    const first = this.state.nodes.filter(e => e.level === 1).map(e => e.id);
-    const topY = this.network.getPositions(first[0])[first[0]].y;
-
     // Once the network has rendered, center the view on top-level nodes
     // Doesn't look that great on tablet / mobile -- would need to fix this
     this.network.once('stabilized', () => {
       this.network.moveTo({
-        position: { x: 0, y: topY / 2 },
+        position: { x: 0, y: 0 },
         scale: 0.8,
       });
-
-      console.log('modified view position', this.network.getViewPosition());
     });
-
-    console.log('nodes', nodes);
-
-
-    // this.network.fit();
-
-    console.log('scale: ' + this.network.getScale());
 
     // TODO: This should be decoupled from the vis module
     if (this.props.onCourseSelect) {
