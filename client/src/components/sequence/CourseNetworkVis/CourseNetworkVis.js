@@ -113,31 +113,46 @@ class CourseNetworkVis extends Component {
       this.selectedCourse = params.nodes[0];
       this.onCourseSelect({ selectedCourse: params.nodes[0] });
     });
+    
+    // TODO: This should be decoupled from the vis module
+    if (this.props.onCourseSelect) {
+      //when a node is selected, communicate to parent page
+      this.network.on("selectNode", (params) => {
+        this.selectedCourse = params.nodes[0];
+        this.onCourseSelect({ selectedCourse: params.nodes[0] });
+      });
+    }
 
-    var input = document.getElementById("awesomplete");
-    //TODO figure out a better way to get value from child component
-    input.addEventListener('awesomplete-selectcomplete',
-      e => {
-        let course = e.text.value;
-        var nodeData = {};
-        nodeData.font = { multi: "md", face: "arial" };
-        nodeData.color = { background: 'white', border: 'black' };
-        nodeData.id = course.courseID;
-        nodeData.label = "*" + course.name + "*\n" + course.institution;
+    // TODO: This should be decoupled from the vis module
+    if (this.props.useAutoComplete) {
+      var input = document.getElementById("awesomplete");
+      //TODO figure out a better way to get value from child component
+      input.addEventListener('awesomplete-selectcomplete',
+        e => {
+          let course = e.text.value;
+          var nodeData = {};
+          nodeData.font = { multi: "md", face: "arial" };
+          nodeData.color = { background: 'white', border: 'black' };
+          nodeData.id = course.courseID;
+          nodeData.label = "*" + course.name + "*\n" + course.institution;
 
-        nodeData.level = data.nodes._data[this.selectedCourse] !== undefined ? data.nodes._data[this.selectedCourse].level + 2 : 3;
-        let edgeData = {
-          from: this.selectedCourse,
-          to: nodeData.id ,
-          arrows: "to",
-          color: {
-            color: "blue"
-          }
-        };
-        data.nodes.add(nodeData);
-        data.edges.add(edgeData);
-      },
-      false);
+          nodeData.level = data.nodes._data[this.selectedCourse].level + 1;
+          let edgeData = {
+            from: this.selectedCourse,
+            to: nodeData.id ,
+            arrows: "to",
+            color: {
+              color: "blue"
+            }
+          };
+          //todo something better. The new nodes shouldn't always be level 5
+          // nodeData.level = 5;
+          console.log(e.text.value);
+          data.nodes.add(nodeData);
+          data.edges.add(edgeData);
+        },
+        false);
+    }
   }
 
   render() {

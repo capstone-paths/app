@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 export default class LerntApi {
     static getSequence(id) {
@@ -36,5 +36,9 @@ export default class LerntApi {
     }
     getLearningStyles() {
         return axios.get('/api/learning-styles/')
+    }
+    // TODO: Must pass in user for additional context
+    static getSystemRecommendation(trackID) {
+        return axios.get('/api/learning-paths/system-recommendation/' + trackID);
     }
 }

@@ -116,15 +116,17 @@ class SequencePage extends Component {
 
     if (this.state.loaded || ( this.props.match.params.sequenceId === 'new') ) {
       vis = <CourseNetworkVis
-        ref={this.visRef}
-        sequenceData={this.state.sequenceData}
-        onCourseSelect={this.onCourseSelect}
-      />
+
+              ref={this.visRef}
+              sequenceData={this.state.sequenceData}
+              onCourseSelect={this.onCourseSelect}
+              useAutoComplete
+            />
     } else {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
     }
 
-    return (
+   return (
       <div style={{ fontSize: '2em' }}>
 
         <Header as='h1' attached='top'>
