@@ -91,12 +91,13 @@ class SequencePage extends Component {
               ref={this.visRef}
               sequenceData={this.state.sequenceData}
               onCourseSelect={this.onCourseSelect}
+              useAutoComplete
             />
     } else {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
     }
 
-    return (
+   return (
       <div style={{ fontSize: '2em' }}>
 
         <Header as='h1' attached='top'>

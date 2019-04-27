@@ -52,10 +52,32 @@ public class Tracker
         VirtualNode vEnd = resultNodes.containsKey(endID) ?
                 resultNodes.get(endID).getVirtualNode() : start.getVirtualNode();
 
+        // This whole section should be cleaned up with a proper abstraction; it's messy
+        Label c = Label.label(config.getCourseLabelName());
+        Label t = Label.label(config.getTrackLabelName());
+
+        String startId;
+        if (start.getNode().hasLabel(c)) {
+            startId = (String) start.getNode().getProperty(config.getCourseIDPropName());
+        } else if (start.getNode().hasLabel(t)) {
+            startId = (String) start.getNode().getProperty(config.getTrackIDPropName());
+        } else {
+            startId = "-1";
+        }
+
+        String endId;
+        if (end.getNode().hasLabel(c)) {
+            endId = (String) end.getNode().getProperty(config.getCourseIDPropName());
+        } else if (start.getNode().hasLabel(t)) {
+            endId = (String) end.getNode().getProperty(config.getTrackIDPropName());
+        } else {
+            endId = "-1";
+        }
+
         RelationshipType type = RelationshipType.withName("NEXT");
         VirtualRelationship vr = vStart.createRelationshipTo(vEnd, type);
-        vr.setProperty("originalStartID", startID);
-        vr.setProperty("originalEndID", endID);
+        vr.setProperty("originalStartID", startId);
+        vr.setProperty("originalEndID", endId);
 
         // Need this because otherwise can't comfortably navigate the virtual graph
         vEnd.createRelationshipFrom(vStart, type);
