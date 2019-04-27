@@ -97,16 +97,12 @@ router.post('/toggle-subscribe/:sequenceID/:userID', (req, res, next) => {
  * @param    data (in-body, mandatory, LearningPath)
  */
 router.post('/', (req, res, next) => {
-  const { data } = req.body;
-  if (!data) {
-    res.status(400);
-  }
-
+  const { userID, pathID, name, rels} = req.body;
+  
   const session = utils.getDBSession(req);
-  const lp = new LearningPath(data);
 
-  lp
-    .save(session)
+  LearningPath
+    .save(session, userID, pathID, name, rels)
     .then(response => res.json(response))
     .catch(next);
 });

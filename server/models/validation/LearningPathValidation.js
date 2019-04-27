@@ -10,7 +10,6 @@ const ValidationError = require('./ValidationError');
  * @returns {Boolean}
  */
 const checkIfAllCoursesExist = async (session, relationships) => {
-  console.log('checkIfAllCoursesExist');
   let courseSet = new Set();
   relationships.forEach(rel => {
     courseSet.add(rel.start);
