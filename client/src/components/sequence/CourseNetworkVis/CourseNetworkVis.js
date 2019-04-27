@@ -105,14 +105,7 @@ class CourseNetworkVis extends Component {
         }
       },
     };
-    console.log(data);
     this.network = new vis.Network(container, data, options);
-
-    //when a node is selected, communicate to parent page
-    this.network.on("selectNode", (params) => {
-      this.selectedCourse = params.nodes[0];
-      this.onCourseSelect({ selectedCourse: params.nodes[0] });
-    });
     
     // TODO: This should be decoupled from the vis module
     if (this.props.onCourseSelect) {
