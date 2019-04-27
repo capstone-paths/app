@@ -24,7 +24,7 @@ class CourseNetworkVis extends Component {
     super(props);
     this.onCourseSelect = props.onCourseSelect;
 
-    const { courseNodes, rels } = props.sequenceData;
+    const { courseNodes, rels } = props.sequenceData !== undefined ? props.sequenceData : {courseNodes : [], rels: []};
 
     let nodes = courseNodes.map(course => {
       return {
@@ -77,8 +77,6 @@ class CourseNetworkVis extends Component {
               nodeData.color = { background: 'white', border: 'black' };
               nodeData.id = course.courseID;
               nodeData.label = "*" + course.name + "*\n" + course.institution;
-              //todo something better. The new nodes shouldn't always be level 5
-              nodeData.level = 5;
               callback(nodeData);
             },
             false);
@@ -107,6 +105,7 @@ class CourseNetworkVis extends Component {
         }
       },
     };
+    console.log(data);
     this.network = new vis.Network(container, data, options);
 
     //when a node is selected, communicate to parent page
@@ -126,7 +125,7 @@ class CourseNetworkVis extends Component {
         nodeData.id = course.courseID;
         nodeData.label = "*" + course.name + "*\n" + course.institution;
 
-        nodeData.level = data.nodes._data[this.selectedCourse].level + 1;
+        nodeData.level = data.nodes._data[this.selectedCourse] !== undefined ? data.nodes._data[this.selectedCourse].level + 2 : 3;
         let edgeData = {
           from: this.selectedCourse,
           to: nodeData.id ,
@@ -135,8 +134,6 @@ class CourseNetworkVis extends Component {
             color: "blue"
           }
         };
-        //todo something better. The new nodes shouldn't always be level 5
-        // nodeData.level = 5;
         data.nodes.add(nodeData);
         data.edges.add(edgeData);
       },

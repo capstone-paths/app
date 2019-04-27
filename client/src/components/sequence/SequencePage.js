@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import CourseNetworkVis from './CourseNetworkVis/CourseNetworkVis';
 import { Icon, Button } from 'semantic-ui-react'
-import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
+import { Header, Menu, Grid, Segment, Input } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
 import CourseDetailsMini from '../course/CourseDetailsMini';
 import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSequenceButton'
@@ -23,15 +23,17 @@ class SequencePage extends Component {
 
   componentDidMount() {
     const { sequenceId } = this.props.match.params;
-    LerntApi
-      .getSequence(sequenceId)
-      .then(response => {
-        this.setState({ loaded: true, sequenceData: response.data });
-      })
-      .catch(e => {
-        // TODO: We need error handling
-        console.log('SequencePage error: ', e);
-      });
+    if(sequenceId !== 'new'){
+      LerntApi
+        .getSequence(sequenceId)
+        .then(response => {
+          this.setState({ loaded: true, sequenceData: response.data });
+        })
+        .catch(e => {
+          // TODO: We need error handling
+          console.log('SequencePage error: ', e);
+        });
+    }
   }
 
   // Arrow functions allow to access 'this' without binding
@@ -42,7 +44,7 @@ class SequencePage extends Component {
 
   onCourseSelect = (course) => {
     console.log(this.state);
-    const { pathID } = this.state.sequenceData;
+    const { pathID } = this.state.sequenceData !== undefined ? this.state.sequenceData  :  {pathID: 'new'};
     const { selectedCourse } = course;
     var state = this.state;
     state.currentCourse = course.selectedCourse;
@@ -78,13 +80,17 @@ class SequencePage extends Component {
       }
     });
     let sequence = {
-      pathID : this.state.sequenceData.sequence.pathID,
-      name : this.state.sequenceData.sequence.name,
+      pathID : this.state.sequenceData !== undefined ? this.state.sequenceData.sequence.pathID : null,
+      name :  document.getElementById('nameInput').value,
       rels : rels,
       //todo replace with context of user 
       userID: '2'
     };
-    LerntApi.saveSequence(sequence);
+    LerntApi.saveSequence(sequence)
+    .then(response=>{
+      this.setState({ loaded: true, sequenceData: response.data });
+      this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+    })
     console.log(edges);
     console.log(rels);
   };
@@ -108,7 +114,7 @@ class SequencePage extends Component {
   render() {
     let vis;
 
-    if (this.state.loaded) {
+    if (this.state.loaded || ( this.props.match.params.sequenceId === 'new') ) {
       vis = <CourseNetworkVis
         ref={this.visRef}
         sequenceData={this.state.sequenceData}
@@ -122,7 +128,7 @@ class SequencePage extends Component {
       <div style={{ fontSize: '2em' }}>
 
         <Header as='h1' attached='top'>
-          {this.state.loaded ? this.state.sequenceData.sequence.name : ''}
+          <Input id="nameInput" style={{width:'20em'}} defaultValue={this.state.loaded ? this.state.sequenceData.sequence.name : ''} />
           <SubscribeToSequenceButton
             sequenceID={this.props.match.params.sequenceId}
           />

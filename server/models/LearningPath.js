@@ -2,6 +2,7 @@ const { checkIfAllCoursesExist } = require('./validation/LearningPathValidation'
 const ValidationError = require('./validation/ValidationError');
 const User = require('./User');
 const PathStart = require('./PathStart');
+const uuidv1 = require('uuid/v1');
 
 class LearningPath {
   constructor(properties) {
@@ -19,16 +20,22 @@ class LearningPath {
   static async save(session, userID, pathID, name, relationships) {
     await checkIfAllCoursesExist(session, relationships);
 
+
     // TODO: Not sure if this makes sense at the model layer. Commenting out for now  
     // const pathStart = new PathStart(pathStartData);
     // await pathStart.validate();
+
+    let firstNext = relationships.find(r => r.start == undefined).end
 
     const query = `
       OPTIONAL MATCH (c: Course)-[oldR:NEXT { pathID: {pathID} }]->() DELETE oldR WITH oldR
       MATCH (author: User { userID: {userID} } )
       MERGE (start: PathStart {pathID: {pathID} })
       SET start.name = {name}
-      MERGE (author)-[:CREATED]->(start)
+      MERGE (author)-[:CREATED]->(start) 
+      WITH start, author 
+      MATCH(firstCourse: Course {courseID: {firstNext}})
+      MERGE (start)-[:NEXT { pathID: {pathID} }]->(firstCourse)
       WITH author, start
       UNWIND {relationships} AS rel
       MATCH (c1: Course) WHERE c1.courseID = rel.start
@@ -36,9 +43,12 @@ class LearningPath {
       MERGE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
       RETURN author, start
     `;
-
-    await session.run(query, { userID, pathID, name, relationships });
-    return true;
+  
+    if(pathID === null){
+      pathID = uuidv1()
+    }
+    await session.run(query, { userID, pathID, name, relationships, firstNext });
+    return this.findById(session, pathID);
   }
 
   /**
