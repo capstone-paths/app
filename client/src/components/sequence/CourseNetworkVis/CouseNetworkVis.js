@@ -44,7 +44,7 @@ export default class CouseNetworkVis extends Component {
           };
         });
         nodes = nodes.map((node) => {
-          node.level = findLevel(node.id, edges) * 2;
+          node.level = findLevel(node.id, edges);
           return node;
         });
         var state = this.state != null ? this.state : {};
