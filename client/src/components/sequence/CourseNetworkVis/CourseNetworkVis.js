@@ -45,7 +45,9 @@ class CourseNetworkVis extends Component {
     }));
 
     nodes = nodes.map((node) => {
-      node.level = findLevel(node.id, edges);
+      //scales the level to increase spacing between nodes
+      let levelScale = 2;
+      node.level = findLevel(node.id, edges) * levelScale;
       return node;
     });
 
