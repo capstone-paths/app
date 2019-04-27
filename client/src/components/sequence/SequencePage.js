@@ -7,6 +7,8 @@ import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
 import CourseDetailsMini from '../course/CourseDetailsMini';
 import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSequenceButton'
 
+import './SequencePage.css';
+
 class SequencePage extends Component {
 
 
@@ -140,7 +142,13 @@ class SequencePage extends Component {
               <Grid.Column width={16} style={{ padding: "0.8em" }}>
 
                 <Header as='h1'>
-                  <Input id="nameInput" style={{width:'20em'}} defaultValue={this.state.loaded ? this.state.sequenceData.sequence.name : ''} />
+                  <Input
+                    id="nameInput"
+                    style={{ width:'66%' }}
+                    className="syllabus-name-input"
+                    defaultValue={this.state.loaded ?
+                      this.state.sequenceData.sequence.name : ''}
+                  />
                   <SubscribeToSequenceButton
                     sequenceID={this.props.match.params.sequenceId}
                   />
