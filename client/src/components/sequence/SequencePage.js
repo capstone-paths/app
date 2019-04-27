@@ -98,32 +98,52 @@ class SequencePage extends Component {
     }
 
    return (
-      <div style={{ fontSize: '2em' }}>
+      <div style={{ fontSize: '2em'}}>
 
-        <Header as='h1' attached='top'>
-          {this.state.loaded ? this.state.sequenceData.sequence.name : ''}
-          <SubscribeToSequenceButton
-            sequenceID ={this.props.match.params.sequenceId}
-          />
-          <Button
-            color="green"
-            style={{float: 'right'}}
-            onClick={this.saveSequence}>
-              Save
-              <Icon name='right chevron' />
-          </Button>
-        </Header>
+          <Grid
+            celled
+            style={{
+              "margin-top": 0,
+              height: 'calc(100vh - 200px)',
+              overflow:'hidden'
+            }}
+          >
+            <Grid.Row style={{ height: "12%" }} >
+              <Grid.Column width={16} style={{ padding: "0.8em" }}>
+                <Header as='h1'>
+                  {this.state.loaded ? this.state.sequenceData.sequence.name : ''}
+                  <SubscribeToSequenceButton
+                    sequenceID ={this.props.match.params.sequenceId}
+                  />
+                  <Button
+                    color="green"
+                    style={{float: 'right'}}
+                    onClick={this.saveSequence}>
+                    Save
+                    <Icon name='right chevron' />
+                  </Button>
+                </Header>
 
-        <Segment attached style={{ padding: "0em" }}>
-          <Grid celled='internally'>
-            <Grid.Row>
+              </Grid.Column>
+            </Grid.Row>
+
+            <Grid.Row style={{ height: "88%" }}>
 
               <Grid.Column width={12}>
-                {vis}
+                <div style={{ height: "100%", overflow: "hidden" }}>
+                  {vis}
+                </div>
               </Grid.Column>
 
               <Grid.Column width={4} style={{ padding: "0em" }}>
-                <Menu fluid vertical >
+                <Menu
+                  fluid
+                  vertical
+                  style={{
+                    "box-shadow": "none",
+                    border: "none"
+                  }}
+                >
                   <Menu.Item>
                     <Header as='h4'>Search Courses</Header>
                     <AddCourseSearch />
@@ -143,11 +163,10 @@ class SequencePage extends Component {
                     {this.getCourseDetails()}
                   </Menu.Item>
                 </Menu>
-
               </Grid.Column>
+
             </Grid.Row>
           </Grid>
-        </Segment>
 
       </div>
     );

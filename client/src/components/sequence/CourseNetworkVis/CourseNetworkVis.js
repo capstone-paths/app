@@ -63,6 +63,8 @@ class CourseNetworkVis extends Component {
     };
 
     var options = {
+      height: '100%',
+
       manipulation: {
         enabled: true,
         addNode: (nodeData, callback) => {
