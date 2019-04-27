@@ -129,7 +129,7 @@ class CourseNetworkVis extends Component {
           nodeData.id = course.courseID;
           nodeData.label = "*" + course.name + "*\n" + course.institution;
 
-          nodeData.level = data.nodes._data[this.selectedCourse].level + 1;
+          nodeData.level = this.selectedCourse != null ? data.nodes._data[this.selectedCourse].level + 1 : 1;
           let edgeData = {
             from: this.selectedCourse,
             to: nodeData.id ,
