@@ -57,7 +57,7 @@ def add_courses_to_sequence(driver, sequence_id, sequence_name, track_id, track_
                 return 0 # pass control back if sequence with same name already exits
 
         if (track_id == '0'):
-            track_id = get_max_track_id()
+            track_id = get_max_track_id(track_name)
 
         with driver.session() as session:
 
@@ -124,14 +124,26 @@ def get_max_sequence_id(sequence_name):
             return str(int(current_max_sequence_id.value()) + 1)
 
 
-# function gets the max id to be used for track
-def get_max_track_id():
-    current_max_track_id = get_max_track_id_query(import_params.driver).single()
-    if ( current_max_track_id.value() == None):
-        return '1'
-    else:
-        return str(int(current_max_track_id.value()) + 1)
+# function checks if a track exists
+def check_if_track_exists(driver,track_name):
+        with driver.session() as session:
+            return session.run("MATCH (t:Track) "
+                               "WHERE toLower(t.name) = $track_name "
+                               "RETURN t.name as name, t.trackID as trackID", track_name=track_name.strip().lower())
 
+
+# function gets the max id to be used for track
+def get_max_track_id(track_name):
+    track_n = check_if_track_exists(import_params.driver, track_name).single()
+    if ( track_n ):
+        print('Track "{0}" already exists. Attaching sequence to Track "{0}" '.format(track_name))
+        return str(track_n.value(1))
+    else:
+        current_max_track_id = get_max_track_id_query(import_params.driver).single()
+        if ( current_max_track_id.value() == None):
+            return '1'
+        else:
+            return str(int(current_max_track_id.value()) + 1)
 
 
 
