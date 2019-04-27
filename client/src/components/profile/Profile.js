@@ -59,8 +59,11 @@ class Profile extends Component {
                         <Grid.Row>
                             <Card style={{ width: '100%' }} >
                                 <Card.Content>
-                                    <Card.Header>Active Paths</Card.Header>
+                                    <Card.Header>Active Paths </Card.Header>
                                     <SequenceList sequences={this.state.user.learningPaths} />
+                                </Card.Content>
+                                <Card.Content extra>
+                                    <Button color='yellow' fluid size='small' as={Link} to="/learning-path/new">New Path</Button>
                                 </Card.Content>
                             </Card>
                         </Grid.Row>
