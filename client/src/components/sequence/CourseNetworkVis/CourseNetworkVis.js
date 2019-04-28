@@ -36,8 +36,7 @@ class CourseNetworkVis extends Component {
         },
         color: {
           background: '#93C2FA',
-          border: 'white'
-          // border: '#759AC7'
+          border: 'white',
         },
         id: course.courseID,
         label: "*" + course.name + "*\n" + course.institution,
@@ -94,7 +93,6 @@ class CourseNetworkVis extends Component {
         }
       },
       layout: {
-        // TODO: I believe this only applies when no hierarchy
         improvedLayout: true,
         hierarchical: {
           nodeSpacing: 300,
@@ -127,10 +125,16 @@ class CourseNetworkVis extends Component {
     this.network = new vis.Network(container, data, options);
 
     // Once the network has rendered, center the view on top-level nodes
-    // Doesn't look that great on tablet / mobile -- would need to fix this
-    this.network.once('stabilized', () => {
+    this.network.once('initRedraw', () => {
+      // Compute the y-pos of the first node, center the view on that
+      // baseline, then pan up by half of the canvas container size, to get a
+      // nice aligned view of the graph along the top
+      const first = this.state.nodes.filter(n => n.level === 1).map(n => n.id)[0];
+      const firstY = this.network.getPositions(first)[first].y;
+      const h = document.getElementById('course-sequence').clientHeight;
+
       this.network.moveTo({
-        position: { x: 0, y: 0 },
+        position: { x: 0, y: firstY + h / 2 },
         scale: 0.8,
       });
     });
