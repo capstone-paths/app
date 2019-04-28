@@ -1,0 +1,255 @@
+{
+  "learningPaths": [
+    {
+      "creator": {
+        "bio": "I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.",
+        "userID": "2",
+        "username": "Sam"
+      },
+      "name": "Aj's kickstart your data science career",
+      "pathID": "3"
+    },
+    {
+      "creator": {
+        "bio": "",
+        "userID": "1",
+        "username": "Ajay"
+      },
+      "name": "Aj's kickstart your data science career",
+      "pathID": "3"
+    },
+    {
+      "creator": {
+        "bio": "I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.",
+        "userID": "2",
+        "username": "Sam"
+      },
+      "name": "Sam Chao's Full Stack Development",
+      "pathID": "2"
+    },
+    {
+      "creator": {
+        "bio": "I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.",
+        "userID": "2",
+        "username": "Sam"
+      },
+      "name": "Sam Chao's Front End Development",
+      "pathID": "1"
+    }
+  ],
+  "interest": [
+    {
+      "skillID": "7",
+      "name": "Javascript"
+    },
+    {
+      "skillID": "15",
+      "name": "Data Science"
+    },
+    {
+      "skillID": "18",
+      "name": "User Experience"
+    }
+  ],
+  "bio": "I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations.",
+  "learningType": [
+    {
+      "learningStyleID": "1",
+      "name": "Theorist",
+      "description": "Want to undstand the theory behind it"
+    }
+  ],
+  "currentCourses": [
+    {
+      "syllabus": "N/A",
+      "overview": "Learn foundational programming concepts (e.g., functions, for loops, conditional statements) and how to solve problems like a programmer. In addition, learn basic web development as you build web pages using HTML, CSS, JavaScript. By the end of the course, will create a web page where others can upload their images and apply image filters that you create.After completing this course, you will be able to:1. Think critically about how to solve a problem using programming;2. Write JavaScript programs using functions, for loops, and conditional statements;3. Use HTML to construct a web page with paragraphs, divs, images, links, and lists;4. Add styles to a web page with CSS IDs and classes; and5. Make a web page interactive with JavaScript commands like alert, onClick, onChange, adding input features like an image canvas, button, and slider.",
+      "cost": "audit",
+      "relatedCoursesIds": [
+        "e631dd30-10d4-3d16-9bd3-0b272f197854",
+        "883ab7d4-829d-3745-b2a4-2b5fa890da37",
+        "015dfcba-5b04-33fa-bbdf-c62e93540fab",
+        "eb2a0929-ff01-3da7-bd68-8bae82c5e890",
+        "0e4f42ab-9e3d-346d-ad28-9c7df6f5c495"
+      ],
+      "session": "Upcoming",
+      "subject": "Programming Languages",
+      "rating": {
+        "low": 3,
+        "high": 0
+      },
+      "noReviews": {
+        "low": 10,
+        "high": 0
+      },
+      "key_phrases_awsc": [
+        "programming foundations",
+        "javascript, html"
+      ],
+      "language": "English",
+      "effort": [],
+      "categories_awsc": [
+        "javascript",
+        "html",
+        "css"
+      ],
+      "url": "https%3A%2F%2Fwww.classcentral.com%2Fcourse%2Fcoursera-programming-foundations-with-javascript-html-and-css-4256",
+      "relatedCoursesURL": [
+        "https://www.classcentral.com/course/coursera-html-css-and-javascript-4239",
+        "https://www.classcentral.com/course/coursera-responsive-website-basics-code-with-html-css-and-javascript-4191",
+        "https://www.classcentral.com/course/coursera-introduction-to-web-development-7027",
+        "https://www.classcentral.com/course/edx-programming-for-the-web-with-javascript-8518",
+        "https://www.classcentral.com/course/coursera-html-css-and-javascript-for-web-developers-4270"
+      ],
+      "tags": [],
+      "instructors": [
+        "Susan H. Rodger",
+        " Robert Duvall",
+        " Owen Astrachan",
+        "Andrew D. Hilton"
+      ],
+      "duration": {
+        "low": 4,
+        "high": 0
+      },
+      "cc_tags": [
+        "html",
+        "javascript",
+        "css",
+        "usa",
+        "north america"
+      ],
+      "institution": "Duke University",
+      "provider": "Coursera",
+      "name": "Programming Foundations with JavaScript, HTML and CSS",
+      "courseID": "9ee80c99-21bf-334b-9d94-6cfa8050f9bb",
+      "startDate": {
+        "year": {
+          "low": 2019,
+          "high": 0
+        },
+        "month": {
+          "low": 4,
+          "high": 0
+        },
+        "day": {
+          "low": 15,
+          "high": 0
+        },
+        "hour": {
+          "low": 0,
+          "high": 0
+        },
+        "minute": {
+          "low": 0,
+          "high": 0
+        },
+        "second": {
+          "low": 0,
+          "high": 0
+        },
+        "nanosecond": {
+          "low": 0,
+          "high": 0
+        }
+      }
+    },
+    {
+      "syllabus": "Front-end Web UI Frameworks Overview: BootstrapThis module gives you a quick introduction to full-stack web development and the outline of the course. Then you will learn the basics of Bootstrap, setting up a web project using Bootstrap. You will learn about responsive design and the Bootstrap grid system. You will also learn about Navigation and Navigation bar. At the end of this module, you need to complete your first assignment.Bootstrap CSS ComponentsThis module concentrates on Bootstrap's components that are designed using pure CSS classes. You will learn about buttons, forms, tables, panels, wells, images and media, labels, badges, alerts and progress bars. At the end of this module you need to complete your second assignment.Bootstrap Javascript ComponentsThis module concentrates on Bootstrap's JavaScript based components. You will learn about tabs, pills and tabbed navigation, collapse, accordion, scrollspy, affix, tooltips, popovers, modals and the carousel. At the end of this module you need to complete the third assignment.Web ToolsThis module rounds out our discussions on Bootstrap JavaScript components. Then we discuss CSS preprocessors, Less and Sass. Finally, Node.js and NPM and Bower are presented. The final assignment of this course needs to be completed at the end of this module.",
+      "overview": "This course will give you an overview of client-side web frameworks, in particular Bootstrap. You will learn about grids and responsive design, Bootstrap CSS and JavaScript components. You will learn about CSS preprocessors, Less and Sass. You will also learn the basics of Node.js and NPM and learn about Web tools like Bower.At the end of this course, you will be able to:- Set up, design and style a web page using Bootstrap and its components- Create a responsive web page design- Make use of web tools to setup and manage web sitesThis course will close for new learner enrollment on Aug 3, 2017 PST. If you have already enrolled, you will continue to see it on your Coursera Dashboard as long as you remain enrolled.This specialization is being shut down since we have launched the new Full Stack Web and Multiplatform Mobile App Development Specialization https://www.coursera.org/specializations/full-stack-mobile-app-development with all new courses on Bootstrap 4, Angular, Ionic Ver. 3 and Cordova, NativeScript Version 3 and Server-side Development with NodeJS, Express and MongoDB. Interested students should move to the new specialization.You may wish to consider the new Bootstrap 4 course: https://www.coursera.org/learn/bootstrap-4/",
+      "cost": "audit",
+      "relatedCoursesIds": [
+        "e3d1beed-7be2-303f-9599-6bf1d7a33a16",
+        "e631dd30-10d4-3d16-9bd3-0b272f197854",
+        "623ea10d-ab5f-3d98-8e5a-356b34ee5885",
+        "1f36b633-f8b2-3440-8f17-13682dae38c6",
+        "08bf4cb5-3c2f-328f-af6e-ce7ca4aa3e81"
+      ],
+      "session": "Finished",
+      "subject": "Web Development",
+      "noReviews": {
+        "low": 9,
+        "high": 0
+      },
+      "rating": {
+        "low": 4,
+        "high": 0
+      },
+      "key_phrases_awsc": [
+        "front-end web ui frameworks"
+      ],
+      "language": "English",
+      "effort": [],
+      "categories_awsc": [],
+      "url": "https%3A%2F%2Fwww.classcentral.com%2Fcourse%2Fcoursera-front-end-web-ui-frameworks-and-tools-4240",
+      "tags": [],
+      "relatedCoursesURL": [
+        "https://www.classcentral.com/course/coursera-front-end-web-ui-frameworks-and-tools-bootstrap-4-8682",
+        "https://www.classcentral.com/course/coursera-html-css-and-javascript-4239",
+        "https://www.classcentral.com/course/coursera-multiplatform-mobile-app-development-with-web-technologies-4224",
+        "https://www.classcentral.com/course/edx-introduction-to-bootstrap-a-tutorial-3338",
+        "https://www.classcentral.com/course/coursera-responsive-web-design-4200"
+      ],
+      "instructors": [
+        "Jogesh K. Muppala"
+      ],
+      "duration": {
+        "low": 4,
+        "high": 0
+      },
+      "cc_tags": [
+        "javascript",
+        "responsive design",
+        "asia",
+        "front end development",
+        "bootstrap",
+        "hong kong"
+      ],
+      "institution": "The Hong Kong University of Science and Technology",
+      "provider": "Coursera",
+      "name": "Front-End Web UI Frameworks and Tools",
+      "courseID": "03ba6c01-e633-3ef6-a3df-1d8a9ce1df04",
+      "startDate": {
+        "year": {
+          "low": 2017,
+          "high": 0
+        },
+        "month": {
+          "low": 8,
+          "high": 0
+        },
+        "day": {
+          "low": 7,
+          "high": 0
+        },
+        "hour": {
+          "low": 0,
+          "high": 0
+        },
+        "minute": {
+          "low": 0,
+          "high": 0
+        },
+        "second": {
+          "low": 0,
+          "high": 0
+        },
+        "nanosecond": {
+          "low": 0,
+          "high": 0
+        }
+      }
+    }
+  ],
+  "experience": [
+    {
+      "skillID": "5",
+      "name": "HTML"
+    },
+    {
+      "skillID": "2",
+      "name": "CSS"
+    }
+  ],
+  "userID": "2",
+  "username": "Sam"
+}

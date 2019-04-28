@@ -1,0 +1,7 @@
+{
+    "baseUrl": "http://localhost:3000",
+    "ignoreTestFiles" : [
+        "**/examples/**",
+        "**/generate-fixtures.spec.js"
+    ]
+}
