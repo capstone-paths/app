@@ -5,7 +5,6 @@ script:
   - npm run build
   - npm run lint
   - npm run test
-  - cd client && npm run start & && npm run cypress-run
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAI4Y2ZXNVRWF4GPVQ
