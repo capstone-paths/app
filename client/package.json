@@ -5,6 +5,8 @@
   "proxy": "http://localhost:8081",
   "devDependencies": {
     "babel-eslint": "9.0.0",
+    "cypress": "^3.2.0",
+    "eslint-plugin-cypress": "^2.2.1",
     "eslint-plugin-react": "^7.12.4"
   },
   "dependencies": {
@@ -24,7 +26,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress": "cypress open",
+    "cypress-run": "cypress run",
+    "cypress-generate": "cypress run --spec \"cypress/integration/generate-fixtures.spec.js\""
   },
   "eslintConfig": {
     "extends": "react-app"
