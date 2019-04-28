@@ -106,7 +106,7 @@ class CourseNetworkVis extends Component {
       },
 
       physics : {
-        enabled: true,
+        enabled: false,
       },
 
       nodes: {
@@ -116,6 +116,7 @@ class CourseNetworkVis extends Component {
           maximum: 200,
         },
       },
+
       edges: {
         smooth: {
           type: 'cubicBezier',
