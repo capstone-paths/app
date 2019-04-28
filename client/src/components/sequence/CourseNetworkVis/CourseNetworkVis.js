@@ -28,8 +28,17 @@ class CourseNetworkVis extends Component {
 
     let nodes = courseNodes.map(course => {
       return {
-        font: { multi: "md", face: "arial" },
-        color: { background: 'white', border: 'black' },
+        font: {
+          multi: "md",
+          color: 'black',
+          face: 'helvetica',
+          size: 15,
+        },
+        color: {
+          background: '#93C2FA',
+          border: 'white'
+          // border: '#759AC7'
+        },
         id: course.courseID,
         label: "*" + course.name + "*\n" + course.institution,
       };
@@ -40,7 +49,7 @@ class CourseNetworkVis extends Component {
       to: rel.end,
       arrows: "to",
       color: {
-        color: "blue"
+        color: "#6D737A"
       },
     }));
 
@@ -89,7 +98,7 @@ class CourseNetworkVis extends Component {
         improvedLayout: true,
         hierarchical: {
           nodeSpacing: 300,
-          direction: "UD",
+          direction: 'UD',
           sortMethod: 'directed',
           blockShifting: true,
           parentCentralization: true,
@@ -105,8 +114,8 @@ class CourseNetworkVis extends Component {
         shape: "box",
         margin: 10,
         widthConstraint: {
-          maximum: 200
-        }
+          maximum: 200,
+        },
       },
       edges: {
         smooth: {
