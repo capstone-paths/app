@@ -126,7 +126,13 @@ class CourseNetworkVis extends Component {
     };
     this.network = new vis.Network(container, data, options);
 
-    // Once the network has rendered, center the view on top-level nodes
+    // Zoom out so that we can do a nice zoom in next
+    this.network.once('initRedraw', () => {
+      this.network.moveTo({
+        scale: 0.3,
+      });
+    });
+
     this.network.once('initRedraw', () => {
       // Compute the y-pos of the first node, center the view on that
       // baseline, then pan up by half of the canvas container size, to get a
@@ -138,6 +144,10 @@ class CourseNetworkVis extends Component {
       this.network.moveTo({
         position: { x: 0, y: firstY + h / 2 },
         scale: 0.8,
+        animation: {
+          duration: 1500,
+          easingFunction: 'easeInOutCubic'
+        }
       });
     });
 
