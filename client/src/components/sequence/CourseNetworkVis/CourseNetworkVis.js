@@ -24,7 +24,7 @@ class CourseNetworkVis extends Component {
     super(props);
     this.onCourseSelect = props.onCourseSelect;
 
-    const { courseNodes, rels } = props.sequenceData !== undefined ? props.sequenceData : {courseNodes : [], rels: []};
+    const { courseNodes, rels } = props.sequenceData;
 
     let nodes = courseNodes.map(course => {
       return {
@@ -45,9 +45,7 @@ class CourseNetworkVis extends Component {
     }));
 
     nodes = nodes.map((node) => {
-      //scales the level to increase spacing between nodes
-      let levelScale = 2;
-      node.level = findLevel(node.id, edges) * levelScale;
+      node.level = findLevel(node.id, edges);
       return node;
     });
 
@@ -65,6 +63,8 @@ class CourseNetworkVis extends Component {
     };
 
     var options = {
+      height: '100%',
+
       manipulation: {
         enabled: true,
         addNode: (nodeData, callback) => {
@@ -77,16 +77,28 @@ class CourseNetworkVis extends Component {
               nodeData.color = { background: 'white', border: 'black' };
               nodeData.id = course.courseID;
               nodeData.label = "*" + course.name + "*\n" + course.institution;
+              //todo something better. The new nodes shouldn't always be level 5
+              nodeData.level = 5;
               callback(nodeData);
             },
             false);
         }
       },
       layout: {
-        randomSeed: 2,
+        // TODO: I believe this only applies when no hierarchy
+        improvedLayout: true,
         hierarchical: {
-          direction: "LR"
+          nodeSpacing: 300,
+          direction: "UD",
+          sortMethod: 'directed',
+          blockShifting: true,
+          parentCentralization: true,
+          edgeMinimization: true,
         }
+      },
+
+      physics : {
+        enabled: true,
       },
 
       nodes: {
@@ -97,16 +109,23 @@ class CourseNetworkVis extends Component {
         }
       },
       edges: {
-        length: 335,
         smooth: {
           type: 'cubicBezier',
-          forceDirection: 'horizontal',
-          roundness: 0.4
+          roundness: 0.2,
         }
       },
     };
     this.network = new vis.Network(container, data, options);
-    
+
+    // Once the network has rendered, center the view on top-level nodes
+    // Doesn't look that great on tablet / mobile -- would need to fix this
+    this.network.once('stabilized', () => {
+      this.network.moveTo({
+        position: { x: 0, y: 0 },
+        scale: 0.8,
+      });
+    });
+
     // TODO: This should be decoupled from the vis module
     if (this.props.onCourseSelect) {
       //when a node is selected, communicate to parent page
@@ -140,7 +159,6 @@ class CourseNetworkVis extends Component {
           };
           //todo something better. The new nodes shouldn't always be level 5
           // nodeData.level = 5;
-          console.log(e.text.value);
           data.nodes.add(nodeData);
           data.edges.add(edgeData);
         },
