@@ -36,7 +36,7 @@ class CourseNetworkVis extends Component {
         },
         color: {
           background: '#93C2FA',
-          border: 'white',
+          border: '#93C2FA',
         },
         id: course.courseID,
         label: "*" + course.name + "*\n" + course.institution,
@@ -50,6 +50,7 @@ class CourseNetworkVis extends Component {
       color: {
         color: "#6D737A"
       },
+      width: 2,
     }));
 
     nodes = nodes.map((node) => {
