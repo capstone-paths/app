@@ -28,8 +28,16 @@ class CourseNetworkVis extends Component {
 
     let nodes = courseNodes.map(course => {
       return {
-        font: { multi: "md", face: "arial" },
-        color: { background: 'white', border: 'black' },
+        font: {
+          multi: "md",
+          color: 'black',
+          face: 'helvetica',
+          size: 15,
+        },
+        color: {
+          background: '#93C2FA',
+          border: '#93C2FA',
+        },
         id: course.courseID,
         label: "*" + course.name + "*\n" + course.institution,
       };
@@ -40,8 +48,9 @@ class CourseNetworkVis extends Component {
       to: rel.end,
       arrows: "to",
       color: {
-        color: "blue"
+        color: "#6D737A"
       },
+      width: 2,
     }));
 
     nodes = nodes.map((node) => {
@@ -85,11 +94,10 @@ class CourseNetworkVis extends Component {
         }
       },
       layout: {
-        // TODO: I believe this only applies when no hierarchy
         improvedLayout: true,
         hierarchical: {
           nodeSpacing: 300,
-          direction: "UD",
+          direction: 'UD',
           sortMethod: 'directed',
           blockShifting: true,
           parentCentralization: true,
@@ -98,16 +106,17 @@ class CourseNetworkVis extends Component {
       },
 
       physics : {
-        enabled: true,
+        enabled: false,
       },
 
       nodes: {
         shape: "box",
         margin: 10,
         widthConstraint: {
-          maximum: 200
-        }
+          maximum: 200,
+        },
       },
+
       edges: {
         smooth: {
           type: 'cubicBezier',
@@ -117,12 +126,28 @@ class CourseNetworkVis extends Component {
     };
     this.network = new vis.Network(container, data, options);
 
-    // Once the network has rendered, center the view on top-level nodes
-    // Doesn't look that great on tablet / mobile -- would need to fix this
-    this.network.once('stabilized', () => {
+    // Zoom out so that we can do a nice zoom in next
+    this.network.once('initRedraw', () => {
       this.network.moveTo({
-        position: { x: 0, y: 0 },
+        scale: 0.3,
+      });
+    });
+
+    this.network.once('initRedraw', () => {
+      // Compute the y-pos of the first node, center the view on that
+      // baseline, then pan up by half of the canvas container size, to get a
+      // nice aligned view of the graph along the top
+      const first = this.state.nodes.filter(n => n.level === 1).map(n => n.id)[0];
+      const firstY = this.network.getPositions(first)[first].y;
+      const h = document.getElementById('course-sequence').clientHeight;
+
+      this.network.moveTo({
+        position: { x: 0, y: firstY + h / 2 },
         scale: 0.8,
+        animation: {
+          duration: 1500,
+          easingFunction: 'easeInOutCubic'
+        }
       });
     });
 
