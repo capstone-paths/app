@@ -180,7 +180,7 @@ router.get('/by-track-id/:id', (req, res, next) => {
     .getPathDataByTrackID(session, id)
     .then((result) => {
       if (!result) {
-        res.status(400).send({ error: `No recommendations for id: ${id}` });
+        res.status(400).send({ error: `No learning paths for trackID: ${id}` });
       }
 
       res.json(result);

@@ -45,6 +45,6 @@ export default class LerntApi {
         return axios.get('/api/tracks');
     }
     static getAllPathsByTrackID(id) {
-        return axios.get('/api/by-track-id/' + id);
+        return axios.get('/api/learning-paths/by-track-id/' + id);
     }
 }

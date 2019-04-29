@@ -11,8 +11,6 @@ class Track {
       return undefined;
     }
 
-    console.log(results.records);
-
     let trackData = results.records.map(result => {
       let { trackID, name } = result.get('t').properties;
       return { trackID, name };
