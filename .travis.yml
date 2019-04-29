@@ -6,6 +6,7 @@ script:
   - npm run lint
   - npm run start:client-background
   - npm run test
+  # fake change
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAZIUGCNIWSP2UT2UD
