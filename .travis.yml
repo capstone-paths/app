@@ -13,7 +13,8 @@ deploy:
     secure: diXyTXIBkfd9pLb5s3YIR193BL666OSb5mDIkv+/hMNSLK2p2DeqA4mG1gBar4xXJyp3a46oO3FkQUc9N9GJTSy5rF7nwFuXJEr4cIkx9GLU2ezmB/pW2OmzszLR9dtsz/ZniLwyAt8Vu1UYHsrQnuDjTOhsotE9I0aIpYVxSa+9JX+nmlpKTJkDJAgOrLePo31RKUOTv3YFgcKbAmSveBo2+NmjWidKaqw7Ptw2bosci5p9WKXfMtsNtEVh87qfVma5bMpXpucMPSsVRk0LHvintMMdWsXjFa3MvzoXN0d2wJaEsEzCOSqFUBt3smLmhDNoMovPO82AfQc3kJV8xeQ9hXDn8m+6qpxmeRSRi0Ez5vxYWwEeOpap+uqcT4p05O7x5UGJ3gBP9qg8RYiYegZqFAdUAlKwPVO3LAR50qx45VwLwN5q3bzJDtAswc0b4JpLNfv3nEKaVvbvlgpYrW0ZOJ3hb0N5UhxpEFhjxLpkY7T3kDONyQH6yc1pg2u4mauqQSi9vSO5e8pxAYaQRl4+oSZCqXES0Jo6RinqBlDWSB3lmLeV4lDd108zOfCqlcBNvy33p3PvxJCV4/CtYFjE/b79zYXNRZiSup2kkN+U1NaxAvipJcGUroUK2H/8zNAHz38mpfS1YthopvxIE14/Kjq0dHhrWbCF1Pm3WeM=
   region: us-east-1
   app: lernt
-  env: prod
+  env: Lernio-Production
+  bucket_name: elasticbeanstalk-us-east-1-637010078253
   on:
     repo: capstone-paths/app
     branch: travis_deploy_setup
