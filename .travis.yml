@@ -17,4 +17,4 @@ deploy:
   bucket_name: elasticbeanstalk-us-east-1-637010078253
   on:
     repo: capstone-paths/app
-    branch: master
+    branch: fix_deploy_issue
