@@ -105,6 +105,7 @@ MERGE (sam)-[:CREATED]->(st02)
 MERGE (sam)-[:SUBSCRIBED]->(st02)
 MERGE (ajay)-[:SUBSCRIBED]->(st02)
 MERGE (sam)-[:IN_PROGRESS]->(pfjs)
+MERGE (sam)-[:COMPLETE]->(pfjs)
 MERGE (sam)-[:IN_PROGRESS]->(feui)
 
 

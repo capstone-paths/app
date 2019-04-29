@@ -26,7 +26,8 @@ class SequencePage extends Component {
     const { sequenceId } = this.props.match.params;
     if(sequenceId !== 'new'){
       LerntApi
-        .getSequence(sequenceId)
+      //todo user context
+        .getSequence(sequenceId, '2')
         .then(response => {
           this.setState({ loaded: true, sequenceData: response.data });
         })

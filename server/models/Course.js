@@ -25,13 +25,13 @@ class Course {
     /**
    * Finds a course by id
    * @param {Session} session 
-   * @param {Integer} id 
+   * @param {Integer} courseId 
    */
-  static async findById(session, id) {
+  static async findById(session, courseId) {
     const query = `
-    MATCH (c: Course {courseID: $id})
+    MATCH (c: Course {courseID: $courseId})
     RETURN c as course`;
-    const results = await session.run(query, { id });
+    const results = await session.run(query, { courseId });
     if (results.records.length === 0) {
       return undefined;
     }

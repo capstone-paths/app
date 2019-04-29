@@ -32,7 +32,7 @@ router.get('/', (req, res, next) => {
  * @desc   Retrieves a learning path by id
  * @param  id (in-path, mandatory, id)
  */
-router.get('/:id', (req, res, next) => {
+router.get('/:id/:userId', (req, res, next) => {
   console.log('learning-paths called, id: ', req.params.id);
 
   if (!req.params.id) {
@@ -41,7 +41,7 @@ router.get('/:id', (req, res, next) => {
 
   const session = utils.getDBSession(req);
   LearningPath
-    .findById(session, req.params.id)
+    .findById(session, req.params.id, req.params.userId)
     .then((result) => {
       if (!result) {
         res.status(400);

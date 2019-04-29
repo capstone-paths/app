@@ -27,12 +27,12 @@ router.get('/', (req, res, next) => {
 });
 
 /**
- * @route  GET /api/courses/:id
+ * @route  GET /api/courses/:id/:userId
  * @access Public
  * @desc   Retrieves a course by id
  * @param  id (in-path, mandatory, id)
  */
-router.get('/:id', (req, res, next) => {
+router.get('/:id/:userId', (req, res, next) => {
   if (!req.params.id) {
     res.status(400);
   }

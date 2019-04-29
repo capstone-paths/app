@@ -31,7 +31,7 @@ class CourseNetworkVis extends Component {
         font: { multi: "md", face: "arial" },
         color: { background: 'white', border: 'black' },
         id: course.courseID,
-        label: "*" + course.name + "*\n" + course.institution,
+        label: "*" + course.name + "*\n" + course.institution + "*\n" + course.status,
       };
     });
 

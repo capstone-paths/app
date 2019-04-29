@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export default class LerntApi {
-    static getSequence(id) {
-        return axios.get('/api/learning-paths/' + id)
+    static getSequence(id, userId) {
+        return axios.get('/api/learning-paths/' + id + '/' + userId)
     }
     static saveSequence(sequence) {
         return axios.post('/api/learning-paths/', sequence)
@@ -19,8 +19,8 @@ export default class LerntApi {
     toggleSubscribe(userId, sequenceId) {
         return axios.post('/api/learning-paths/toggle-subscribe/' + sequenceId + '/' + userId)
     }
-    getCourse(id) {
-        return axios.get('/api/courses/' + id)
+    getCourse(userId, courseId) {
+        return axios.get('/api/courses/' + courseId + '/' + userId)
     }
     getCourses() {
         return axios.get('/api/courses/')
