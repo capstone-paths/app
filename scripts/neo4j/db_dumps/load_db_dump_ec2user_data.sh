@@ -48,10 +48,10 @@ neo4j_pwd=${arr[2]}
 
 # setting credentials in parameter store
 
-/usr/bin/aws ssm put-parameter --name "neo4j_cypher_url" --value "$neo4j_cypher_url" --type String --tier Standard --region us-east-1 --overwrite
-/usr/bin/aws ssm put-parameter --name "neo4j_bolt_url" --value "$neo4j_bolt_url" --type String --tier Standard --region us-east-1 --overwrite
-/usr/bin/aws ssm put-parameter --name "neo4j_user" --value "$neo4j_user" --type String --tier Standard --region us-east-1 --overwrite
-/usr/bin/aws ssm put-parameter --name "neo4j_pwd" --value "$neo4j_pwd" --type String --tier Standard --region us-east-1 --overwrite
+/usr/bin/aws ssm put-parameter --name "CF_PS_NEO4J_CYPHER_URL" --value "$neo4j_cypher_url" --type String --tier Standard --region us-east-1 --overwrite
+/usr/bin/aws ssm put-parameter --name "CF_PS_NEO4J_BOLT_URL" --value "$neo4j_bolt_url" --type String --tier Standard --region us-east-1 --overwrite
+/usr/bin/aws ssm put-parameter --name "CF_PS_NEO4J_USER" --value "$neo4j_user" --type String --tier Standard --region us-east-1 --overwrite
+/usr/bin/aws ssm put-parameter --name "CF_PS_NEO4J_PWD" --value "$neo4j_pwd" --type String --tier Standard --region us-east-1 --overwrite
 
 
 # download required jar files (used wget/ curl was getting the html content and not the file)
