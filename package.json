@@ -14,7 +14,7 @@
     "start:server": "cd server && npm run start",
     "watch:server": "cd server && npm run watch",
     "install:all": "npm install && cd server && npm install",
-    "start:client-background" : "cd client && npm run start &",
+    "start:client-background": "cd client && npm run start &",
     "test": "./node_modules/.bin/mocha --reporter spec && cd client && npm run cypress-run"
   },
   "engines": {
