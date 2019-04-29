@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-- 10.15.3
+  - "10.15.3"
 script:
-- npm run build
-- npm run lint
-- npm run start:client-background
-- npm run test
+  - npm run build
+  - npm run lint
+  - npm run start:client-background
+  - npm run test
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAZIUGCNIWSP2UT2UD
@@ -16,3 +16,4 @@ deploy:
   env: prod
   on:
     repo: capstone-paths/app
+    branch: travis_deploy_setup
