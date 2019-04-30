@@ -19,9 +19,12 @@ class LearningPathDiscoveryPage extends Component {
       trackListState: netState.LOADING,
       learningPathList: [],
       learningPathListState: trackId ? netState.LOADING : netState.IDLE,
+      recommendationData: {},
+      recommendationDataState: trackId ? netState.LOADING : netState.IDLE,
       errors: {
         trackList: '',
         learningPathList: '',
+        recommendationData: '',
       }
     };
   }
@@ -52,6 +55,7 @@ class LearningPathDiscoveryPage extends Component {
 
     if (trackId) {
       this.getLearningPathList(trackId);
+      this.getSystemRecommendation(trackId);
     }
   }
 
@@ -78,6 +82,33 @@ class LearningPathDiscoveryPage extends Component {
           learningPathListState: netState.ERROR,
           errors,
         })
+      });
+  }
+
+
+  getSystemRecommendation(trackId) {
+    if (!trackId) {
+      return;
+    }
+
+    LerntApi
+      .getSystemRecommendation(trackId)
+      .then(res => {
+        console.log('getSystemRecommendation success: ', res.data);
+        this.setState({
+          recommendationData: res.data,
+          recommendationDataState: netState.LOADED,
+        });
+      })
+      .catch(e => {
+        console.error('getSystemRecommendation error: ', e);
+        const errors = { ...this.state.errors };
+        errors.recommendationData = e.response.data.error || 'Error: could' +
+          ' not retrieve system recommendations for track id: ' + trackId;
+        this.setState({
+          recommendationDataState: netState.ERROR,
+          errors,
+        });
       });
   }
 
