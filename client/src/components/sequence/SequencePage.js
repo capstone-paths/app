@@ -39,13 +39,12 @@ class SequencePage extends Component {
 
   // Arrow functions allow to access 'this' without binding
   // https://medium.freecodecamp.org/react-binding-patterns-5-approaches-for-handling-this-92c651b5af56
-  onClick = () => {
-    alert('Add course to sequence');
+  addCourseToSequence = (event, course) => {
+    this.visRef.current.addNode(course);
   };
 
   onCourseSelect = (course) => {
-    console.log(this.state);
-    const { pathID } = this.state.sequenceData !== undefined ? this.state.sequenceData  :  {pathID: 'new'};
+    const { pathID } = this.state.sequenceData !== undefined ? this.state.sequenceData.sequence  :  {pathID: 'new'};
     const { selectedCourse } = course;
     var state = this.state;
     state.currentCourse = course.selectedCourse;
@@ -59,7 +58,6 @@ class SequencePage extends Component {
 
   getCourseDetails = () => {
     const { currentCourse } = this.state;
-    console.log(this.state);
     if (!currentCourse) {
       return '';
     }
@@ -92,8 +90,6 @@ class SequencePage extends Component {
       this.setState({ loaded: true, sequenceData: response.data });
       this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
     })
-    console.log(edges);
-    console.log(rels);
   };
 
   getCourseRecommendations = () => {
@@ -106,7 +102,9 @@ class SequencePage extends Component {
       courseRecommendations.map(course => (
         <Menu.Item
           name='test'
-          onClick={this.onClick}>{course.name}
+          onClick={(e) => {
+            this.addCourseToSequence(e, course)
+          }}>{course.name} 
         </Menu.Item>
       ))
     )
@@ -190,10 +188,10 @@ class SequencePage extends Component {
                     {this.getCourseRecommendations()}
                   </Menu.Item>
 
-                  <Menu.Item>
+                  {/* <Menu.Item>
                     <Header as='h4'>Sequence Statistics</Header>
                     <p>100% Awesome</p>
-                  </Menu.Item>
+                  </Menu.Item> */}
 
                   <Menu.Item>
                     {this.getCourseDetails()}

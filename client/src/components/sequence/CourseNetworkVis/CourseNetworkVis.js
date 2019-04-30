@@ -18,13 +18,30 @@ function findLevel(nodeId, edges) {
   }
 }
 
+function courseToNode(course) {
+  return {
+    font: {
+      multi: "md",
+      color: 'black',
+      face: 'helvetica',
+      size: 15,
+    },
+    color: {
+      background: '#93C2FA',
+      border: '#93C2FA',
+    },
+    id: course.courseID,
+    label: "*" + course.name + "*\n" + course.institution,
+  };
+}
+
 class CourseNetworkVis extends Component {
 
   constructor(props) {
     super(props);
     this.onCourseSelect = props.onCourseSelect;
 
-    const { courseNodes, rels } = props.sequenceData;
+    const { courseNodes, rels } = props.sequenceData ? props.sequenceData : {courseNodes: [], rels: []} ;
 
     let nodes = courseNodes.map(course => {
       return {
@@ -59,6 +76,25 @@ class CourseNetworkVis extends Component {
     });
 
     this.state = { nodes, edges }
+
+    // moved add node to be stored on "this" so it can be accessed from SequencePage component reference 
+    this.addNode = (course) => {
+      var nodeData = courseToNode(course);
+  
+      nodeData.level = this.selectedCourse != null ? this.network.body.data.nodes._data[this.selectedCourse].level + 1 : 1;
+      let edgeData = {
+        from: this.selectedCourse,
+        to: nodeData.id ,
+        arrows: "to",
+        color: {
+          color: "#6D737A"
+        },
+        width: 2,
+      };
+  
+      this.network.body.data.nodes.add(nodeData);
+      this.network.body.data.edges.add(edgeData);
+    }
   }
 
   componentDidMount() {
@@ -76,22 +112,7 @@ class CourseNetworkVis extends Component {
 
       manipulation: {
         enabled: true,
-        addNode: (nodeData, callback) => {
-          var input = document.getElementById("awesomplete");
-          //TODO figure out a better way to get value from child component
-          input.addEventListener('awesomplete-selectcomplete',
-            e => {
-              let course = e.text.value;
-              nodeData.font = { multi: "md", face: "arial" };
-              nodeData.color = { background: 'white', border: 'black' };
-              nodeData.id = course.courseID;
-              nodeData.label = "*" + course.name + "*\n" + course.institution;
-              //todo something better. The new nodes shouldn't always be level 5
-              nodeData.level = 5;
-              callback(nodeData);
-            },
-            false);
-        }
+        addNode: false
       },
       layout: {
         improvedLayout: true,
@@ -125,7 +146,7 @@ class CourseNetworkVis extends Component {
       },
     };
     this.network = new vis.Network(container, data, options);
-
+    this.network.enableEditMode();
     // Zoom out so that we can do a nice zoom in next
     this.network.once('initRedraw', () => {
       this.network.moveTo({
@@ -138,17 +159,19 @@ class CourseNetworkVis extends Component {
       // baseline, then pan up by half of the canvas container size, to get a
       // nice aligned view of the graph along the top
       const first = this.state.nodes.filter(n => n.level === 1).map(n => n.id)[0];
-      const firstY = this.network.getPositions(first)[first].y;
-      const h = document.getElementById('course-sequence').clientHeight;
+      if (first !== undefined) {
+        const firstY = this.network.getPositions(first)[first].y;
+        const h = document.getElementById('course-sequence').clientHeight;
 
-      this.network.moveTo({
-        position: { x: 0, y: firstY + h / 2 },
-        scale: 0.8,
-        animation: {
-          duration: 1500,
-          easingFunction: 'easeInOutCubic'
-        }
-      });
+        this.network.moveTo({
+          position: { x: 0, y: firstY + h / 2 },
+          scale: 0.8,
+          animation: {
+            duration: 1500,
+            easingFunction: 'easeInOutCubic'
+          }
+        });
+      }
     });
 
     // TODO: This should be decoupled from the vis module
@@ -167,25 +190,7 @@ class CourseNetworkVis extends Component {
       input.addEventListener('awesomplete-selectcomplete',
         e => {
           let course = e.text.value;
-          var nodeData = {};
-          nodeData.font = { multi: "md", face: "arial" };
-          nodeData.color = { background: 'white', border: 'black' };
-          nodeData.id = course.courseID;
-          nodeData.label = "*" + course.name + "*\n" + course.institution;
-
-          nodeData.level = this.selectedCourse != null ? data.nodes._data[this.selectedCourse].level + 1 : 1;
-          let edgeData = {
-            from: this.selectedCourse,
-            to: nodeData.id ,
-            arrows: "to",
-            color: {
-              color: "blue"
-            }
-          };
-          //todo something better. The new nodes shouldn't always be level 5
-          // nodeData.level = 5;
-          data.nodes.add(nodeData);
-          data.edges.add(edgeData);
+          this.addNode(course);
         },
         false);
     }
