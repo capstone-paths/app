@@ -116,6 +116,66 @@
         "Namespace": "aws:elasticbeanstalk:application:environment",
         "OptionName": "PS_NEO4J_PWD",
         "Value": "{{resolve:ssm:CF_PS_NEO4J_PWD:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_ACCESS_KEY_ID",
+        "Value": "{{resolve:ssm:COG_ACCESS_KEY_ID:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_ALGORITHM",
+        "Value": "{{resolve:ssm:COG_ALGORITHM:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_CLIENT_ID",
+        "Value": "{{resolve:ssm:COG_CLIENT_ID:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_IV_FILL",
+        "Value": "{{resolve:ssm:COG_IV_FILL:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_IV_SIZE",
+        "Value": "{{resolve:ssm:COG_IV_SIZE:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_KEY_LENGTH",
+        "Value": "{{resolve:ssm:COG_KEY_LENGTH:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_KEY_SALT",
+        "Value": "{{resolve:ssm:COG_KEY_SALT:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_MAX_VALID_TIME",
+        "Value": "{{resolve:ssm:COG_MAX_VALID_TIME:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_REGION",
+        "Value": "{{resolve:ssm:COG_REGION:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_SECRET_ACCESS_KEY",
+        "Value": "{{resolve:ssm:COG_SECRET_ACCESS_KEY:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_TEMP_PASSWORD",
+        "Value": "{{resolve:ssm:COG_TEMP_PASSWORD:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_USER_POOL_ID",
+        "Value": "{{resolve:ssm:COG_USER_POOL_ID:1}}"
         }
 
       ]
