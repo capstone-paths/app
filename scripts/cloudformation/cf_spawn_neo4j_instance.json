@@ -12,6 +12,13 @@
       "ConstraintDescription" : "neo4j-ec2-key"
     },
 
+    "RoleName": {
+      "Description" : "Lernt Neo4j EC2 Role",
+      "Type" : "String",
+      "Default" : "Lernt_EC2_Neo4j_Role",
+      "ConstraintDescription" : "Must be a valid IAM Role"
+    },
+
     "InstanceType" : {
       "Description" : "WebServer EC2 instance type",
       "Type" : "String",
@@ -56,9 +63,87 @@
       "Properties" : {
         "InstanceType" : { "Ref" : "InstanceType" },
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "Tags" : [
+            {"Key" : "Name", "Value" : "Neo4j-CF-EC2"}
+        ],
         "KeyName" : { "Ref" : "KeyName" },
+         "IamInstanceProfile"  : { "Ref" : "RoleName" },
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
-                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] }
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "UserData":{  "Fn::Base64" : {
+                      "Fn::Join" : ["", [
+      "Content-Type: multipart/mixed; boundary=\"//\"\n",
+      "MIME-Version: 1.0\n",
+      "--//\n",
+      "Content-Type: text/cloud-config; charset=\"us-ascii\"\n",
+      "MIME-Version: 1.0\n",
+      "Content-Transfer-Encoding: 7bit\n",
+      "Content-Disposition: attachment; filename=\"cloud-config.txt\"\n",
+      "cloud_final_modules:\n",
+      "- [scripts-user, always]\n",
+      "--//\n",
+      "Content-Type: text/x-shellscript; charset=\"us-ascii\"\n",
+      "MIME-Version: 1.0\n",
+      "Content-Transfer-Encoding: 7bit\n",
+      "Content-Disposition: attachment; filename=\"userdata.txt\"\n",
+      "#!/bin/bash\n",
+      "#stop neo4j database\n",
+      "/opt/bitnami/neo4j/bin/neo4j stop &\n",
+      "/bin/echo \"Stopping Neo4j Database\"\n",
+      "wait\n",
+      "# install required libraries\n",
+      "/usr/bin/apt-get update\n",
+      "sleep 60\n",
+      "/usr/bin/apt-get install python3-pip -y\n",
+      "sleep 60\n",
+      "/usr/bin/pip3 install --upgrade awscli\n",
+      "sleep 60\n",
+      "# getting database credentials - db dns\n",
+      "ec2_public_dns=$(/usr/bin/wget -q -O - http://169.254.169.254/latest/meta-data/public-hostname)\n",
+      "# setting cypher browser url\n",
+      "neo4j_cypher_url=\"[http://$ec2_public_dns:7474/browser/]\"\n",
+      "# setting bolt url\n",
+      "neo4j_bolt_url=\"bolt://$ec2_public_dns:7687\"\n",
+      "# getting database credentials from file bitnami_credentials\n",
+      "str=$(/bin/grep -o \"'.*'\" /home/bitnami/bitnami_credentials)\n",
+      "arr=(${str//' '/ })\n",
+      "neo4j_user=${arr[0]}\n",
+      "neo4j_pwd=${arr[2]}\n",
+      "# setting credentials in parameter store\n",
+      "/usr/bin/aws ssm put-parameter --name \"CF_PS_NEO4J_CYPHER_URL\" --value \"$neo4j_cypher_url\" --type String --tier Standard --region us-east-1 --overwrite\n",
+      "/usr/bin/aws ssm put-parameter --name \"CF_PS_NEO4J_BOLT_URL\" --value \"$neo4j_bolt_url\" --type String --tier Standard --region us-east-1 --overwrite\n",
+      "/usr/bin/aws ssm put-parameter --name \"CF_PS_NEO4J_USER\" --value \"$neo4j_user\" --type String --tier Standard --region us-east-1 --overwrite\n",
+      "/usr/bin/aws ssm put-parameter --name \"CF_PS_NEO4J_PWD\" --value \"$neo4j_pwd\" --type String --tier Standard --region us-east-1 --overwrite\n",
+      "# download required jar files (used wget/ curl was getting the html content and not the file)\n",
+      "/usr/bin/wget  -N --directory-prefix=/opt/bitnami/neo4j/plugins/ https://github.com/capstone-paths/app/raw/master/neo4j-plugins/graph-algorithms-algo.jar\n",
+      "/usr/bin/wget  -N --directory-prefix=/opt/bitnami/neo4j/plugins/ https://github.com/capstone-paths/app/raw/master/neo4j-plugins/lernt-neo4j-procedures.jar\n",
+      "#download backup\n",
+      "/usr/bin/aws s3 cp s3://lernt-db-backup/lernt_init_db.dump /home/bitnami/lernt_init_db.dump  &\n",
+      "wait\n",
+      "# update Neo4j Configuration file\n",
+      "if cat /opt/bitnami/neo4j/conf/neo4j.conf | grep dbms.security.procedures.unrestricted=algo.*\n",
+      "then\n",
+      " /bin/echo \"Neo4j Config already updated.\"\n",
+      "else\n",
+      " /bin/echo \"Updating Neo4j Config\"\n",
+      " lno=$(/bin/grep -nr dbms.security.procedures.unrestricted /opt/bitnami/neo4j/conf/neo4j.conf | /usr/bin/cut -d : -f 1)\n",
+      " lno+=\"i\"\n",
+      " /bin/sed -i \"$lno\"'dbms.security.procedures.unrestricted=algo.*' /opt/bitnami/neo4j/conf/neo4j.conf\n",
+      "fi\n",
+      "export JAVA_HOME=\"/opt/bitnami/java\"\n",
+      "PATH=$JAVA_HOME/bin:$PATH\n",
+      "/opt/bitnami/neo4j/bin/neo4j stop &\n",
+      "/bin/echo \"Stopping Neo4j Database\"\n",
+      "wait\n",
+      "#load up database\n",
+      "/opt/bitnami/neo4j/bin/neo4j-admin load --from=/home/bitnami/lernt_init_db.dump --database=graph.db --force &\n",
+      "wait\n",
+      "#start database\n",
+      "/opt/bitnami/neo4j/bin/neo4j start\n",
+      "--//\n"
+
+  ]]}}
+
       }
     },
 
@@ -71,7 +156,20 @@
           "FromPort" : "22",
           "ToPort" : "22",
           "CidrIp" : { "Ref" : "SSHLocation"}
-        } ]
+        } ,
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : "7474",
+          "ToPort" : "7474",
+          "CidrIp" : "0.0.0.0/0"
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : "7687",
+          "ToPort" : "7687",
+          "CidrIp" : "0.0.0.0/0"
+        }
+      ]
       }
     }
   },
