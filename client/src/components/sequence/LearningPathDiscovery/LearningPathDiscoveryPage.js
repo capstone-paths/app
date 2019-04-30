@@ -3,6 +3,7 @@ import { Form, Grid, Accordion, Icon, Header } from 'semantic-ui-react'
 import LerntApi from '../../../LerntApi';
 import LearningPathList from './LearningPathList';
 import ReactAutocomplete from 'react-autocomplete';
+import faker from 'faker';
 
 
 const netState = { IDLE: 0, LOADING: 1, LOADED: 2, ERROR: 3 };
@@ -171,7 +172,11 @@ class LearningPathDiscoveryPage extends Component {
         break;
 
       case netState.LOADED:
-        element = <LearningPathList list={this.state.learningPathList} />;
+        const list = this.state.learningPathList.map(i => ({
+          ...i,
+          description: faker.lorem.paragraph(),
+        }));
+        element = <LearningPathList list={list} />;
         break;
 
       case netState.ERROR:

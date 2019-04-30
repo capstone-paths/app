@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Icon,  Item} from 'semantic-ui-react';
-import faker from 'faker';
 
 function LearningPathList(props) {
   return (
@@ -16,7 +15,7 @@ function LearningPathList(props) {
                 <strong>Author: </strong> <span>{value.userName}</span>
               </Item.Meta>
               <Item.Meta>
-                <p>{faker.lorem.paragraph()}</p>
+                <p>{value.description}</p>
               </Item.Meta>
               <Item.Extra>
                 <Button color='yellow' floated='right' as={ Link } to={courseLink}>
