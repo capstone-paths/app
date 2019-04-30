@@ -27,11 +27,23 @@ class Course {
    * @param {Session} session 
    * @param {Integer} courseId 
    */
-  static async findById(session, courseId) {
+  static async findById(session, courseId, userId) {
     const query = `
     MATCH (c: Course {courseID: $courseId})
-    RETURN c as course`;
-    const results = await session.run(query, { courseId });
+    OPTIONAL MATCH (user: User{userID: $userId})-[completed :COMPLETED]->(c)
+      with c, count(completed) as completed
+    OPTIONAL MATCH (user: User{userID: $userId})-[inProgress :IN_PROGRESS]->(c)
+    RETURN apoc.map.merge(
+      PROPERTIES(c),
+        {
+          status: CASE
+                    WHEN count(inProgress) >= 1 THEN 'inprogress'
+                    WHEN completed >= 1 THEN 'complete'
+                    ELSE 'unstarted' END
+        }
+      ) as course`;
+
+    const results = await session.run(query, { courseId, userId });
     if (results.records.length === 0) {
       return undefined;
     }
@@ -44,10 +56,7 @@ class Course {
     let records = results.records[0];
 
     let course = records.get('course');
-    let courseData = course.properties;
-    return {
-      course : courseData
-    };
+    return course;
   }
 }
 
