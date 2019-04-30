@@ -236,13 +236,35 @@ class LearningPath {
     return { sequence, courseNodes, rels };
   }
 
-  // TODO: Need to think about this
-  toJSON() {
-    const { authorID, pathStartData, relationships } = this;
-    return { authorID, pathStartData, relationships };
+
+  /**
+   * Fetches a list of all paths made by users for a given track;
+   * does not return entire learning paths, but rather useful metadata
+   * such as author id and name, path name, etc.
+   * @param {Session} session Neo4j session context
+   * @param {uuid} trackID The track for which to get path data
+   */
+  static async getPathDataByTrackID(session, trackID) {
+    const query = `
+      MATCH (t: Track { trackID: $trackID })<-[:BELONGS_TO]-(p: PathStart)
+      MATCH (u: User)-[:CREATED]->(p)
+       WITH { 
+        userID: u.userID,
+        userName: u.username,
+        pathID: p.pathID, 
+        pathName: p.name 
+      } AS pathData
+      RETURN pathData
+    `;
+
+    const results = await session.run(query, { trackID });
+
+    if (results.records.length === 0)  {
+      return undefined;
+    }
+
+    return results.records.map(result => result.get('pathData'));
   }
-
-
 }
 
 module.exports = LearningPath;

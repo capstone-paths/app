@@ -41,4 +41,10 @@ export default class LerntApi {
     static getSystemRecommendation(trackID) {
         return axios.get('/api/learning-paths/system-recommendation/' + trackID);
     }
+    static getAllTrackNames() {
+        return axios.get('/api/tracks');
+    }
+    static getAllPathsByTrackID(id) {
+        return axios.get('/api/learning-paths/by-track-id/' + id);
+    }
 }

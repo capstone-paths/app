@@ -159,4 +159,33 @@ router.get('/system-recommendation/:id', (req, res, next) => {
     .catch(next);
 });
 
+
+/**
+ * @route  GET /api/learning-paths/by-track-id/:trackID
+ * @access Public
+ * @desc   Returns path metadata for all paths in the system with a given track
+ * @param  trackID (in-path, mandatory, id)
+ */
+router.get('/by-track-id/:id', (req, res, next) => {
+  const { id } = req.params;
+  console.log('by-track-id called, id: ', id);
+
+  if (!id) {
+    res.status(400).send({ error: 'missing trackID' });
+  }
+
+  const session = utils.getDBSession(req);
+
+  LearningPath
+    .getPathDataByTrackID(session, id)
+    .then((result) => {
+      if (!result) {
+        res.status(400).send({ error: `No learning paths for trackID: ${id}` });
+      }
+
+      res.json(result);
+    })
+    .catch(next);
+});
+
 module.exports = router;
