@@ -4,36 +4,54 @@ import { Icon, Grid, Segment } from 'semantic-ui-react';
 
 import CourseNetworkVis from './CourseNetworkVis/CourseNetworkVis';
 
+const netState = { IDLE: 0, LOADING: 1, LOADED: 2, ERROR: 3 };
+
 class SysRecommendationPage extends Component {
   state = {
-    loaded: false,
-    sequenceData: undefined,
+    learningPathState: netState.LOADING,
+    learningPathData: undefined,
+    error: undefined,
   };
 
   visRef = React.createRef();
 
   componentDidMount() {
-    LerntApi
-      .getSystemRecommendation('madeupTrack')
-      .then(response => {
-        console.log('getSysRecommendation res', response.data);
-        this.setState({ loaded: true, sequenceData: response.data });
-      })
-      .catch(e => {
-        console.log('SysRecommendationPage error: ', e);
-      });
+    const { trackId } = this.props.match.params;
+
+    if (trackId) {
+      LerntApi
+        .getSystemRecommendation(trackId)
+        .then(response => {
+          console.log('getSysRecommendation res', response.data);
+          this.setState({
+            learningPathState: netState.LOADED,
+            learningPathData: response.data
+          });
+        })
+        .catch(e => {
+          console.log('SysRecommendationPage error: ', e);
+          const error = e.response.data.error || 'Could not get a system' +
+            ' recommendation at present';
+          this.setState({
+            learningPathState: netState.ERROR,
+            error
+          })
+        });
+    }
   }
 
   render() {
     let vis;
 
-    if (this.state.loaded) {
+    if (this.state.learningPathState === netState.LOADED) {
       vis = <CourseNetworkVis
         ref={this.visRef}
-        sequenceData={this.state.sequenceData}
+        sequenceData={this.state.learningPathData}
       />
-    } else {
+    } else if (this.state.learningPathState === netState.LOADING) {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
+    } else {
+      vis = <div>{this.state.error}</div>
     }
 
     return (
