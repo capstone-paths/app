@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Grid, Accordion, Icon, Header } from 'semantic-ui-react'
 import LerntApi from '../../../LerntApi';
-import SequenceList from '../../collections/SequenceList';
+import LearningPathList from './LearningPathList';
 import ReactAutocomplete from 'react-autocomplete';
 
 
@@ -72,6 +72,7 @@ class LearningPathDiscoveryPage extends Component {
       .then(res => {
         console.log('getLearningPathList success: ', res.data);
         this.setState({
+          trackId,
           learningPathList: res.data,
           learningPathListState: netState.LOADED,
         });
@@ -87,8 +88,6 @@ class LearningPathDiscoveryPage extends Component {
         })
       });
   }
-
-
 
 
   getSystemRecommendation(trackId) {
@@ -128,7 +127,7 @@ class LearningPathDiscoveryPage extends Component {
 
   seachSubmit = (e, titleProps) => {
     var state = this.state
-    state.results = <SequenceList></SequenceList>
+    // state.results = <SequenceList></SequenceList>
     this.setState(state)
   };
 
@@ -176,6 +175,39 @@ class LearningPathDiscoveryPage extends Component {
   };
 
 
+  ResultsList = () => {
+    console.log('results list called, data: ', this.state.learningPathList);
+    console.log('state', this.state.learningPathListState);
+    console.log('trackId', this.state.trackId);
+
+    let element;
+
+    switch (this.state.learningPathListState)
+    {
+      case netState.LOADING:
+        element = <div>Loading ... <Icon loading name='spinner' /></div>;
+        break;
+
+      case netState.LOADED:
+        element = <LearningPathList list={this.state.learningPathList} />;
+        break;
+
+      case netState.ERROR:
+        element = <p>{this.state.errors.learningPathList}</p>;
+        break;
+
+      case netState.IDLE:
+        element = (
+          <p>
+            Nothing here. Search for a track to see available Learning Paths
+          </p>
+        );
+    }
+
+    return element;
+  };
+
+
   render() {
     // We only consider the page renderable once the search component works
     // If error in fetching the track data, but we still have learning
@@ -185,6 +217,9 @@ class LearningPathDiscoveryPage extends Component {
     }
 
     const { activeIndex } = this.state;
+
+    let resList = this.ResultsList();
+    console.log('render resList: ', resList);
 
     return <Grid celled='internally'>
       <Grid.Row>
@@ -218,6 +253,7 @@ class LearningPathDiscoveryPage extends Component {
         </Grid.Column>
         <Grid.Column width={12}>
           <Header as="h1">Results</Header>
+          {resList}
         </Grid.Column>
       </Grid.Row>
     </Grid>
