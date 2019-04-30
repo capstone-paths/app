@@ -36,26 +36,25 @@ class HomePage extends Component {
             marginTop: "1em"
           }}
         >
-          <div class="eight wide tablet four wide computer column">
+          <div class="eight wide tablet five wide computer column">
             <div class="ui fluid card">
               <div class="content">
                 <h3 class="ui center aligned header">
-                  <a href="frontend.html">Front-End Dev</a>
+                  <a href="frontend.html">Front-End Development</a>
                 </h3>
               </div>
               <div class="icon">
                 <i class="html5 icon" />
                 <i class="css3 icon" />
                 <i class="js icon" />
-                <i class="react icon" />
               </div>
             </div>
           </div>
-          <div class="eight wide tablet four wide computer column">
+          <div class="eight wide tablet five wide computer column">
             <div class="ui fluid card">
               <div class="content">
                 <h3 class="ui center aligned header">
-                  <a href="backend.html">Back-End Dev</a>
+                  <a href="backend.html">Back-End Development</a>
                 </h3>
               </div>
               <div class="icon">
@@ -63,11 +62,25 @@ class HomePage extends Component {
               </div>
             </div>
           </div>
-          <div class="eight wide tablet four wide computer column">
+          <div class="eight wide tablet five wide computer column">
             <div class="ui fluid card">
               <div class="content">
                 <h3 class="ui center aligned header">
-                  <a href="android.html">Android Dev</a>
+                  <a href="fullstack.html">Full-Stack Development</a>
+                </h3>
+              </div>
+              <div class="icon">
+                <i class="js icon" />
+                <i class="react icon" />
+                <i class="node icon" />
+              </div>
+            </div>
+          </div>
+          <div class="eight wide tablet five wide computer column">
+            <div class="ui fluid card">
+              <div class="content">
+                <h3 class="ui center aligned header">
+                  <a href="android.html">Android Development</a>
                 </h3>
               </div>
               <div class="icon">
@@ -75,15 +88,27 @@ class HomePage extends Component {
               </div>
             </div>
           </div>
-          <div class="eight wide tablet four wide computer column">
+          <div class="eight wide tablet five wide computer column">
             <div class="ui fluid card">
               <div class="content">
                 <h3 class="ui center aligned header">
-                  <a href="ios.html">iOS Dev</a>
+                  <a href="ios.html">iOS Development</a>
                 </h3>
               </div>
               <div class="icon">
                 <i class="apple icon" />
+              </div>
+            </div>
+          </div>
+          <div class="eight wide tablet five wide computer column">
+            <div class="ui fluid card">
+              <div class="content">
+                <h3 class="ui center aligned header">
+                  <a href="datascience.html">Data Science</a>
+                </h3>
+              </div>
+              <div class="icon">
+                <i class="python icon" />
               </div>
             </div>
           </div>
