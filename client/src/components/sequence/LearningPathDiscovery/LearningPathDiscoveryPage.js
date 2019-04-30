@@ -13,7 +13,6 @@ class LearningPathDiscoveryPage extends Component {
     super(props);
 
     const { trackId } = this.props.match.params;
-    console.log('constructor trackId: ', trackId);
 
     this.state = {
       activeIndex: -1,
@@ -38,14 +37,12 @@ class LearningPathDiscoveryPage extends Component {
     LerntApi
       .getAllTrackNames()
       .then(res => {
-        console.log('getAllTrackNames success: ', res.data);
         this.setState({
           trackList: res.data,
           trackListState: netState.LOADED
         });
       })
       .catch(e => {
-        console.error('getTrackNames error: ', e);
         const errors = { ...this.state.errors };
         errors.trackList = e.response.data.error || 'Error: track list' +
           ' unavailable';
@@ -70,7 +67,6 @@ class LearningPathDiscoveryPage extends Component {
     LerntApi
       .getAllPathsByTrackID(trackId)
       .then(res => {
-        console.log('getLearningPathList success: ', res.data);
         this.setState({
           trackId,
           learningPathList: res.data,
@@ -78,7 +74,6 @@ class LearningPathDiscoveryPage extends Component {
         });
       })
       .catch(e => {
-        console.error('getAllPathsByTrackId error: ', e);
         const errors = { ...this.state.errors };
         errors.learningPathList = e.response.data.error || 'Error: could' +
           ' not get learning path list';
@@ -98,14 +93,12 @@ class LearningPathDiscoveryPage extends Component {
     LerntApi
       .getSystemRecommendation(trackId)
       .then(res => {
-        console.log('getSystemRecommendation success: ', res.data);
         this.setState({
           recommendationData: res.data,
           recommendationDataState: netState.LOADED,
         });
       })
       .catch(e => {
-        console.error('getSystemRecommendation error: ', e);
         const errors = { ...this.state.errors };
         errors.recommendationData = e.response.data.error || 'Error: could' +
           ' not retrieve system recommendations for track id: ' + trackId;
@@ -121,13 +114,6 @@ class LearningPathDiscoveryPage extends Component {
     const { index } = titleProps;
     var state = this.state
     state.activeIndex = state.activeIndex === index ? -1 : index
-    this.setState(state)
-  };
-
-
-  seachSubmit = (e, titleProps) => {
-    var state = this.state
-    // state.results = <SequenceList></SequenceList>
     this.setState(state)
   };
 
@@ -176,10 +162,6 @@ class LearningPathDiscoveryPage extends Component {
 
 
   ResultsList = () => {
-    console.log('results list called, data: ', this.state.learningPathList);
-    console.log('state', this.state.learningPathListState);
-    console.log('trackId', this.state.trackId);
-
     let element;
 
     switch (this.state.learningPathListState)
@@ -219,36 +201,38 @@ class LearningPathDiscoveryPage extends Component {
     const { activeIndex } = this.state;
 
     let resList = this.ResultsList();
-    console.log('render resList: ', resList);
 
     return <Grid celled='internally'>
       <Grid.Row>
 
         <Grid.Column width={4} >
           <Form>
-            <Form.Group widths='equal'>
-              {/*<Form.Input fluid label='Search' placeholder='Example: Java' />*/}
+            <Form.Field>
+              <label>Search By Category</label>
               {this.getSearchInputElement()}
-            </Form.Group>
-            <Accordion>
-              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                <Icon name='dropdown' />
-                Advanced
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <Form.Group inline>
-                  <div class="field"><label>Difficulty</label><div class="ui fluid"><input type="range" min="0" max="5" step="1" /></div></div>
-                </Form.Group>
-                <Form.Group inline>
-                  <div class="field"><label>Work Load</label><div class="ui fluid"><input type="range" min="0" max="5" step="1" /></div></div>
-                </Form.Group>
-                <Form.Group inline>
-                  <div class="field"><label>Rating</label><div class="ui fluid"><input type="range" min="0" max="5" step="1" /></div></div>
-                </Form.Group>
-              </Accordion.Content>
-            </Accordion>
+            </Form.Field>
+            <Form.Button >Search</Form.Button>
+            {
+              this.state.learningPathList.length > 0 &&
+              <Accordion>
+                <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+                  <Icon name='dropdown' />
+                  Filters
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 0}>
+                  <Form.Group inline>
+                    <div class="field"><label>Difficulty</label><div class="ui fluid"><input type="range" min="0" max="5" step="1" /></div></div>
+                  </Form.Group>
+                  <Form.Group inline>
+                    <div class="field"><label>Work Load</label><div class="ui fluid"><input type="range" min="0" max="5" step="1" /></div></div>
+                  </Form.Group>
+                  <Form.Group inline>
+                    <div class="field"><label>Rating</label><div class="ui fluid"><input type="range" min="0" max="5" step="1" /></div></div>
+                  </Form.Group>
+                </Accordion.Content>
+              </Accordion>
+            }
 
-            <Form.Button onClick={this.seachSubmit}>Search</Form.Button>
           </Form>
         </Grid.Column>
         <Grid.Column width={12}>
@@ -257,8 +241,6 @@ class LearningPathDiscoveryPage extends Component {
         </Grid.Column>
       </Grid.Row>
     </Grid>
-
-
   }
 }
 
