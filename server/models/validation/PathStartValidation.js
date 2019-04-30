@@ -3,7 +3,7 @@ const Joi = require('joi');
 const ValidationError = require('./ValidationError');
 
 const PathStartSchema = {
-  id: Joi.string().guid(),
+  pathID: Joi.string().guid(),
   name: Joi.string().alphanum().min(2).max(30).required()
 }
 

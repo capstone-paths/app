@@ -33,6 +33,8 @@ router.get('/', (req, res, next) => {
  * @param  id (in-path, mandatory, id)
  */
 router.get('/:id', (req, res, next) => {
+  console.log('learning-paths called, id: ', req.params.id);
+
   if (!req.params.id) {
     res.status(400);
   }
@@ -95,16 +97,12 @@ router.post('/toggle-subscribe/:sequenceID/:userID', (req, res, next) => {
  * @param    data (in-body, mandatory, LearningPath)
  */
 router.post('/', (req, res, next) => {
-  const { data } = req.body;
-  if (!data) {
-    res.status(400);
-  }
-
+  const { userID, pathID, name, rels} = req.body;
+  
   const session = utils.getDBSession(req);
-  const lp = new LearningPath(data);
 
-  lp
-    .save(session)
+  LearningPath
+    .save(session, userID, pathID, name, rels)
     .then(response => res.json(response))
     .catch(next);
 });
@@ -142,6 +140,7 @@ router.get('/system-recommendation/:id', (req, res, next) => {
   // get the track id
   // invoke the custom procedure
   const { id } = req.params;
+  console.log('system-recommendation called, id: ', id);
   if (!id) {
     res.status(400).send({ error: 'missing id' });
   }
@@ -154,6 +153,35 @@ router.get('/system-recommendation/:id', (req, res, next) => {
       if (!result) {
         res.status(400).send({ error: `No recommendations for id: ${id}` });
       } 
+
+      res.json(result);
+    })
+    .catch(next);
+});
+
+
+/**
+ * @route  GET /api/learning-paths/by-track-id/:trackID
+ * @access Public
+ * @desc   Returns path metadata for all paths in the system with a given track
+ * @param  trackID (in-path, mandatory, id)
+ */
+router.get('/by-track-id/:id', (req, res, next) => {
+  const { id } = req.params;
+  console.log('by-track-id called, id: ', id);
+
+  if (!id) {
+    res.status(400).send({ error: 'missing trackID' });
+  }
+
+  const session = utils.getDBSession(req);
+
+  LearningPath
+    .getPathDataByTrackID(session, id)
+    .then((result) => {
+      if (!result) {
+        res.status(400).send({ error: `No learning paths for trackID: ${id}` });
+      }
 
       res.json(result);
     })

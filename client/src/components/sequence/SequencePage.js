@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import CourseNetworkVis from './CourseNetworkVis/CourseNetworkVis';
 import { Icon, Button } from 'semantic-ui-react'
-import { Header, Menu, Grid, Segment } from 'semantic-ui-react'
+import { Header, Menu, Grid, Input } from 'semantic-ui-react'
 import AddCourseSearch from './AddCourseSearch/AddCourseSearch'
 import CourseDetailsMini from '../course/CourseDetailsMini';
 import SubscribeToSequenceButton from './SubscribeToSequenceButton/SubscribeToSequenceButton'
 
-class SequencePage extends Component {
+import './SequencePage.css';
 
+class SequencePage extends Component {
 
   constructor(props) {
     super(props);
@@ -23,32 +24,33 @@ class SequencePage extends Component {
 
   componentDidMount() {
     const { sequenceId } = this.props.match.params;
-    LerntApi
-      .getSequence(sequenceId)
-      .then(response => {
-        this.setState({ loaded: true, sequenceData: response.data });
-      })
-      .catch(e => {
-        // TODO: We need error handling
-        console.log('SequencePage error: ', e);
-      });
+    if(sequenceId !== 'new'){
+      LerntApi
+        .getSequence(sequenceId)
+        .then(response => {
+          this.setState({ loaded: true, sequenceData: response.data });
+        })
+        .catch(e => {
+          // TODO: We need error handling
+          console.log('SequencePage error: ', e);
+        });
+    }
   }
 
   // Arrow functions allow to access 'this' without binding
   // https://medium.freecodecamp.org/react-binding-patterns-5-approaches-for-handling-this-92c651b5af56
-  onClick = () => {
-    alert('Add course to sequence');
-  };
-
-  saveSequence = () => {
-    alert('saved');
+  addCourseToSequence = (event, course) => {
+    this.visRef.current.addNode(course);
   };
 
   onCourseSelect = (course) => {
-    const { pathId } = this.state;
+    const { pathID } = this.state.sequenceData !== undefined ? this.state.sequenceData.sequence  :  {pathID: 'new'};
     const { selectedCourse } = course;
+    var state = this.state;
+    state.currentCourse = course.selectedCourse;
+    this.setState(state);
     LerntApi
-      .getSequenceCourseRecommendation('2', pathId, selectedCourse)
+      .getSequenceCourseRecommendation('2', pathID, selectedCourse)
       .then(response => {
         this.setState({ courseRecommendations: response.data });
       });
@@ -64,7 +66,30 @@ class SequencePage extends Component {
       <CourseDetailsMini
         courseId ={currentCourse}
       />
-    )
+    );
+  };
+
+  saveSequence = () => {
+    let edges = this.visRef.current.network.body.data.edges._data;
+    let rels = Object.keys(edges).map(key => {
+      let edge = edges[key];
+      return {
+        start: edge.from,
+        end: edge.to
+      }
+    });
+    let sequence = {
+      pathID : this.state.sequenceData !== undefined ? this.state.sequenceData.sequence.pathID : null,
+      name :  document.getElementById('nameInput').value,
+      rels : rels,
+      //todo replace with context of user
+      userID: '2'
+    };
+    LerntApi.saveSequence(sequence)
+    .then(response=>{
+      this.setState({ loaded: true, sequenceData: response.data });
+      this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+    })
   };
 
   getCourseRecommendations = () => {
@@ -77,7 +102,9 @@ class SequencePage extends Component {
       courseRecommendations.map(course => (
         <Menu.Item
           name='test'
-          onClick={this.onClick}>{course.name}
+          onClick={(e) => {
+            this.addCourseToSequence(e, course)
+          }}>{course.name} 
         </Menu.Item>
       ))
     )
@@ -86,43 +113,71 @@ class SequencePage extends Component {
   render() {
     let vis;
 
-    if (this.state.loaded) {
+    if (this.state.loaded || ( this.props.match.params.sequenceId === 'new') ) {
       vis = <CourseNetworkVis
               ref={this.visRef}
               sequenceData={this.state.sequenceData}
               onCourseSelect={this.onCourseSelect}
+              useAutoComplete
             />
     } else {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
     }
 
-    return (
-      <div style={{ fontSize: '2em' }}>
+   return (
+      <div style={{ fontSize: '2em'}}>
 
-        <Header as='h1' attached='top'>
-          {this.state.loaded ? this.state.sequenceData.sequence.name : ''}
-          <SubscribeToSequenceButton
-            sequenceID ={this.props.match.params.sequenceId}
-          />
-          <Button
-            color="green"
-            style={{float: 'right'}}
-            onClick={this.saveSequence}>
-              Save
-              <Icon name='right chevron' />
-          </Button>
-        </Header>
+          <Grid
+            celled
+            style={{
+              "margin-top": 0,
+              height: 'calc(100vh - 200px)',
+              overflow:'hidden'
+            }}
+          >
+            <Grid.Row style={{ height: "12%" }} >
+              <Grid.Column width={16} style={{ padding: "0.8em" }}>
 
-        <Segment attached style={{ padding: "0em" }}>
-          <Grid celled='internally'>
-            <Grid.Row>
+                <Header as='h1'>
+                  <Input
+                    id="nameInput"
+                    style={{ width:'66%' }}
+                    className="syllabus-name-input"
+                    defaultValue={this.state.loaded ?
+                      this.state.sequenceData.sequence.name : ''}
+                  />
+                  <SubscribeToSequenceButton
+                    sequenceID={this.props.match.params.sequenceId}
+                  />
+                  <Button
+                    color="green"
+                    style={{ float: 'right' }}
+                    onClick={this.saveSequence}>
+                    Save
+                    <Icon name='right chevron' />
+                  </Button>
+                </Header>
+
+              </Grid.Column>
+            </Grid.Row>
+
+            <Grid.Row style={{ height: "88%" }}>
 
               <Grid.Column width={12}>
-                {vis}
+                <div style={{ height: "100%", overflow: "hidden" }}>
+                  {vis}
+                </div>
               </Grid.Column>
 
               <Grid.Column width={4} style={{ padding: "0em" }}>
-                <Menu fluid vertical >
+                <Menu
+                  fluid
+                  vertical
+                  style={{
+                    "box-shadow": "none",
+                    border: "none"
+                  }}
+                >
                   <Menu.Item>
                     <Header as='h4'>Search Courses</Header>
                     <AddCourseSearch />
@@ -133,20 +188,19 @@ class SequencePage extends Component {
                     {this.getCourseRecommendations()}
                   </Menu.Item>
 
-                  <Menu.Item>
+                  {/* <Menu.Item>
                     <Header as='h4'>Sequence Statistics</Header>
                     <p>100% Awesome</p>
-                  </Menu.Item>
+                  </Menu.Item> */}
 
                   <Menu.Item>
                     {this.getCourseDetails()}
                   </Menu.Item>
                 </Menu>
-
               </Grid.Column>
+
             </Grid.Row>
           </Grid>
-        </Segment>
 
       </div>
     );

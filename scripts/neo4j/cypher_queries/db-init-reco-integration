@@ -10,47 +10,6 @@ CREATE(ls1: LearningStyle {learningStyleID: '1', name:'Theorist', description: '
 CREATE(ls2: LearningStyle {learningStyleID: '2', name:'Pragmatist', description: 'Want the real world application'})
 CREATE(ls3: LearningStyle {learningStyleID: '3', name:'Reflector', description: 'Learn by observing'})
 
-CREATE(s1: Skill {skillID: '1', name:'Angular'})
-CREATE(s2: Skill {skillID: '2', name:'CSS'})
-CREATE(s3: Skill {skillID: '3', name:'Graphic Design'})
-CREATE(s4: Skill {skillID: '4', name:'Ember'})
-CREATE(s5: Skill {skillID: '5', name:'HTML'})
-CREATE(s6: Skill {skillID: '6', name:'Information Architecture'})
-CREATE(s7: Skill {skillID: '7', name:'Javascript'})
-CREATE(s8: Skill {skillID: '8', name:'Mechanical Engineering'})
-CREATE(s9: Skill {skillID: '9', name:'Meteor'})
-CREATE(s10: Skill {skillID: '10', name:'NodeJS'})
-CREATE(s11: Skill {skillID: '11', name:'Full-Stack Engineering'})
-CREATE(s12: Skill {skillID: '12', name:'Python'})
-CREATE(s13: Skill {skillID: '13', name:'Rails'})
-CREATE(s14: Skill {skillID: '14', name:'React'})
-CREATE(s15: Skill {skillID: '15', name:'Data Science'})
-CREATE(s16: Skill {skillID: '16', name:'Ruby'})
-CREATE(s17: Skill {skillID: '17', name:'UI Design'})
-CREATE(s18: Skill {skillID: '18', name:'User Experience'})
-
-
-// Create some test users
-CREATE ( u001: User { userID: '0', username: 'PJ', bio: '' } )
-CREATE ( u002: User { userID: '1', username: 'Ajay', bio: '' } )
-CREATE ( u003: User { userID: '2', username: 'Sam', bio: "I'm a management consultant. I spend the bulk of my time in data & analytics, especially in the areas of project management and strategic operations." } )
-CREATE ( u004: User { userID: '3', username: 'Jon', bio: '' } )
-CREATE ( u005: User { userID: '4', username: 'Stephen', bio: ''} )
-
-// This is a trick to separate commands
-WITH count(*) as dummy
-
-// Use this pattern for substituion
-// OPTIONAL MATCH (xxxx: Course) WHERE toLower(x.name) CONTAINS 'x'
-
-// Sam Sequence #1 Courses
-MATCH (pfjs: Course) WHERE toLower(pfjs.name) CONTAINS 'programming foundations with javascript'
-MATCH (gitv: Course) WHERE toLower(gitv.name) CONTAINS 'version control with git' AND toLower(gitv.institution) CONTAINS 'udacity'
-MATCH (acss: Course) WHERE toLower(acss.name) CONTAINS 'advanced css concepts'
-MATCH (pwjs: Course) WHERE toLower(pwjs.name) CONTAINS 'programming for the web with javascript'
-MATCH (feui: Course) WHERE toLower(feui.name) ENDS WITH 'front-end web ui frameworks and tools'
-MATCH (reac: Course) WHERE toLower(reac.name) CONTAINS 'front-end web development with react'
-
 // Sam Sequence #2 Courses
 MATCH (dbme: Course) WHERE toLower(dbme.name) CONTAINS 'database management essentials'
 MATCH (mong: Course) WHERE toLower(mong.name) ENDS WITH 'introduction to mongodb'
@@ -103,7 +62,7 @@ MERGE (sam)-[:SUBSCRIBED]->(st02)
 // This is a trick to separate commands
 WITH count(*) as dummy
 
-//Register Sam's learning style 
+//Register Sam's learning style
 MATCH (u:User),(ls:LearningStyle)
 WHERE u.userID = "2" AND ls.learningStyleID = "1"
 CREATE (u)-[:LEARNS_BY]->(ls)
@@ -131,7 +90,7 @@ CREATE (u)-[:INTERESTED]->(s)
 WITH count(*) as dummy
 
 // Create a couple fake courses (to see them clearly)
-CREATE ( c1: Course {courseID: 'madeupCourse1', name: 'Course A', subject: 'A', tags: ["one"]} ) 
+CREATE ( c1: Course {courseID: 'madeupCourse1', name: 'Course A', subject: 'A', tags: ["one"]} )
 CREATE ( c2: Course {courseID: 'madeupCourse2', name: 'Course B', subject: 'B', tags: ["two"]} )
 CREATE ( c3: Course {courseID: 'madeupCourse3', name: 'Course C', subject: 'C', tags: ["three"]} )
 CREATE ( t0: Track {trackID: 'madeupTrack', name: 'Experimental Track' } )
@@ -139,3 +98,4 @@ CREATE ( t0: Track {trackID: 'madeupTrack', name: 'Experimental Track' } )
 MERGE (c1)-[:NEXT {sequenceID: 'exp1'}]->(c3)
 MERGE (c2)-[:NEXT {sequenceID: 'exp2'}]->(c3)
 MERGE (c3)-[:NEXT {sequenceID: 'exp3'}]->(t0)
+

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Container, Header, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { Z_BLOCK } from "zlib";
+
 class HomePage extends Component {
   render() {
     let bigFont = { fontSize: "3em" };

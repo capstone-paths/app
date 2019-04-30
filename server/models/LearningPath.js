@@ -2,6 +2,7 @@ const { checkIfAllCoursesExist } = require('./validation/LearningPathValidation'
 const ValidationError = require('./validation/ValidationError');
 const User = require('./User');
 const PathStart = require('./PathStart');
+const uuidv1 = require('uuid/v1');
 
 class LearningPath {
   constructor(properties) {
@@ -16,36 +17,38 @@ class LearningPath {
    * Saves a LearningPath to the database
    * @param {Session} session 
    */
-  async save(session) {
-    const { authorID, pathStartData, relationships } = this;
-
-    const user = await User.findById(session, authorID);
-    if (!user) {
-      throw new ValidationError(`User does not exist: ${authorID}`);
-    }
-
+  static async save(session, userID, pathID, name, relationships) {
     await checkIfAllCoursesExist(session, relationships);
 
-    const pathStart = new PathStart(pathStartData);
-    await pathStart.validate();
-    this.id = pathStart.id;
+
+    // TODO: Not sure if this makes sense at the model layer. Commenting out for now  
+    // const pathStart = new PathStart(pathStartData);
+    // await pathStart.validate();
+
+    let firstNext = relationships.find(r => r.start == undefined).end
 
     const query = `
-      MATCH (author: User { userID: {authorID} } )
-      CREATE (start: PathStart)
-      SET start = {pathStartData}
-      CREATE (author)-[:CREATED]->(start)
+      OPTIONAL MATCH (c: Course)-[oldR:NEXT { pathID: {pathID} }]->() DELETE oldR WITH oldR
+      MATCH (author: User { userID: {userID} } )
+      MERGE (start: PathStart {pathID: {pathID} })
+      SET start.name = {name}
+      MERGE (author)-[:CREATED]->(start) 
+      WITH start, author 
+      MATCH(firstCourse: Course {courseID: {firstNext}})
+      MERGE (start)-[:NEXT { pathID: {pathID} }]->(firstCourse)
       WITH author, start
       UNWIND {relationships} AS rel
       MATCH (c1: Course) WHERE c1.courseID = rel.start
       MATCH (c2: Course) WHERE c2.courseID = rel.end
-      CREATE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
+      MERGE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
       RETURN author, start
     `;
-
-    const pathID = this.id;
-    await session.run(query, { authorID, pathID, pathStartData, relationships });
-    return this;
+  
+    if(pathID === null){
+      pathID = uuidv1()
+    }
+    await session.run(query, { userID, pathID, name, relationships, firstNext });
+    return this.findById(session, pathID);
   }
 
   /**
@@ -88,12 +91,14 @@ class LearningPath {
       RETURN sequenceData
     `;
 
+    console.log('findById model, about to execute query, id: ', id);
     const results = await session.run(query, { id });
     if (results.records.length === 0) {
       return undefined;
     }
 
     let records = results.records[0];
+    console.log('findById model, return results, id: ', id);
     return records.get('sequenceData');
   }
 
@@ -147,9 +152,9 @@ class LearningPath {
      * @param {Session} session 
      * @param {Integer} id 
      */
-  static async findRecommendations(session, userId, sequenceId, courseId) {
+  static async findRecommendations(session, userId, pathId, courseId) {
     //todo expand on this. This is a most popular search
-    const query = `
+    const similarQuery = `
     MATCH (p1:User {userID: $userId})-[:EXPERIENCED]->(skill1)
     WITH p1, collect(id(skill1)) AS p1Skill
     MATCH (p2:User)-[:EXPERIENCED]->(skill2)
@@ -158,17 +163,31 @@ class LearningPath {
     WHERE algo.similarity.jaccard(p1Skill, p2Skill) > $similarityThreshold 
     MATCH (p2)-[:SUBSCRIBED]->(paths: PathStart)
     MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse)
-    RETURN PROPERTIES(nextCourse) as course,
-           count(course)
-    ORDER BY count(course) desc
+    WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
+    WITH PROPERTIES(nextCourse) as nextCourse,
+           count(course) as similarCount
+    RETURN nextCourse, similarCount
+    ORDER BY similarCount desc
     LIMIT 3
     `;
     let similarityThreshold = .25;
-    const results = await session.run(query, { courseId, userId, similarityThreshold });
-    if (results.records.length === 0) {
-      return undefined;
-    }
-    return results.records.map(r => r.get('course'));
+    const similarResults = await session.run(similarQuery, { courseId, userId, pathId, similarityThreshold });
+
+    var courses = similarResults.records.map(r => r.get('nextCourse'));
+
+    const popularQuery = `
+    MATCH (course: Course {courseID : $courseId})-[next :NEXT]->(nextCourse)
+    WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
+    WITH PROPERTIES(nextCourse) as nextCourse,
+           count(course) as count
+    RETURN nextCourse, count
+    ORDER BY count desc
+    LIMIT 3
+    `;
+
+    const popularResults =  await session.run(popularQuery, { courseId, pathId });
+    courses.push(...popularResults.records.map(r=>r.get('nextCourse')));
+    return courses.slice(0,3);
   }
 
   /**
@@ -189,9 +208,6 @@ class LearningPath {
     if (results.records.length === 0) {
       return undefined;
     }
-
-    let sequence, nodes, rels;
-
     let records = results.records[0];
 
     // It would be much cleaner to do all this filtering and mapping
@@ -199,34 +215,56 @@ class LearningPath {
     // VirtualNodes in the custom procedures, regular Cypher filter
     // functions do not seem to work properly, so have to do it in code
 
-    sequence = records
+    let sequence = records
       .get('nodes')
       .filter(n => n.labels.includes('PathStart'))
       .map(n => n.properties);
 
-    nodes = records
+    let courseNodes = records
       .get('nodes')
       .filter(n => n.labels.includes('Course'))
       .map(n => n.properties);
 
 
-    rels = records
+    let rels = records
       .get('relationships')
       .map(rel => ({
-        start: rel.properties.originalStartID.toNumber(),
-        end: rel.properties.originalEndID.toNumber()
+        start: rel.properties.originalStartID,
+        end: rel.properties.originalEndID,
       }));
 
-    return { sequence, nodes, rels };
-  }
-
-  // TODO: Need to think about this
-  toJSON() {
-    const { authorID, pathStartData, relationships } = this;
-    return { authorID, pathStartData, relationships };
+    return { sequence, courseNodes, rels };
   }
 
 
+  /**
+   * Fetches a list of all paths made by users for a given track;
+   * does not return entire learning paths, but rather useful metadata
+   * such as author id and name, path name, etc.
+   * @param {Session} session Neo4j session context
+   * @param {uuid} trackID The track for which to get path data
+   */
+  static async getPathDataByTrackID(session, trackID) {
+    const query = `
+      MATCH (t: Track { trackID: $trackID })<-[:BELONGS_TO]-(p: PathStart)
+      MATCH (u: User)-[:CREATED]->(p)
+       WITH { 
+        userID: u.userID,
+        userName: u.username,
+        pathID: p.pathID, 
+        pathName: p.name 
+      } AS pathData
+      RETURN pathData
+    `;
+
+    const results = await session.run(query, { trackID });
+
+    if (results.records.length === 0)  {
+      return undefined;
+    }
+
+    return results.records.map(result => result.get('pathData'));
+  }
 }
 
 module.exports = LearningPath;

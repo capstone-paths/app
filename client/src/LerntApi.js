@@ -1,8 +1,11 @@
-const axios = require('axios');
+import axios from 'axios';
 
 export default class LerntApi {
     static getSequence(id) {
         return axios.get('/api/learning-paths/' + id)
+    }
+    static saveSequence(sequence) {
+        return axios.post('/api/learning-paths/', sequence)
     }
     getSequences() {
         return axios.get('/api/learning-paths/')
@@ -33,5 +36,15 @@ export default class LerntApi {
     }
     getLearningStyles() {
         return axios.get('/api/learning-styles/')
+    }
+    // TODO: Must pass in user for additional context
+    static getSystemRecommendation(trackID) {
+        return axios.get('/api/learning-paths/system-recommendation/' + trackID);
+    }
+    static getAllTrackNames() {
+        return axios.get('/api/tracks');
+    }
+    static getAllPathsByTrackID(id) {
+        return axios.get('/api/learning-paths/by-track-id/' + id);
     }
 }

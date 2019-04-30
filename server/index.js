@@ -17,8 +17,9 @@ const learningPaths = require('./routes/learning-paths');
 const courses = require('./routes/courses');
 const users = require('./routes/users');
 const skills = require('./routes/skills');
+const tracks = require('./routes/tracks');
 const learningStyles = require('./routes/learning-styles');
-const authREST = require('./routes/auth-rest')
+const authREST = require('./routes/auth-rest');
 
 
 
@@ -40,8 +41,8 @@ app.use('/api/courses', courses);
 app.use('/api/users', users);
 app.use('/api/skills', skills);
 app.use('/api/learning-styles', learningStyles);
+app.use('/api/tracks', tracks);
 app.use('/auth', authREST);
-
 
 
 // Serve static content from React app build
