@@ -13,8 +13,9 @@ class SysRecommendationPage extends Component {
   visRef = React.createRef();
 
   componentDidMount() {
+    console.log(this.props);
     LerntApi
-      .getSystemRecommendation('madeupTrack')
+      .getSystemRecommendation(this.props.match.params.trackId)
       .then(response => {
         console.log('getSysRecommendation res', response.data);
         this.setState({ loaded: true, sequenceData: response.data });
