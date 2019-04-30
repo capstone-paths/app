@@ -1,0 +1,141 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "AWS CloudFormation Template to Configure and launch the AWS Elastic Beanstalk Lernt.io application.",
+
+  "Parameters" : {
+    "KeyName": {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the AWS Elastic Beanstalk instance",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription" : "neo4j-ec2-key"
+    }
+  },
+
+  "Mappings" : {
+    "Region2Principal" : {
+      "us-east-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+      "us-east-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" }
+    }
+
+  },
+
+  "Resources" : {
+    "WebServerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties" : {
+        "AssumeRolePolicyDocument" : {
+          "Statement"  : [{
+            "Effect"   : "Allow",
+            "Principal": { "Service": [{ "Fn::FindInMap" : ["Region2Principal", {"Ref" : "AWS::Region"}, "EC2Principal"]}] },
+            "Action"   : [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Path": "/"
+      }
+    },
+
+    "WebServerRolePolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName" : "WebServerRole",
+        "PolicyDocument" : {
+          "Statement"  : [ {
+            "Effect"    : "Allow",
+            "NotAction" : "iam:*",
+            "Resource"  : "*"
+          } ]
+        },
+        "Roles": [ { "Ref": "WebServerRole" } ]
+      }
+    },
+
+    "WebServerInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [ { "Ref": "WebServerRole" } ]
+      }
+    },
+
+    "LerntApplication" : {
+      "Type" : "AWS::ElasticBeanstalk::Application",
+      "Properties" : {
+        "Description" : "AWS Elastic Beanstalk Lernt.io Node.js Application"
+      }
+    },
+
+    "LerntApplicationVersion" : {
+      "Type" : "AWS::ElasticBeanstalk::ApplicationVersion",
+      "Properties" : {
+        "Description" : "Version 1.0",
+        "ApplicationName" : { "Ref" : "LerntApplication" },
+        "SourceBundle" : {
+          "S3Bucket" : "cf-ebs-lernt.io-code" ,
+          "S3Key" : "lernt.io.zip"
+        }
+      }
+    },
+
+    "LerntConfigurationTemplate" : {
+      "Type" : "AWS::ElasticBeanstalk::ConfigurationTemplate",
+      "Properties" : {
+        "ApplicationName" : { "Ref" : "LerntApplication" },
+        "Description" : "SSH access to Node.JS Application",
+        "SolutionStackName" : "64bit Amazon Linux 2018.03 v4.8.2 running Node.js",
+        "OptionSettings" : [{
+          "Namespace" : "aws:autoscaling:launchconfiguration",
+          "OptionName" : "EC2KeyName",
+          "Value" : { "Ref" : "KeyName" }
+        },
+        {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "IamInstanceProfile",
+          "Value": { "Ref": "WebServerInstanceProfile" }
+        },
+        {
+          "Namespace": "aws:autoscaling:launchconfiguration",
+          "OptionName": "InstanceType",
+          "Value": "t2.medium"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "ENVIRONMENT_TYPE",
+        "Value": "PROD"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_NEO4J_BOLT_URL",
+        "Value": "{{resolve:ssm:CF_PS_NEO4J_BOLT_URL:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_NEO4J_USER",
+        "Value": "{{resolve:ssm:CF_PS_NEO4J_USER:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_NEO4J_PWD",
+        "Value": "{{resolve:ssm:CF_PS_NEO4J_PWD:1}}"
+        }
+
+      ]
+      }
+    },
+
+    "LerntEnvironment" : {
+      "Type" : "AWS::ElasticBeanstalk::Environment",
+      "Properties" : {
+        "Description" :  "AWS Elastic Beanstalk Environment running Sample Node.js Application",
+        "ApplicationName" : { "Ref" : "LerntApplication" },
+        "TemplateName" : { "Ref" : "LerntConfigurationTemplate" },
+        "VersionLabel" : { "Ref" : "LerntApplicationVersion" }
+      }
+    }
+  },
+  "Outputs" : {
+    "URL" : {
+      "Description" : "URL of the Lernt AWS Elastic Beanstalk Environment",
+      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : ["LerntEnvironment", "EndpointURL"] }]]}
+    }
+  }
+}
