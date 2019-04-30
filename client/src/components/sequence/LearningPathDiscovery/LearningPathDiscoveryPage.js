@@ -199,7 +199,7 @@ class LearningPathDiscoveryPage extends Component {
       case netState.IDLE:
         element = (
           <p>
-            Nothing here. Search for a track to see available Learning Paths
+            Nothing here. Search for a track to see available Learning Paths.
           </p>
         );
     }

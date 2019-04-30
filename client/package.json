@@ -13,6 +13,7 @@
     "awesomplete": "^1.1.4",
     "axios": "0.18.0",
     "eslint-config-react-app": "3.0.8",
+    "faker": "^4.1.0",
     "react": "^16.8.5",
     "react-autocomplete": "^1.8.1",
     "react-dom": "^16.8.5",
