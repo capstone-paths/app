@@ -127,7 +127,33 @@ class LearningPathDiscoveryPage extends Component {
     this.setState(state)
   };
 
+  getSearchInputElement = () => {
+    let element;
+
+    switch(this.state.trackListState)
+    {
+      case netState.LOADED:
+        element = <input />;
+        break;
+      case netState.ERROR:
+        element = <p>{this.state.errors.trackList}</p>;
+        break;
+      case netState.LOADING:
+      default:
+        element = <div>Loading ... <Icon loading name='spinner' /></div>;
+    }
+
+    return element;
+  };
+
   render() {
+    // We only consider the page renderable once the search component works
+    // If error in fetching the track data, but we still have learning
+    // path results, the search component will handle the error individually
+    if (this.state.trackListState === netState.LOADING) {
+      return <div>Loading ... <Icon loading name='spinner' /></div>;
+    }
+
     const { activeIndex } = this.state;
 
     return <Grid celled='internally'>
@@ -136,7 +162,8 @@ class LearningPathDiscoveryPage extends Component {
         <Grid.Column width={4} >
           <Form>
             <Form.Group widths='equal'>
-              <Form.Input fluid label='Search' placeholder='Example: Java' />
+              {/*<Form.Input fluid label='Search' placeholder='Example: Java' />*/}
+              {this.getSearchInputElement()}
             </Form.Group>
             <Accordion>
               <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
