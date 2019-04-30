@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import LerntApi from '../../../LerntApi';
 import { Form, Grid, Accordion, Icon, Header } from 'semantic-ui-react'
+import LerntApi from '../../../LerntApi';
 import SequenceList from '../../collections/SequenceList';
+import ReactAutocomplete from 'react-autocomplete';
+
 
 const netState = { IDLE: 0, LOADING: 1, LOADED: 2, ERROR: 3 };
 
@@ -11,10 +13,12 @@ class LearningPathDiscoveryPage extends Component {
     super(props);
 
     const { trackId } = this.props.match.params;
+    console.log('constructor trackId: ', trackId);
 
     this.state = {
       activeIndex: -1,
       searchInput: '',
+      trackId,
       trackList: [],
       trackListState: netState.LOADING,
       learningPathList: [],
@@ -51,8 +55,7 @@ class LearningPathDiscoveryPage extends Component {
         });
       });
 
-    const { trackId } = this.props.match.params;
-
+    const { trackId } = this.state;
     if (trackId) {
       this.getLearningPathList(trackId);
       this.getSystemRecommendation(trackId);
@@ -84,6 +87,8 @@ class LearningPathDiscoveryPage extends Component {
         })
       });
   }
+
+
 
 
   getSystemRecommendation(trackId) {
@@ -127,17 +132,41 @@ class LearningPathDiscoveryPage extends Component {
     this.setState(state)
   };
 
+
   getSearchInputElement = () => {
     let element;
 
     switch(this.state.trackListState)
     {
       case netState.LOADED:
-        element = <input />;
+        element = document.getElementById('track-search-input');
+        const { trackList } = this.state;
+        element = (
+          <ReactAutocomplete
+            items={ trackList.map(t => ({ id: t.trackID, label: t.name })) }
+            getItemValue={ item => item.id }
+            renderItem={(item, highlighted) =>
+              <div
+                key={item.id}
+                style={{ backgroundColor: highlighted ? '#eee' : 'transparent'}}
+              >
+                {item.label}
+              </div>
+            }
+            value={this.state.searchInput}
+            onChange={e => this.setState({ searchInput: e.target.value })}
+            onSelect={value => {
+              this.getLearningPathList(value);
+              this.getSystemRecommendation(value);
+            }}
+          />
+        );
         break;
+
       case netState.ERROR:
         element = <p>{this.state.errors.trackList}</p>;
         break;
+
       case netState.LOADING:
       default:
         element = <div>Loading ... <Icon loading name='spinner' /></div>;
@@ -145,6 +174,7 @@ class LearningPathDiscoveryPage extends Component {
 
     return element;
   };
+
 
   render() {
     // We only consider the page renderable once the search component works
@@ -188,7 +218,6 @@ class LearningPathDiscoveryPage extends Component {
         </Grid.Column>
         <Grid.Column width={12}>
           <Header as="h1">Results</Header>
-          {this.state.results}
         </Grid.Column>
       </Grid.Row>
     </Grid>
