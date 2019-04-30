@@ -39,7 +39,7 @@ router.get('/:id/:userId', (req, res, next) => {
 
   const session = utils.getDBSession(req);
   Course
-    .findById(session, req.params.id)
+    .findById(session, req.params.id, req.params.userId)
     .then((result) => {
       if (!result) {
         res.status(400);

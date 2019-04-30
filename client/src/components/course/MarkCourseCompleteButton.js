@@ -12,15 +12,20 @@ export default class MarkCourseCompleteButton extends Component {
     }
 
     buttonText(){
-        return "Mark Complete";
-        // if (this.state.isSubscribed){
-        //     return "Unsubscibe";
-        // }else{
-        //     return "Subscribe";
-        // }
+        console.log(this.course);
+        if (this.course.status === 'unstarted'){
+            return "Start Course";
+        }else if (this.course.status === 'inprogress'){
+            return "Mark Complete";
+        } else{
+            return "Unmark Complete";
+        }
     }
     buttonColor(){
         return "blue";
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
     }
     render() {
         let toggleComplete = () => {

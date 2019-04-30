@@ -19,7 +19,7 @@ class CourseDetailsMini extends Component {
             let userId = "2";
             this.api.getCourse(userId, this.props.courseId)
                 .then((response) => {
-                    this.setState({ loaded: true, course: response.data.course })
+                    this.setState({ loaded: true, course: response.data })
                 });
         }
     }
