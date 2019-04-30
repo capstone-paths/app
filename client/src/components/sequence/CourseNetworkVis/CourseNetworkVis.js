@@ -41,7 +41,7 @@ class CourseNetworkVis extends Component {
     super(props);
     this.onCourseSelect = props.onCourseSelect;
 
-    const { courseNodes, rels } = props.sequenceData;
+    const { courseNodes, rels } = props.sequenceData ? props.sequenceData : {courseNodes: [], rels: []} ;
 
     let nodes = courseNodes.map(course => {
       return {
@@ -159,17 +159,19 @@ class CourseNetworkVis extends Component {
       // baseline, then pan up by half of the canvas container size, to get a
       // nice aligned view of the graph along the top
       const first = this.state.nodes.filter(n => n.level === 1).map(n => n.id)[0];
-      const firstY = this.network.getPositions(first)[first].y;
-      const h = document.getElementById('course-sequence').clientHeight;
+      if (first !== undefined) {
+        const firstY = this.network.getPositions(first)[first].y;
+        const h = document.getElementById('course-sequence').clientHeight;
 
-      this.network.moveTo({
-        position: { x: 0, y: firstY + h / 2 },
-        scale: 0.8,
-        animation: {
-          duration: 1500,
-          easingFunction: 'easeInOutCubic'
-        }
-      });
+        this.network.moveTo({
+          position: { x: 0, y: firstY + h / 2 },
+          scale: 0.8,
+          animation: {
+            duration: 1500,
+            easingFunction: 'easeInOutCubic'
+          }
+        });
+      }
     });
 
     // TODO: This should be decoupled from the vis module
