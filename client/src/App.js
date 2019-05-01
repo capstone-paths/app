@@ -18,10 +18,10 @@ class App extends Component {
     return (
       <div>
         <Nav />
+        <Route exact path="/" component={HomePage}/>
         <Container style={{
         paddingTop: '8em',
       }}>
-        <Route exact path="/" component={HomePage}/>
         <Route exact path="/login" component={LoginForm}/>
         <Route exact path="/profile/:userId" component={Profile}/>
         <Route
