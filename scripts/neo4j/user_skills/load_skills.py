@@ -1,4 +1,4 @@
-# program wipes out data in Neo4j database defined in .env file
+# program loads user skills and learning styles
 
 import sys
 import os

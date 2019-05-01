@@ -22,7 +22,8 @@ def main():
         from custom_tags import load_custom_tags     # load custom tags
         from user_skills import load_skills          # load custom  skills
         from read_query import load_cypher_query
-        from load_path_jsons import load_path_jsons
+        from load_path_jsons import load_path_jsons  # load learning paths
+        from mock_users import load_users        # load mock users
 
         wipe_data.delete_database()                  # wipe clean database if needed
         print("\n")
@@ -36,6 +37,10 @@ def main():
         print("\n")
         load_path_jsons.load_path_jsons()            # load path jsons
         print("\n")
+        load_users.load_mock_user()                  # load path jsons
+        print("\n")
+
+
 
     else:
         print("Verify db_conn/.env file for connection information.")

@@ -1,6 +1,7 @@
 """
 Program preprocess random user data file adds random experience and interests and subscribes users to some randomly picked
 learning paths. Finally creates a JSON file.
+mock data was generated using - https://www.generatedata.com/
 """
 import sys
 import os
