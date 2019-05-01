@@ -16,3 +16,21 @@
     font-size: 4em;
 }
 
+.category-card {
+    text-shadow: 2px 2px 3px rgba(25, 25, 25, 0.15);
+    color: rgb(247, 247, 247);
+    background: rgb(227,149,5) !important;
+    background: linear-gradient(150deg, rgba(227,149,5,1) 0%, rgba(253,136,5,1) 100%) !important;
+    text-align: center;
+    padding-top: 1.5em !important;
+    padding-bottom: 1.5em !important;
+}
+
+.category-card > i {
+    align-self: center;
+}
+
+.category-card > h2 {
+    margin-top: 1rem;
+}
+
