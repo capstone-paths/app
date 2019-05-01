@@ -4,11 +4,11 @@
 // Please do not alter this file without checking with the team
 // -- things will very likely break in the server
 
-
-CREATE(ls0: LearningStyle {learningStyleID: '0', name:'Activist', description: 'Learn by doing'})
-CREATE(ls1: LearningStyle {learningStyleID: '1', name:'Theorist', description: 'Want to undstand the theory behind it'})
-CREATE(ls2: LearningStyle {learningStyleID: '2', name:'Pragmatist', description: 'Want the real world application'})
-CREATE(ls3: LearningStyle {learningStyleID: '3', name:'Reflector', description: 'Learn by observing'})
+// Creating learning styles moved to another process
+//CREATE(ls0: LearningStyle {learningStyleID: '0', name:'Activist', description: 'Learn by doing'})
+//CREATE(ls1: LearningStyle {learningStyleID: '1', name:'Theorist', description: 'Want to undstand the theory behind it'})
+//CREATE(ls2: LearningStyle {learningStyleID: '2', name:'Pragmatist', description: 'Want the real world application'})
+//CREATE(ls3: LearningStyle {learningStyleID: '3', name:'Reflector', description: 'Learn by observing'})
 
 
 // Creating skills moved to another process

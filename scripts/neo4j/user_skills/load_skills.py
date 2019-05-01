@@ -2,6 +2,7 @@
 
 import sys
 import os
+import json
 # add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -18,6 +19,7 @@ def add_skill(driver, skill, ctr):
 
 # function to parse scrapped json file
 def process_skills_file(skill_file_wPath):
+    print("Loading Skills as nodes into neo4j database...")
     with open(skill_file_wPath) as skill_file:
         skill = skill_file.readline().strip()             # read skill from file
         ctr = 1
@@ -52,9 +54,9 @@ def load_user_skills():
     process_skills_file('./user_skills/skills_list')
 
     print("Using file found at ./user_skills/learning_style.json as source for learning style nodes" )
-    process_learning_style_json('./user_skills/learning_style.json')
+    process_learning_style_json('./user_skills/learning_styles.json')
 
 
 
 #comment
-load_user_skills()
+#load_user_skills()
