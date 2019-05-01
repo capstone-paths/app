@@ -20,6 +20,7 @@ def main():
         from wipe_data import wipe_data              # lazy loading modules
         from course_loader import course_loader
         from custom_tags import load_custom_tags     # load custom tags
+        from user_skills import load_skills          # load custom  skills
         from read_query import load_cypher_query
         from load_path_jsons import load_path_jsons
 
@@ -29,9 +30,11 @@ def main():
         print("\n")
         load_custom_tags.load_custom_tags_for_courses()    # load course tags
         print("\n")
+        load_skills.load_user_skills()               # load skills
+        print("\n")
         load_cypher_query.process_query_file()       # load sequences from file
         print("\n")
-        load_path_jsons.load_path_jsons()            # load path jsons 
+        load_path_jsons.load_path_jsons()            # load path jsons
         print("\n")
 
     else:
