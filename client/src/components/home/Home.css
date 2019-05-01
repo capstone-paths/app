@@ -1,3 +1,6 @@
+#home-container {
+    padding-top: 67px;
+}
 .hero {
     height: calc(100vh - 180px);
     background: rgb(6,110,226);
