@@ -30,7 +30,14 @@
 }
 
 .category-card:hover {
+    /* Need to set color, otherwise link element sets blue */
+    color: white !important;
     background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(242,123,0,1) 0%, rgba(242,153,0,1) 100% ) !important;
+}
+
+.link-color-override,
+.link-color-override:hover {
+    color: white !important;
 }
 
 .category-card__icon {

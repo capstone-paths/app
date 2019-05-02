@@ -45,19 +45,31 @@ class HomePage extends Component {
 
               <Grid.Row>
                 <Grid.Column>
-                  <Card raised centered fluid className='category-card'>
+                  <Card
+                    raised centered fluid
+                    className='category-card'
+                    as={Link} to='/learning-path-discovery/1'
+                  >
                     <Icon name='react' className='category-card__icon' />
                     <h3>Front-End <br /> Development</h3>
                   </Card>
                 </Grid.Column>
                 <Grid.Column>
-                  <Card raised centered fluid className='category-card'>
+                  <Card
+                    raised centered fluid
+                    className='category-card'
+                    as={Link} to='/learning-path-discovery/5'
+                  >
                     <Icon name='node js' className='category-card__icon' />
                     <h3>Back-End <br /> Development</h3>
                   </Card>
                 </Grid.Column>
                 <Grid.Column>
-                  <Card raised centered fluid className='category-card'>
+                  <Card
+                    raised centered fluid
+                    className='category-card'
+                    as={Link} to='/learning-path-discovery/7'
+                  >
                     <Icon name='stack overflow' className='category-card__icon' />
                     <h3>Full-Stack <br /> Development</h3>
                   </Card>
@@ -66,19 +78,31 @@ class HomePage extends Component {
 
               <Grid.Row>
                 <Grid.Column>
-                  <Card raised centered fluid className='category-card'>
+                  <Card
+                    raised centered fluid
+                    className='category-card'
+                    as={Link} to='/learning-path-discovery/8'
+                  >
                     <Icon name='apple' className='category-card__icon'/>
                     <h3>iOS <br /> Development</h3>
                   </Card>
                 </Grid.Column>
                 <Grid.Column>
-                  <Card raised centered fluid className='category-card'>
+                  <Card
+                    raised centered fluid
+                    className='category-card'
+                    as={Link} to='/learning-path-discovery/4'
+                  >
                     <Icon name='android' className='category-card__icon ' />
                     <h3>Android <br /> Development</h3>
                   </Card>
                 </Grid.Column>
                 <Grid.Column>
-                  <Card raised centered fluid className='category-card'>
+                  <Card
+                    raised centered fluid
+                    className='category-card'
+                    as={Link} to='/learning-path-discovery/3'
+                  >
                     <Icon name='python' className='category-card__icon' />
                     <h3>Data <br /> Science</h3>
                   </Card>
@@ -88,7 +112,10 @@ class HomePage extends Component {
             </Grid>
 
             <Header as='h3' align='right'>
-              &hellip; or search all available categories
+              &hellip; or &nbsp;
+              <Link to='/learning-path-discovery'>
+                search all available categories
+              </Link>
             </Header>
           </Container>
         </Container>
@@ -106,7 +133,12 @@ class HomePage extends Component {
               <br />
               Let the world follow the trail that you've blazed!
             </p>
-            <Button size='big' color='yellow'>Make a Learning Path</Button>
+            <Button
+              size='big' color='yellow'
+              as={Link} to='/learning-path/new'
+            >
+              Make a Learning Path
+            </Button>
           </Container>
         </Container>
 
@@ -123,7 +155,14 @@ class HomePage extends Component {
               The code is open source, and available to fork on GitHub.
             </p>
             <Button size='big' color='blue'>
-              <Icon name='github' /> Fork on GitHub
+              <Icon name='github' />
+              <a
+                rel="noopener noreferrer" target="_blank"
+                href="https://github.com/capstone-paths/app"
+                className="link-color-override"
+              >
+                Fork on GitHub
+              </a>
             </Button>
           </Container>
         </Container>
