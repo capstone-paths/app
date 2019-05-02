@@ -4,30 +4,32 @@
 // Please do not alter this file without checking with the team
 // -- things will very likely break in the server
 
+// Creating learning styles moved to another process
+//CREATE(ls0: LearningStyle {learningStyleID: '0', name:'Activist', description: 'Learn by doing'})
+//CREATE(ls1: LearningStyle {learningStyleID: '1', name:'Theorist', description: 'Want to undstand the theory behind it'})
+//CREATE(ls2: LearningStyle {learningStyleID: '2', name:'Pragmatist', description: 'Want the real world application'})
+//CREATE(ls3: LearningStyle {learningStyleID: '3', name:'Reflector', description: 'Learn by observing'})
 
-CREATE(ls0: LearningStyle {learningStyleID: '0', name:'Activist', description: 'Learn by doing'})
-CREATE(ls1: LearningStyle {learningStyleID: '1', name:'Theorist', description: 'Want to undstand the theory behind it'})
-CREATE(ls2: LearningStyle {learningStyleID: '2', name:'Pragmatist', description: 'Want the real world application'})
-CREATE(ls3: LearningStyle {learningStyleID: '3', name:'Reflector', description: 'Learn by observing'})
 
-CREATE(s1: Skill {skillID: '1', name:'Angular'})
-CREATE(s2: Skill {skillID: '2', name:'CSS'})
-CREATE(s3: Skill {skillID: '3', name:'Graphic Design'})
-CREATE(s4: Skill {skillID: '4', name:'Ember'})
-CREATE(s5: Skill {skillID: '5', name:'HTML'})
-CREATE(s6: Skill {skillID: '6', name:'Information Architecture'})
-CREATE(s7: Skill {skillID: '7', name:'Javascript'})
-CREATE(s8: Skill {skillID: '8', name:'Mechanical Engineering'})
-CREATE(s9: Skill {skillID: '9', name:'Meteor'})
-CREATE(s10: Skill {skillID: '10', name:'NodeJS'})
-CREATE(s11: Skill {skillID: '11', name:'Full-Stack Engineering'})
-CREATE(s12: Skill {skillID: '12', name:'Python'})
-CREATE(s13: Skill {skillID: '13', name:'Rails'})
-CREATE(s14: Skill {skillID: '14', name:'React'})
-CREATE(s15: Skill {skillID: '15', name:'Data Science'})
-CREATE(s16: Skill {skillID: '16', name:'Ruby'})
-CREATE(s17: Skill {skillID: '17', name:'UI Design'})
-CREATE(s18: Skill {skillID: '18', name:'User Experience'})
+// Creating skills moved to another process
+//CREATE(s1: Skill {skillID: '1', name:'Angular'})
+//CREATE(s2: Skill {skillID: '2', name:'CSS'})
+//CREATE(s3: Skill {skillID: '3', name:'Graphic Design'})
+//CREATE(s4: Skill {skillID: '4', name:'Ember'})
+//CREATE(s5: Skill {skillID: '5', name:'HTML'})
+//CREATE(s6: Skill {skillID: '6', name:'Information Architecture'})
+//CREATE(s7: Skill {skillID: '7', name:'Javascript'})
+//CREATE(s8: Skill {skillID: '8', name:'Mechanical Engineering'})
+//CREATE(s9: Skill {skillID: '9', name:'Meteor'})
+//CREATE(s10: Skill {skillID: '10', name:'NodeJS'})
+//CREATE(s11: Skill {skillID: '11', name:'Full-Stack Engineering'})
+//CREATE(s12: Skill {skillID: '12', name:'Python'})
+//CREATE(s13: Skill {skillID: '13', name:'Rails'})
+//CREATE(s14: Skill {skillID: '14', name:'React'})
+//CREATE(s15: Skill {skillID: '15', name:'Data Science'})
+//CREATE(s16: Skill {skillID: '16', name:'Ruby'})
+//CREATE(s17: Skill {skillID: '17', name:'UI Design'})
+//CREATE(s18: Skill {skillID: '18', name:'User Experience'})
 
 
 
@@ -111,7 +113,7 @@ MERGE (sam)-[:IN_PROGRESS]->(feui)
 // This is a trick to separate commands
 WITH count(*) as dummy
 
-//Register Sam's learning style 
+//Register Sam's learning style
 MATCH (u:User),(ls:LearningStyle)
 WHERE u.userID in ["1","2"] AND ls.learningStyleID = "1"
 CREATE (u)-[:LEARNS_BY]->(ls)
