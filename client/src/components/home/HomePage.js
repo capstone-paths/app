@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Divider, Card, Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import TreeAnimation from './animations/TreeAnimation.js';
 import './Home.css';
 
 class HomePage extends Component {
@@ -12,7 +13,7 @@ class HomePage extends Component {
         {/* Section: Hero */}
         <Grid verticalAlign='middle'>
           <Grid.Row className='hero'>
-            <Grid.Column>
+            <Grid.Column width={16}>
               <Container
                 className='hero-text'
                 text
@@ -26,11 +27,11 @@ class HomePage extends Component {
                 </h3>
               </Container>
             </Grid.Column>
+
+            <TreeAnimation />
+            <div className='anim-tree-hider' />
           </Grid.Row>
         </Grid>
-
-        <Divider hidden />
-        <Divider hidden />
 
         {/* Section Start: Categories */}
         <Container fluid className='home-section home-section--categories'>
