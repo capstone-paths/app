@@ -36,3 +36,17 @@
     font-size: 3em !important;
 }
 
+.home-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.home-section--categories {
+    /* Dramatically reduce padding so that headline fits above fold */
+    padding-top: 0.5rem;
+}
+
+.home-section--gray {
+    background-color: rgb(248, 248, 248);
+}
+
