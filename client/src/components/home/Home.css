@@ -20,17 +20,19 @@
     text-shadow: 2px 2px 3px rgba(25, 25, 25, 0.15);
     color: rgb(247, 247, 247);
     background: rgb(227,149,5) !important;
-    background: linear-gradient(150deg, rgba(227,149,5,1) 0%, rgba(253,136,5,1) 100%) !important;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,136,0,1) 0%, rgba(255,166,0,1) 100% ) !important;
     text-align: center;
     padding-top: 1.5em !important;
-    padding-bottom: 1.5em !important;
+    padding-bottom: 2em !important;
+    cursor: pointer;
 }
 
-.category-card > i {
+.category-card:hover {
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(242,123,0,1) 0%, rgba(242,153,0,1) 100% ) !important;
+}
+
+.category-card__icon {
     align-self: center;
-}
-
-.category-card > h2 {
-    margin-top: 1rem;
+    font-size: 3em !important;
 }
 
