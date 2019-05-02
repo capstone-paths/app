@@ -36,6 +36,7 @@ class HomePage extends Component {
         <Container text>
           <Header as='h1'>What do you want to learn?</Header>
           <Header as='h3'>Browse Learning Paths by Popular Categories</Header>
+
           <Grid columns={3}>
 
             <Grid.Row>
@@ -83,13 +84,29 @@ class HomePage extends Component {
           </Grid>
         </Container>
 
+        {/* LOL */}
+        <Divider hidden />
         <Divider hidden />
         <Divider hidden />
 
         {/* Section: Share Your Knowledge */}
         <Container text>
-
+          <Header as='h1'>Got knowledge you'd like to share?</Header>
+          <Header as='h3'>Share a Learning Path with the world!</Header>
+          <p>
+            Lernt.io not only about planning your own learning - it's about
+            sharing what you've learnt with others. With our Learning Path
+            editor, you can build and share collections of courses.
+            <br />
+            Let the world follow the trail that you've blazed!
+          </p>
+          <Button size='big' color='yellow'>Make a Learning Path</Button>
         </Container>
+
+        <Divider hidden />
+        <Divider hidden />
+        <Divider hidden />
+
 
 
       </div>
