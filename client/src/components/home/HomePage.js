@@ -36,7 +36,9 @@ class HomePage extends Component {
         <Container fluid className='home-section home-section--categories'>
           <Container text>
             <Header as='h1'>What do you want to learn?</Header>
-            <Header as='h3'>Browse Learning Paths by Popular Categories</Header>
+            <Header as='h3'>
+              Browse popular categories for Learning Paths &hellip;
+            </Header>
 
             <Grid columns={3}>
 
@@ -83,6 +85,10 @@ class HomePage extends Component {
               </Grid.Row>
 
             </Grid>
+
+            <Header as='h3' align='right'>
+              &hellip; or search all available categories
+            </Header>
           </Container>
         </Container>
 
