@@ -198,11 +198,11 @@ class LearningPath {
    */
   static async getSystemRecommendation(session, trackID) {
     const query = `
-    MATCH (t: Track) WHERE t.trackID=$trackID
-    CALL lernt.findCoursePath(t, { frequencyThreshold: 0.8 })
-    YIELD nodes, relationships
-    RETURN nodes, relationships
-    `
+      MATCH (t: Track) WHERE t.trackID=$trackID
+      CALL lernt.findCoursePath(t, { frequencyThreshold: 0.71 })
+      YIELD nodes, relationships
+      RETURN nodes, relationships
+    `;
 
     const results = await session.run(query, { trackID });
     if (results.records.length === 0) {
