@@ -9,7 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const logger = require('./config/winston');
-//const oauth = require('./models/oauth');
+const oauth = require('./models/oauth');
 const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 
 
@@ -20,7 +20,7 @@ const users = require('./routes/users');
 const skills = require('./routes/skills');
 const tracks = require('./routes/tracks');
 const learningStyles = require('./routes/learning-styles');
-//const authREST = require('./routes/auth-rest');
+const authREST = require('./routes/auth-rest');
 
 
 
@@ -34,7 +34,7 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(neo4jSessionCleanup);
-//app.use(oauth.guard)
+app.use(oauth.guard)
 
 
 // Plug in routers
@@ -44,7 +44,7 @@ app.use('/api/users', users);
 app.use('/api/skills', skills);
 app.use('/api/learning-styles', learningStyles);
 app.use('/api/tracks', tracks);
-//app.use('/auth', authREST);
+app.use('/auth', authREST);
 
 
 // Serve static content from React app build
