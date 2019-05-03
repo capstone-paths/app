@@ -370,18 +370,18 @@ public class CourseTest
     }
 
 
-//    @Test
-//    public void shouldHandleFinalTestDataScenarioA() throws Throwable
-//    {
-//        readModelLineByLine("full-model.cypher");
-//
-//        String query = "MATCH (t: Track) WHERE t.trackID='6' "
-//                +  "CALL lernt.findCoursePath(t, { frequencyThreshold: 0.7 }) "
-//                +  "YIELD nodes, relationships "
-//                +  "RETURN nodes, relationships";
-//
-//        session.run(query);
-//    }
+    @Test
+    public void shouldHandleFinalTestDataScenarioA() throws Throwable
+    {
+        readModelLineByLine("full-model.cypher");
+
+        String query = "MATCH (t: Track) WHERE t.trackID='6' "
+                +  "CALL lernt.findCoursePath(t, { frequencyThreshold: 0.7 }) "
+                +  "YIELD nodes, relationships "
+                +  "RETURN nodes, relationships";
+
+        session.run(query);
+    }
 
 
     private void readModelLineByLine(String filename) throws Throwable

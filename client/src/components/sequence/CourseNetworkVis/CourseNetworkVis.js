@@ -5,10 +5,12 @@ import React, { Component } from 'react';
 import './CourseNetworkVis.css';
 
 function findLevel(nodeId, edges) {
+  console.log('edges: ', edges);
+  console.log('nodeId: ', nodeId);
   const edge = edges.filter(edge => {
     return edge.to === nodeId
   }).pop();
-  if (edge.from == null) {
+  if (edge.from == null || edge.from === '-1') {
     return 1;
   } else {
     edges = edges.filter(e => {
@@ -40,6 +42,8 @@ class CourseNetworkVis extends Component {
   constructor(props) {
     super(props);
     this.onCourseSelect = props.onCourseSelect;
+
+    console.log('CourseNetworkVis sequenceData', props.sequenceData);
 
     const { courseNodes, rels } = props.sequenceData ? props.sequenceData : {courseNodes: [], rels: []} ;
 
