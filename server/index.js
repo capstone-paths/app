@@ -14,6 +14,7 @@ const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 
 //remove
 logger.info(`Env Variables: ${process.env}`);
+console.log(process.env)
 
 
 // Import routers
