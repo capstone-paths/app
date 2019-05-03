@@ -40,13 +40,8 @@ export default class MarkCourseCompleteButton extends Component {
                 window.location.reload();
             });
         }
-        if(this.state.course.status !=='completed'){
-            return <Button size='mini' color={this.buttonColor()} onClick={toggleStatus}>
+        return <Button size='mini' color={this.buttonColor()} onClick={toggleStatus}>
                 {this.buttonText()}
             </Button>
-        }else{
-            return <div></div>
-        }
-
     }
 }

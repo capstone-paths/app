@@ -72,6 +72,18 @@ class Course {
     MATCH (u: User {userID: $userId})
     MATCH (c: Course {courseID: $courseId})
     MERGE (u)-[:`+status+`]->(c)`
+
+
+    const removeCompletedQuery = `
+    MATCH (u: User {userID: $userId})-[r:COMPLETED]->(c: Course {courseID: $courseId})
+    DELETE r
+    `;
+    const removeInprogressQuery = `
+    MATCH (u: User {userID: $userId})-[r:IN_PROGRESS]->(c: Course {courseID: $courseId})
+    DELETE r
+    `;
+    await session.run(removeCompletedQuery, { courseId, userId });
+    await session.run(removeInprogressQuery, { courseId, userId });
     await session.run(query, { courseId, userId });
     return true;
   }
