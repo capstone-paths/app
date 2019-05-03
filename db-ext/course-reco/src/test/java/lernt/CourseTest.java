@@ -211,6 +211,25 @@ public class CourseTest
 
 
     @Test
+    public void shouldHandleSelfCycle() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-self");
+
+        String[] expectedValues = {
+                "Start -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 3;
+        int expectedRels = 2;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+
+
+    @Test
     public void shouldHandleThreeWayCounterCycle() throws Throwable
     {
         setDBInitStateFromFile("bm-000");
@@ -335,7 +354,7 @@ public class CourseTest
         int expectedRels = 5;
 
         String query = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
-                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id', trackIDPropName: 'id', courseIDPropName: 'id'}) "
+                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id', trackIDPropName: 'id', courseIDPropName: 'id', frequencyThreshold: 0.5 }) "
                 +  "YIELD nodes, relationships "
                 +  "RETURN nodes, relationships";
 
@@ -348,6 +367,33 @@ public class CourseTest
         };
 
         courseAndPrereqTester(query, expectedNodes, expectedRels, expectedValues);
+    }
+
+
+    @Test
+    public void shouldHandleFinalTestDataScenarioA() throws Throwable
+    {
+        readModelLineByLine("full-model.cypher");
+
+        String query = "MATCH (t: Track) WHERE t.trackID='6' "
+                +  "CALL lernt.findCoursePath(t, { frequencyThreshold: 0.7 }) "
+                +  "YIELD nodes, relationships "
+                +  "RETURN nodes, relationships";
+
+        session.run(query);
+    }
+
+
+    private void readModelLineByLine(String filename) throws Throwable
+    {
+        URL url = this.getClass().getResource(filename);
+        String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
+
+        String[] queries = init.split(";");
+
+        for (int i = 0; i < queries.length; i++) {
+            session.run(queries[i]);
+        }
     }
 
 

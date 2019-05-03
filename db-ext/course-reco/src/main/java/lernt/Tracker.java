@@ -97,6 +97,11 @@ public class Tracker
         long startID = start.getOriginalID();
         long endID = end.getOriginalID();
 
+        // Self cycle
+        if (startID == endID) {
+            return true;
+        }
+
         // The virtual end should always be in the solution space
         if (!resultNodes.containsKey(endID)) {
             throw new Exception("checkIfCycle logical problem: end Node was not found in current solution space");
