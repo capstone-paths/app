@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
-import { Button, Icon } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 
 export default class MarkCourseCompleteButton extends Component {
@@ -31,20 +31,26 @@ export default class MarkCourseCompleteButton extends Component {
         }
     }
     render() {
-        let toggleComplete = () => {
-            // this.api.toggleSubscribe(this.userId, this.sequenceId).then((response) => {
-            //     var state = this.state;
-            //     state.isSubscribed = response.data;
-            //     this.setState(
-            //         state
-            //     );
-            //     this.forceUpdate();
-            // });
+        let toggleStatus = () => {
+            var status = 'inprogress';
+            if(this.state.course.status === 'inprogress'){
+                status = 'completed';
+            }
+            //todo we need to update with proper user status
+            LerntApi.updateCourseStatus('2', this.state.course.courseID, status).then((response) => {
+                //TODO improve on the need for full page refresh on course status update
+                window.location.reload();
+            });
         }
-        return <Button size='mini' color={this.buttonColor()} onClick={toggleComplete}>
-            {this.buttonText()}
-                                <Icon name='right chevron' />
-        </Button>
+        console.log('button ');
+        console.log(this.state.course);
+        if(this.state.course.status !=='completed'){
+            return <Button size='mini' color={this.buttonColor()} onClick={toggleStatus}>
+                {this.buttonText()}
+            </Button>
+        }else{
+            return <div></div>
+        }
 
     }
 }

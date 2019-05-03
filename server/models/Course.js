@@ -63,7 +63,7 @@ class Course {
   static async updateCourseStatus(session, courseId, userId, status) {
     if(status == 'inprogress'){
       status = 'IN_PROGRESS';
-    }else if(statys =='completed'){
+    }else if(status =='completed'){
       status = 'COMPLETED';
     }else{
       throw 'unexpected status';
