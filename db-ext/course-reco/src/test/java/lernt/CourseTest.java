@@ -351,6 +351,33 @@ public class CourseTest
     }
 
 
+    @Test
+    public void shouldHandleFinalTestDataScenarioA() throws Throwable
+    {
+        readModelLineByLine("full-model.cypher");
+
+        String query = "MATCH (t: Track) WHERE t.trackID='3' "
+                +  "CALL lernt.findCoursePath(t, {}) "
+                +  "YIELD nodes, relationships "
+                +  "RETURN nodes, relationships";
+
+        session.run(query);
+    }
+
+
+    private void readModelLineByLine(String filename) throws Throwable
+    {
+        URL url = this.getClass().getResource(filename);
+        String init = new String(Files.readAllBytes(Paths.get(url.toURI()))).trim();
+
+        String[] queries = init.split(";");
+
+        for (int i = 0; i < queries.length; i++) {
+            session.run(queries[i]);
+        }
+    }
+
+
     private void setDBInitStateFromFile(String filename) throws Throwable
     {
         URL url = this.getClass().getResource(filename);
