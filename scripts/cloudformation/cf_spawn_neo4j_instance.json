@@ -123,6 +123,7 @@
       "# download required jar files (used wget/ curl was getting the html content and not the file)\n",
       "/usr/bin/wget  -N --directory-prefix=/opt/bitnami/neo4j/plugins/ https://github.com/capstone-paths/app/raw/master/neo4j-plugins/graph-algorithms-algo.jar\n",
       "/usr/bin/wget  -N --directory-prefix=/opt/bitnami/neo4j/plugins/ https://github.com/capstone-paths/app/raw/master/neo4j-plugins/lernt-neo4j-procedures.jar\n",
+      "/usr/bin/wget  -N --directory-prefix=/opt/bitnami/neo4j/plugins/ https://github.com/capstone-paths/app/raw/master/neo4j-plugins/apoc.jar\n",
       "#download backup\n",
       "/usr/bin/aws s3 cp s3://lernt-db-backup/lernt_init_db.dump /home/bitnami/lernt_init_db.dump  &\n",
       "wait\n",
