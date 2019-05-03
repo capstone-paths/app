@@ -28,6 +28,13 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+    </dependency>
+
+
     <!-- Test Dependencies -->
     <dependency>
       <!-- This is used for a utility that lets us start Neo4j with

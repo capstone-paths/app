@@ -182,7 +182,7 @@ class LearningPathDiscoveryPage extends Component {
       case netState.ERROR:
         element = <p>{this.state.errors.learningPathList}</p>;
         break;
-
+        
       default:
         element = (
           <p>
@@ -192,7 +192,7 @@ class LearningPathDiscoveryPage extends Component {
     }
 
     return element;
-  };
+  }
 
 
   render() {

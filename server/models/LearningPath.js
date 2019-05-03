@@ -212,11 +212,11 @@ class LearningPath {
    */
   static async getSystemRecommendation(session, trackID) {
     const query = `
-    MATCH (t: Track) WHERE t.trackID=$trackID
-    CALL lernt.findCoursePath(t, {})
-    YIELD nodes, relationships
-    RETURN nodes, relationships
-    `
+      MATCH (t: Track) WHERE t.trackID=$trackID
+      CALL lernt.findCoursePath(t, { frequencyThreshold: 0.71 })
+      YIELD nodes, relationships
+      RETURN nodes, relationships
+    `;
 
     const results = await session.run(query, { trackID });
     if (results.records.length === 0) {
@@ -242,10 +242,15 @@ class LearningPath {
 
     let rels = records
       .get('relationships')
-      .map(rel => ({
-        start: rel.properties.originalStartID,
-        end: rel.properties.originalEndID,
-      }));
+      // .filter(r => r.properties.originalEndId !== '-1')
+      .map(rel => {
+        const { originalStartID, originalEndID } = rel.properties;
+        return {
+          start: originalStartID,
+          end: originalEndID,
+
+        }
+      });
 
     return { sequence, courseNodes, rels };
   }
