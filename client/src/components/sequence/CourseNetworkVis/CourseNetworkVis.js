@@ -22,10 +22,10 @@ function courseToNode(course) {
   var color = '#93C2FA';
   switch(course.status) {
     case 'inprogress':
-      color = '#E6AF0C';
+      color = '#ffffbc';
       break;
     case 'completed':
-      color = '#16AB39';
+      color = '#baffc9';
       break;
     default:
       color = '#93C2FA'
