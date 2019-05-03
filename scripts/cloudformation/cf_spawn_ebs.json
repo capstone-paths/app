@@ -169,6 +169,11 @@
         },
         {
         "Namespace": "aws:elasticbeanstalk:application:environment",
+        "OptionName": "PS_COG_KEY_PASSWORD",
+        "Value": "{{resolve:ssm:COG_KEY_PASSWORD:1}}"
+        },
+        {
+        "Namespace": "aws:elasticbeanstalk:application:environment",
         "OptionName": "PS_COG_TEMP_PASSWORD",
         "Value": "{{resolve:ssm:COG_TEMP_PASSWORD:1}}"
         },
