@@ -13,8 +13,8 @@ const logger = require('./config/winston');
 const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 
 //remove
-logger.info(`Env Variables: ${JSON.stringifyprocess.env)}`);
-//console.log(process.env)
+logger.info(`Env Variables: ${JSON.stringify(process.env)}`);
+console.log(process.env)
 
 
 // Import routers
