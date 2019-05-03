@@ -211,6 +211,25 @@ public class CourseTest
 
 
     @Test
+    public void shouldHandleSelfCycle() throws Throwable
+    {
+        setDBInitStateFromFile("bm-000");
+        processRelationshipsFile("bm-000-test-cycle-self");
+
+        String[] expectedValues = {
+                "Start -> Probability",
+                "Probability -> Track: Machine Learning"
+        };
+
+        int expectedNodes = 3;
+        int expectedRels = 2;
+
+        courseAndPrereqTester(baseWorkingQuery, expectedNodes, expectedRels, expectedValues);
+    }
+
+
+
+    @Test
     public void shouldHandleThreeWayCounterCycle() throws Throwable
     {
         setDBInitStateFromFile("bm-000");
@@ -350,14 +369,14 @@ public class CourseTest
         courseAndPrereqTester(query, expectedNodes, expectedRels, expectedValues);
     }
 
-//
+
 //    @Test
 //    public void shouldHandleFinalTestDataScenarioA() throws Throwable
 //    {
 //        readModelLineByLine("full-model.cypher");
 //
-//        String query = "MATCH (t: Track) WHERE t.trackID='3' "
-//                +  "CALL lernt.findCoursePath(t, {}) "
+//        String query = "MATCH (t: Track) WHERE t.trackID='6' "
+//                +  "CALL lernt.findCoursePath(t, { frequencyThreshold: 0.7 }) "
 //                +  "YIELD nodes, relationships "
 //                +  "RETURN nodes, relationships";
 //

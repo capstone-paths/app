@@ -78,6 +78,9 @@ public class CoursePath
         // For every viable candidate, add to result set as long as it doesn't create a cycle
         for (Course candidate : candidateSet)
         {
+            // TODO: Debug remove
+            String cName = (String) candidate.getNode().getProperty("name");
+
             if (!tracker.checkIfCycle(candidate, current)) {
                 // TODO: Abstract all these calls into a single tracker method
                 tracker.addToResultNodes(candidate);

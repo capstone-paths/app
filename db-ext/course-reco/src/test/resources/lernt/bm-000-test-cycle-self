@@ -1,0 +1,4 @@
+// Should break out of courses referring to themselves
+
+:Course 5, :NEXT, :Course 5, 1
+:Course 5, :NEXT, :Track 1, 1
