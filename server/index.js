@@ -9,7 +9,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const logger = require('./config/winston');
+const oauth = require('./models/oauth');
 const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
+
+//remove
+logger.info(`Env Variables: ${JSON.stringify(process.env)}`);
+console.log(process.env)
 
 
 // Import routers
@@ -33,6 +38,7 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(neo4jSessionCleanup);
+app.use(oauth.guard)
 
 
 // Plug in routers
