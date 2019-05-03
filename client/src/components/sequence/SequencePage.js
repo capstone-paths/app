@@ -115,7 +115,6 @@ class SequencePage extends Component {
     let vis;
     let countCoursesInStatus = status => {
       if(this.state.sequenceData === undefined) return 0;
-      console.log(this.state.sequenceData.courseNodes)
        
       return this.state.sequenceData.courseNodes.filter(course => course.status === status).length; 
     } 

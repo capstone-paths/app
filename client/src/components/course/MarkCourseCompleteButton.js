@@ -7,13 +7,11 @@ export default class MarkCourseCompleteButton extends Component {
     constructor(props) {
         super(props);
         this.api = new LerntApi();
-        console.log('hello Mark course complete ' +props);
         this.course = props.course;
         this.state = {course : props.course};
     }
 
     buttonText(){
-        // console.log(this.course);
         if (this.state.course.status === 'unstarted'){
             return "Start Course";
         }else if (this.state.course.status === 'inprogress'){
@@ -42,8 +40,6 @@ export default class MarkCourseCompleteButton extends Component {
                 window.location.reload();
             });
         }
-        console.log('button ');
-        console.log(this.state.course);
         if(this.state.course.status !=='completed'){
             return <Button size='mini' color={this.buttonColor()} onClick={toggleStatus}>
                 {this.buttonText()}

@@ -20,7 +20,6 @@ function findLevel(nodeId, edges) {
 
 function courseToNode(course) {
   var color = '#93C2FA';
-  console.log(course.status)
   switch(course.status) {
     case 'inprogress':
       color = '#E6AF0C';
