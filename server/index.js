@@ -12,6 +12,9 @@ const logger = require('./config/winston');
 //const oauth = require('./models/oauth');
 const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 
+//remove
+logger.info(`Env Variables: ${process.env}`);
+
 
 // Import routers
 const learningPaths = require('./routes/learning-paths');
