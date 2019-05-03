@@ -25,13 +25,25 @@ class Course {
     /**
    * Finds a course by id
    * @param {Session} session 
-   * @param {Integer} id 
+   * @param {Integer} courseId 
    */
-  static async findById(session, id) {
+  static async findById(session, courseId, userId) {
     const query = `
-    MATCH (c: Course {courseID: $id})
-    RETURN c as course`;
-    const results = await session.run(query, { id });
+    MATCH (c: Course {courseID: $courseId})
+    OPTIONAL MATCH (user: User{userID: $userId})-[completed :COMPLETED]->(c)
+      with c, count(completed) as completed
+    OPTIONAL MATCH (user: User{userID: $userId})-[inProgress :IN_PROGRESS]->(c)
+    RETURN apoc.map.merge(
+      PROPERTIES(c),
+        {
+          status: CASE
+                    WHEN count(inProgress) >= 1 THEN 'inprogress'
+                    WHEN completed >= 1 THEN 'complete'
+                    ELSE 'unstarted' END
+        }
+      ) as course`;
+
+    const results = await session.run(query, { courseId, userId });
     if (results.records.length === 0) {
       return undefined;
     }
@@ -44,10 +56,36 @@ class Course {
     let records = results.records[0];
 
     let course = records.get('course');
-    let courseData = course.properties;
-    return {
-      course : courseData
-    };
+    return course;
+  }
+
+
+  static async updateCourseStatus(session, courseId, userId, status) {
+    if(status == 'inprogress'){
+      status = 'IN_PROGRESS';
+    }else if(status =='completed'){
+      status = 'COMPLETED';
+    }else{
+      throw 'unexpected status';
+    }
+    const query = `
+    MATCH (u: User {userID: $userId})
+    MATCH (c: Course {courseID: $courseId})
+    MERGE (u)-[:`+status+`]->(c)`
+
+
+    const removeCompletedQuery = `
+    MATCH (u: User {userID: $userId})-[r:COMPLETED]->(c: Course {courseID: $courseId})
+    DELETE r
+    `;
+    const removeInprogressQuery = `
+    MATCH (u: User {userID: $userId})-[r:IN_PROGRESS]->(c: Course {courseID: $courseId})
+    DELETE r
+    `;
+    await session.run(removeCompletedQuery, { courseId, userId });
+    await session.run(removeInprogressQuery, { courseId, userId });
+    await session.run(query, { courseId, userId });
+    return true;
   }
 }
 

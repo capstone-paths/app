@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import LerntApi from '../../LerntApi'
 import { Icon } from 'semantic-ui-react'
-import { Header, Grid, List, Checkbox } from 'semantic-ui-react'
+import { Header, Grid, List } from 'semantic-ui-react'
+import MarkCourseCompleteButton from './MarkCourseCompleteButton'
 
 class CourseDetailsMini extends Component {
     constructor(props) {
@@ -14,10 +15,12 @@ class CourseDetailsMini extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.api = new LerntApi();
         if(this.state.course === undefined || this.state.course.courseID !== this.props.courseId){
-        this.api.getCourse(this.props.courseId)
-            .then((response) => {
-                this.setState({ loaded: true, course: response.data.course })
-            });
+            //todo replace with real user context when available 
+            let userId = "2";
+            this.api.getCourse(userId, this.props.courseId)
+                .then((response) => {
+                    this.setState({ loaded: true, course: response.data })
+                });
         }
     }
     render() {
@@ -27,15 +30,12 @@ class CourseDetailsMini extends Component {
                 <Grid.Row columns={1}>
                     <Grid.Column >
                         <Header>{this.state.course.name}</Header>
+                        <MarkCourseCompleteButton course={this.state.course}  />
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={1}>
                     <Grid.Column>
                         <List>
-                            <List.Item>
-                            <List.Header>Status</List.Header>
-                            <Checkbox slider/>
-                            </List.Item>
                             <List.Item>
                                 <List.Header>Institution</List.Header>
                                 {this.state.course.institution}

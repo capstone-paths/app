@@ -182,8 +182,7 @@ class LearningPathDiscoveryPage extends Component {
       case netState.ERROR:
         element = <p>{this.state.errors.learningPathList}</p>;
         break;
-
-      case netState.IDLE:
+        
       default:
         element = (
           <p>

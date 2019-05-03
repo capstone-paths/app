@@ -79,20 +79,34 @@ class LearningPath {
    * @param {Session} session 
    * @param {Integer} id 
    */
-  static async findById(session, id) {
+  static async findById(session, id, userId) {
     const query = `
       MATCH (s: PathStart {pathID: $id})
       MATCH ()-[rel :NEXT {pathID: $id}]->(c: Course)
-      WITH { 
-        sequence : PROPERTIES(s),
-        courseNodes : COLLECT(DISTINCT(PROPERTIES(c))),
-        rels : COLLECT(DISTINCT ({start : startNode(rel).courseID, end: endNode(rel).courseID }))
-      } as sequenceData
-      RETURN sequenceData
+      OPTIONAL MATCH (user: User{userID: $userId})-[completed :COMPLETED]->(c)
+      with s, rel, c, count(completed) as completed
+      OPTIONAL MATCH (user: User{userID: $userId})-[inProgress :IN_PROGRESS]->(c)
+      WITH apoc.map.merge(
+        PROPERTIES(c),
+          {
+            status: CASE
+                      WHEN completed >= 1 THEN 'completed'
+                      WHEN count(inProgress) >= 1 THEN 'inprogress'
+                      ELSE 'unstarted' END
+          }
+        ) as course, s, rel
+      RETURN { 
+          sequence : PROPERTIES(s),
+          courseNodes : COLLECT(DISTINCT(
+            course
+            )),
+          rels : COLLECT(DISTINCT ({start : startNode(rel).courseID, end: endNode(rel).courseID }))
+        } as sequenceData
+      
     `;
 
     console.log('findById model, about to execute query, id: ', id);
-    const results = await session.run(query, { id });
+    const results = await session.run(query, { id, userId });
     if (results.records.length === 0) {
       return undefined;
     }
