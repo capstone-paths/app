@@ -184,6 +184,7 @@ class LearningPathDiscoveryPage extends Component {
         break;
 
       case netState.IDLE:
+      default:
         element = (
           <p>
             Nothing here. Search for a track to see available Learning Paths.
@@ -192,7 +193,7 @@ class LearningPathDiscoveryPage extends Component {
     }
 
     return element;
-  };
+  }
 
 
   render() {

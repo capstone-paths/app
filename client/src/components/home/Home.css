@@ -1,0 +1,88 @@
+#home-container {
+    padding-top: 67px;
+}
+
+.hero {
+    position: relative !important;
+    height: calc(100vh - 180px);
+    background: rgb(6,110,226);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(6,110,226,1) 0%, rgba(30,184,214,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(75,145,214,1) 0%, rgba(93,227,222,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(96,155,214,1) 0%, rgba(100,199,219,1) 62%, rgba(102,227,223,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(96,155,214,1) 0%, rgba(110,188,228,1) 62%, rgba(119,209,237,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(86,150,214,1) 0%, rgba(111,199,220,1) 66%, rgba(125,227,224,1) 100%);
+
+}
+
+.hero-text {
+    color: rgb(252, 252, 252);
+    text-shadow: 2px 2px 3px rgba(25, 25, 25, 0.15);
+}
+
+.hero-text > h1 {
+    font-size: 4em;
+}
+
+.category-card {
+    text-shadow: 2px 2px 3px rgba(25, 25, 25, 0.15);
+    color: rgb(247, 247, 247);
+    background: #FF9012 !important;
+    text-align: center;
+    padding-top: 1.5em !important;
+    padding-bottom: 2em !important;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    /* Need to set color, otherwise link element sets blue */
+    color: white !important;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(242,123,0,1) 0%, rgba(242,153,0,1) 100% ) !important;
+}
+
+.link-color-override,
+.link-color-override:hover {
+    color: white !important;
+}
+
+.category-card__icon {
+    align-self: center;
+    font-size: 3em !important;
+}
+
+.home-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.home-section--categories {
+    /* Reduce padding so that headline fits above fold */
+    padding-top: 3.5rem;
+    position: relative !important;
+}
+
+.home-section--gray {
+    background-color: rgb(248, 248, 248);
+}
+
+/*
+This is a nasty hack to hide a couple pixels from the tree that
+overflow into the next container. Sue me!
+*/
+.anim-tree-hider {
+    position: absolute !important;
+    z-index: 3;
+    bottom: -6px;
+    height: 6px;
+    width: 100%;
+    background-color: white;
+}
+
+#tree-animation-container {
+    display: inline;
+    position: absolute;
+    bottom: -10px;
+    right: 6em;
+    width: 25%;
+    z-index: 2 !important;
+}
+

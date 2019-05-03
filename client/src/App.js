@@ -18,10 +18,16 @@ class App extends Component {
     return (
       <div>
         <Nav />
+        {/*
+        TODO:
+        I've removed home from the enclosing container as it wouldn't
+        allow me to do full-width sections. This should be a fluid container,
+        with each page wrapping their content in a text container to center.
+        */}
+        <Route exact path="/" component={HomePage}/>
         <Container style={{
         paddingTop: '8em',
       }}>
-        <Route exact path="/" component={HomePage}/>
         <Route exact path="/login" component={LoginForm}/>
         <Route exact path="/profile/:userId" component={Profile}/>
         <Route
