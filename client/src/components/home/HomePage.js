@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Divider, Card, Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
+import { Grid,  Card, Button, Container, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import TreeAnimation from './animations/TreeAnimation.js';
 import './Home.css';
