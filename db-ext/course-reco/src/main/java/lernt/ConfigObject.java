@@ -21,8 +21,9 @@ public class ConfigObject
     private String trackIDPropName;
     private String prereqWeightPropName;
     private String prereqLabelName;
-    private Object similarityThreshold;
-    private Object frequencyThreshold;
+    private Double similarityThreshold;
+    private Double frequencyThreshold;
+    private Long prereqMinimumObservations;
 
 
     public ConfigObject(Map<String, Object> config)
@@ -41,8 +42,14 @@ public class ConfigObject
         this.trackIDPropName = (String) config.getOrDefault("trackIDPropName", "trackID");
         this.prereqWeightPropName = (String) config.getOrDefault("prereqWeightPropName", "recommendations");
         this.prereqLabelName = (String) config.getOrDefault("prereqLabelName", "NEXT");
-        this.frequencyThreshold = config.getOrDefault("frequencyThreshold", 0.2);
-        this.similarityThreshold = config.getOrDefault("similarityThreshold", 0.5);
+        this.frequencyThreshold = (Double) config.getOrDefault("frequencyThreshold", 0.2);
+        this.similarityThreshold = (Double) config.getOrDefault("similarityThreshold", 0.5);
+        this.prereqMinimumObservations = (Long) config.getOrDefault("prereqMinimumObservations", 1L);
+    }
+
+    public Long getPrereqMinimumObservations()
+    {
+        return prereqMinimumObservations;
     }
 
     public String getTrackIDPropName() { return trackIDPropName; }

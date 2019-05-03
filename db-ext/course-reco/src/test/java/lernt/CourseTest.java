@@ -335,7 +335,7 @@ public class CourseTest
         int expectedRels = 5;
 
         String query = "MATCH (t: Track) WHERE t.name='Track: Machine Learning' "
-                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id', trackIDPropName: 'id', courseIDPropName: 'id'}) "
+                +  "CALL lernt.findCoursePath(t, {userID: '1', userIDPropName: 'id', trackIDPropName: 'id', courseIDPropName: 'id', frequencyThreshold: 0.5 }) "
                 +  "YIELD nodes, relationships "
                 +  "RETURN nodes, relationships";
 
@@ -350,7 +350,7 @@ public class CourseTest
         courseAndPrereqTester(query, expectedNodes, expectedRels, expectedValues);
     }
 
-
+//
 //    @Test
 //    public void shouldHandleFinalTestDataScenarioA() throws Throwable
 //    {

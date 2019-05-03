@@ -6,7 +6,6 @@ import java.util.*;
 import static java.util.stream.Collectors.toMap;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.commons.math3.distribution.RealDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 
@@ -63,6 +62,14 @@ public class CandidateDecider
         Map<Node, Double> freqs = getIncomingFrequencies();
         double totalIncoming = freqs.values().stream().reduce(0.0, Double::sum);
 
+        // Calculate basic stats, needed to apply thresholds
+        // https://stackoverflow.com/a/51776211/6854595
+        double[] values = toDoubleArray(freqs.values());
+        DescriptiveStatistics ds = new DescriptiveStatistics(values);
+        double variance = ds.getPopulationVariance();
+        double sd = Math.sqrt(variance);
+        double mean = ds.getMean();
+        NormalDistribution nd = new NormalDistribution();
 
         // Sort from highest to lower frequency
         // This is necessary when later we check for duplicates
@@ -78,7 +85,7 @@ public class CandidateDecider
         for (Map.Entry<Node, Double> entry : sorted.entrySet())
         {
             double currentFrequency = entry.getValue();
-            if (!passesMinimumThreshold(currentFrequency, totalIncoming)) {
+            if (!passesMinimumThreshold(nd, currentFrequency, mean, sd)) {
                 continue;
             }
 
@@ -91,6 +98,17 @@ public class CandidateDecider
         }
 
         return candidateSet;
+    }
+
+
+    private double[] toDoubleArray(Collection<Double> values)
+    {
+        double[] vals = new double[values.toArray().length];
+        int i = 0;
+        for (Double v : values) {
+            vals[i++] = v;
+        }
+        return vals;
     }
 
 
@@ -156,6 +174,19 @@ public class CandidateDecider
         }
 
         return courseFrequency / totalFrequency > this.frequencyThreshold;
+    }
+
+
+    private boolean passesMinimumThreshold(NormalDistribution nd, double value, double mean, double sd)
+    {
+        if (sd == 0) {
+            return value >= this.config.getPrereqMinimumObservations();
+        }
+
+        double zScore = (value - mean) / sd;
+        double sf = nd.cumulativeProbability(zScore);
+
+        return sf >= this.frequencyThreshold;
     }
 
 
