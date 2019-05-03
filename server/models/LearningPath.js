@@ -90,8 +90,8 @@ class LearningPath {
         PROPERTIES(c),
           {
             status: CASE
+                      WHEN completed >= 1 THEN 'completed'
                       WHEN count(inProgress) >= 1 THEN 'inprogress'
-                      WHEN completed >= 1 THEN 'complete'
                       ELSE 'unstarted' END
           }
         ) as course, s, rel

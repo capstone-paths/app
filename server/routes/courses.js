@@ -49,5 +49,23 @@ router.get('/:id/:userId', (req, res, next) => {
     .catch(next)
 });
 
+//update course status
+router.post('/:id/:userId/:status', (req, res, next) => {
+  if (!req.params.id) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  Course
+    .updateCourseStatus(session, req.params.id, req.params.userId, req.params.status)
+    .then((result) => {
+      if (!result) {
+        res.status(400);
+      }
+      res.json(result);
+    })
+    .catch(next)
+});
+
 
 module.exports = router;

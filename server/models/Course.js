@@ -58,6 +58,23 @@ class Course {
     let course = records.get('course');
     return course;
   }
+
+
+  static async updateCourseStatus(session, courseId, userId, status) {
+    if(status == 'inprogress'){
+      status = 'IN_PROGRESS';
+    }else if(statys =='completed'){
+      status = 'COMPLETED';
+    }else{
+      throw 'unexpected status';
+    }
+    const query = `
+    MATCH (u: User {userID: $userId})
+    MATCH (c: Course {courseID: $courseId})
+    MERGE (u)-[:`+status+`]->(c)`
+    await session.run(query, { courseId, userId });
+    return true;
+  }
 }
 
 module.exports = Course;
