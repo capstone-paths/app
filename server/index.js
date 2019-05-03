@@ -9,7 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const logger = require('./config/winston');
-const oauth = require('./oauth');
+const oauth = require('./models/oauth');
 const neo4jSessionCleanup = require('./middleware/neo4jSessionCleanup');
 
 
