@@ -7,6 +7,11 @@
     height: calc(100vh - 180px);
     background: rgb(6,110,226);
     background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(6,110,226,1) 0%, rgba(30,184,214,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(75,145,214,1) 0%, rgba(93,227,222,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(96,155,214,1) 0%, rgba(100,199,219,1) 62%, rgba(102,227,223,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(96,155,214,1) 0%, rgba(110,188,228,1) 62%, rgba(119,209,237,1) 100%);
+    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(86,150,214,1) 0%, rgba(111,199,220,1) 66%, rgba(125,227,224,1) 100%);
+
 }
 
 .hero-text {
@@ -21,8 +26,7 @@
 .category-card {
     text-shadow: 2px 2px 3px rgba(25, 25, 25, 0.15);
     color: rgb(247, 247, 247);
-    background: rgb(227,149,5) !important;
-    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,136,0,1) 0%, rgba(255,166,0,1) 100% ) !important;
+    background: #FF9012 !important;
     text-align: center;
     padding-top: 1.5em !important;
     padding-bottom: 2em !important;

@@ -158,11 +158,13 @@ class TreeAnimation extends Component {
               {/*<stop offset="1" stopColor="#fdfcf1"/>*/}
             </linearGradient>
             <linearGradient id="Dégradé_sans_nom_2" data-name="Dégradé sans nom 2" x1="303.2" y1="168.65" x2="213.62" y2="249.02" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#45aa3a"/>
+              {/*<stop offset="0" stopColor="#45aa3a"/>*/}
+              <stop offset="0" stopColor="#58A854"/>
               {/*<stop offset="1" stopColor="#3d9439"/>*/}
             </linearGradient>
             <linearGradient id="Dégradé_sans_nom_3" data-name="Dégradé sans nom 3" x1="236.83" y1="175.48" x2="254.62" y2="212.29" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#41a83b"/>
+              {/*<stop offset="0" stopColor="#41a83b"/>*/}
+              <stop offset="0" stopColor="#529C4E"/>
               {/*<stop offset="1" stopColor="#5ebc44"/>*/}
             </linearGradient>
             <linearGradient id="Dégradé_sans_nom_4-2" x1="196.6" y1="195.74" x2="177" y2="178.38" xlinkHref="#Dégradé_sans_nom_4"/>
