@@ -10,7 +10,7 @@ import LoginForm from './components/login/LoginForm';
 import SequencePage from './components/sequence/SequencePage';
 import { Container } from 'semantic-ui-react';
 import CoursePage from './components/course/CoursePage';
-import LearningPathDiscoveryPage from './components/sequence/SequenceDiscoveryPage'
+import LearningPathDiscoveryPage from './components/sequence/LearningPathDiscovery/LearningPathDiscoveryPage'
 import SysRecommendationPage from './components/sequence/SysRecommendationPage';
 
 class App extends Component {
@@ -25,8 +25,7 @@ class App extends Component {
         <Route exact path="/login" component={LoginForm}/>
         <Route exact path="/profile/:userId" component={Profile}/>
         <Route
-          exact
-          path="/learning-path-discovery"
+          path="/learning-path-discovery/:trackId?"
           component={LearningPathDiscoveryPage}
         />
         <Route

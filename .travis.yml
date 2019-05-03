@@ -6,15 +6,15 @@ script:
   - npm run lint
   - npm run start:client-background
   - npm run test
-deploy:
-  provider: elasticbeanstalk
-  access_key_id: AKIAI4Y2ZXNVRWF4GPVQ
-  secret_access_key:
-    secure: DYMj3eMelmdLY1OEcp8UdZFgge6OnVDwU+54VKlSrtdO7qDBQZspu2nZyCMFx/RIk+T3k80WzA2fTnxNLgs2n2zgcddfOtW+3pB+UyM4C+4LIqi6ApmF7l4wlXMc2HMbE5LWoVQ3/HseeXHWapsz1iYjLqUzufKFURK6rRFHZWFlu+Ez4mWuffFtMXkccyiMFqP7SKwTHr3Qw2w4nOjUOCKaAk2JRYkqSMOMIUBBlyxoaXVC1JLc7Q2IF9lFIDMec9XHlPKV22ncxMMgOz/lle5S2Fb0vDmH5k4bB4T01P5FyRKPz9XzYa/0pPqxFiKV9cs5M2p31MojvDinAGfFlLM36qTbrJWJLFPm7PbKg00rJ9UtXcFXVjNTmd8iutqm2GgOwRCkl/i6+AwEKmBJoy98RtfXbWigmUj35OUVZD05ULgcZ1BzQQHwmsI2Pp+paV7QdypzMdt+Mbr0CihNQxh8XyJIhxOwILW9Ik2BOo2aQKE+Dg2zAxzg7BGmmIBJCPQ0qgn+//WPP9fc9Vsm/stA4Y8/9rR2zPwDVb9DgsBkehByBVt7Ssd293otUShEW1GbFQ0mjtV3jRbCkrla0SzaoD8YRGYeST8zfJyxQ6yb2TSMwPxrozNr2Ou2I96velv9mEsC2RAuq/nOb1NkNRX9eP3JTb6EyKpEJ4HuJMU=
-  region: us-east-1
-  app: lernt
-  env: prod
-  bucket_name: elasticbeanstalk-us-east-1-963617016332
-  on:
-    repo: capstone-paths/app
-    branch: master
+# deploy:
+#   provider: elasticbeanstalk
+#   access_key_id: AKIAZIUGCNIWSP2UT2UD
+#   secret_access_key:
+#     secure: diXyTXIBkfd9pLb5s3YIR193BL666OSb5mDIkv+/hMNSLK2p2DeqA4mG1gBar4xXJyp3a46oO3FkQUc9N9GJTSy5rF7nwFuXJEr4cIkx9GLU2ezmB/pW2OmzszLR9dtsz/ZniLwyAt8Vu1UYHsrQnuDjTOhsotE9I0aIpYVxSa+9JX+nmlpKTJkDJAgOrLePo31RKUOTv3YFgcKbAmSveBo2+NmjWidKaqw7Ptw2bosci5p9WKXfMtsNtEVh87qfVma5bMpXpucMPSsVRk0LHvintMMdWsXjFa3MvzoXN0d2wJaEsEzCOSqFUBt3smLmhDNoMovPO82AfQc3kJV8xeQ9hXDn8m+6qpxmeRSRi0Ez5vxYWwEeOpap+uqcT4p05O7x5UGJ3gBP9qg8RYiYegZqFAdUAlKwPVO3LAR50qx45VwLwN5q3bzJDtAswc0b4JpLNfv3nEKaVvbvlgpYrW0ZOJ3hb0N5UhxpEFhjxLpkY7T3kDONyQH6yc1pg2u4mauqQSi9vSO5e8pxAYaQRl4+oSZCqXES0Jo6RinqBlDWSB3lmLeV4lDd108zOfCqlcBNvy33p3PvxJCV4/CtYFjE/b79zYXNRZiSup2kkN+U1NaxAvipJcGUroUK2H/8zNAHz38mpfS1YthopvxIE14/Kjq0dHhrWbCF1Pm3WeM=
+#   region: us-east-1
+#   app: lernt.io
+#   env: Lerntio-Production
+#   bucket_name: elasticbeanstalk-us-east-1-637010078253
+#   on:
+#     repo: capstone-paths/app
+#     branch: master

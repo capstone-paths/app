@@ -1,0 +1,6 @@
+[
+{"learningStyleID": "0", "name":"Activist", "description": "Learn by doing"},
+{"learningStyleID": "1", "name":"Theorist", "description": "Want to undstand the theory behind it"},
+{"learningStyleID": "2", "name":"Pragmatist", "description": "Want the real world application"},
+{"learningStyleID": "3", "name":"Reflector", "description": "Learn by observing"}
+]

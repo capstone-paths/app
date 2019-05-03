@@ -25,8 +25,8 @@ export default class Nav extends Component {
 
         <Dropdown item simple text="Browse Offerings">
           <Dropdown.Menu>
-            <Dropdown.Item as={ Link } >Recommended Sequences</Dropdown.Item>
-            <Dropdown.Item as={ Link } to="/learning-path-discovery" >Sequence Search</Dropdown.Item>
+            <Dropdown.Item as={ Link } >Recommended Learning Paths</Dropdown.Item>
+            <Dropdown.Item as={ Link } to="/learning-path-discovery" >Learning Path Search</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <Menu.Menu position='right'>

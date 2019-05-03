@@ -166,9 +166,9 @@ class LearningPath {
      * @param {Session} session 
      * @param {Integer} id 
      */
-  static async findRecommendations(session, userId, sequenceId, courseId) {
+  static async findRecommendations(session, userId, pathId, courseId) {
     //todo expand on this. This is a most popular search
-    const query = `
+    const similarQuery = `
     MATCH (p1:User {userID: $userId})-[:EXPERIENCED]->(skill1)
     WITH p1, collect(id(skill1)) AS p1Skill
     MATCH (p2:User)-[:EXPERIENCED]->(skill2)
@@ -177,17 +177,31 @@ class LearningPath {
     WHERE algo.similarity.jaccard(p1Skill, p2Skill) > $similarityThreshold 
     MATCH (p2)-[:SUBSCRIBED]->(paths: PathStart)
     MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse)
-    RETURN PROPERTIES(nextCourse) as course,
-           count(course)
-    ORDER BY count(course) desc
+    WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
+    WITH PROPERTIES(nextCourse) as nextCourse,
+           count(course) as similarCount
+    RETURN nextCourse, similarCount
+    ORDER BY similarCount desc
     LIMIT 3
     `;
     let similarityThreshold = .25;
-    const results = await session.run(query, { courseId, userId, similarityThreshold });
-    if (results.records.length === 0) {
-      return undefined;
-    }
-    return results.records.map(r => r.get('course'));
+    const similarResults = await session.run(similarQuery, { courseId, userId, pathId, similarityThreshold });
+
+    var courses = similarResults.records.map(r => r.get('nextCourse'));
+
+    const popularQuery = `
+    MATCH (course: Course {courseID : $courseId})-[next :NEXT]->(nextCourse)
+    WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
+    WITH PROPERTIES(nextCourse) as nextCourse,
+           count(course) as count
+    RETURN nextCourse, count
+    ORDER BY count desc
+    LIMIT 3
+    `;
+
+    const popularResults =  await session.run(popularQuery, { courseId, pathId });
+    courses.push(...popularResults.records.map(r=>r.get('nextCourse')));
+    return courses.slice(0,3);
   }
 
   /**
@@ -236,13 +250,35 @@ class LearningPath {
     return { sequence, courseNodes, rels };
   }
 
-  // TODO: Need to think about this
-  toJSON() {
-    const { authorID, pathStartData, relationships } = this;
-    return { authorID, pathStartData, relationships };
+
+  /**
+   * Fetches a list of all paths made by users for a given track;
+   * does not return entire learning paths, but rather useful metadata
+   * such as author id and name, path name, etc.
+   * @param {Session} session Neo4j session context
+   * @param {uuid} trackID The track for which to get path data
+   */
+  static async getPathDataByTrackID(session, trackID) {
+    const query = `
+      MATCH (t: Track { trackID: $trackID })<-[:BELONGS_TO]-(p: PathStart)
+      MATCH (u: User)-[:CREATED]->(p)
+       WITH { 
+        userID: u.userID,
+        userName: u.username,
+        pathID: p.pathID, 
+        pathName: p.name 
+      } AS pathData
+      RETURN pathData
+    `;
+
+    const results = await session.run(query, { trackID });
+
+    if (results.records.length === 0)  {
+      return undefined;
+    }
+
+    return results.records.map(result => result.get('pathData'));
   }
-
-
 }
 
 module.exports = LearningPath;
