@@ -183,7 +183,7 @@ class LearningPathDiscoveryPage extends Component {
         element = <p>{this.state.errors.learningPathList}</p>;
         break;
 
-      case netState.IDLE:
+      default:
         element = (
           <p>
             Nothing here. Search for a track to see available Learning Paths.
