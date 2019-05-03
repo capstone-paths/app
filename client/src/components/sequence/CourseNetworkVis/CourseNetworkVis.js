@@ -19,6 +19,18 @@ function findLevel(nodeId, edges) {
 }
 
 function courseToNode(course) {
+  var color = '#93C2FA';
+  console.log(course.status)
+  switch(course.status) {
+    case 'inprogress':
+      color = '#E6AF0C';
+      break;
+    case 'completed':
+      color = '#16AB39';
+      break;
+    default:
+      color = '#93C2FA'
+  } 
   return {
     font: {
       multi: "md",
@@ -27,8 +39,8 @@ function courseToNode(course) {
       size: 15,
     },
     color: {
-      background: '#93C2FA',
-      border: '#93C2FA',
+      background: color,
+      border: color,
     },
     id: course.courseID,
     label: "*" + course.name + "*\n" + course.institution,
@@ -44,20 +56,7 @@ class CourseNetworkVis extends Component {
     const { courseNodes, rels } = props.sequenceData ? props.sequenceData : {courseNodes: [], rels: []} ;
 
     let nodes = courseNodes.map(course => {
-      return {
-        font: {
-          multi: "md",
-          color: 'black',
-          face: 'helvetica',
-          size: 15,
-        },
-        color: {
-          background: '#93C2FA',
-          border: '#93C2FA',
-        },
-        id: course.courseID,
-        label: "*" + course.name + "*\n" + course.institution + "*\n" + course.status,
-      };
+      return courseToNode(course);
     });
 
     let edges = rels.map(rel => ({

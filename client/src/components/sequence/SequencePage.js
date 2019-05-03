@@ -113,7 +113,12 @@ class SequencePage extends Component {
 
   render() {
     let vis;
-
+    let countCoursesInStatus = status => {
+      if(this.state.sequenceData === undefined) return 0;
+      console.log(this.state.sequenceData.courseNodes)
+       
+      return this.state.sequenceData.courseNodes.filter(course => course.status === status).length; 
+    } 
     if (this.state.loaded || ( this.props.match.params.sequenceId === 'new') ) {
       vis = <CourseNetworkVis
               ref={this.visRef}
@@ -170,7 +175,7 @@ class SequencePage extends Component {
                 </div>
               </Grid.Column>
 
-              <Grid.Column width={4} style={{ padding: "0em" }}>
+              <Grid.Column width={4} style={{ padding: "0em", height:'100%', overflowY:'scroll' }}>
                 <Menu
                   fluid
                   vertical
@@ -179,6 +184,14 @@ class SequencePage extends Component {
                     border: "none"
                   }}
                 >
+                   <Menu.Item>
+                    <Header as='h4'>Sequence Statistics</Header>
+                    {/* TODO CSS cleanup  */}
+                    <p><pre style={{color:'#93C2FA', display: 'inline', fontWeight: 'bold', fontSize: '1.5em'}}>{countCoursesInStatus('unstarted')} </pre>unstarted</p>
+                    <p><pre style={{color:'#E6AF0C', display: 'inline', fontWeight: 'bold', fontSize: '1.5em'}}>{countCoursesInStatus('inprogress')} </pre>inprogress</p>
+                    <p><pre style={{color:'#16AB39', display: 'inline', fontWeight: 'bold', fontSize: '1.5em'}}>{countCoursesInStatus('completed')} </pre>completed</p>
+                  </Menu.Item>
+
                   <Menu.Item>
                     <Header as='h4'>Search Courses</Header>
                     <AddCourseSearch />
@@ -189,11 +202,7 @@ class SequencePage extends Component {
                     {this.getCourseRecommendations()}
                   </Menu.Item>
 
-                  {/* <Menu.Item>
-                    <Header as='h4'>Sequence Statistics</Header>
-                    <p>100% Awesome</p>
-                  </Menu.Item> */}
-
+               
                   <Menu.Item>
                     {this.getCourseDetails()}
                   </Menu.Item>
