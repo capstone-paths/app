@@ -2,10 +2,15 @@ import React, {Component}from 'react'
 import { Button, Form, Header,  Modal, Rating } from 'semantic-ui-react'
 import TreeAnimation from '../home/animations/TreeAnimation';
 
-  class ProfileEditor extends Component {
+  class CourseRater extends Component {
     render (){
         const closeModal = () => {
-            this.props.closeModal();
+            console.log('asdsad');
+            console.log( document.getElementById('rating'));
+            var review = {
+                'rating': document.getElementById('rating').value
+            }
+            this.props.closeModal(review);
         }
 
         return (
@@ -17,15 +22,14 @@ import TreeAnimation from '../home/animations/TreeAnimation';
                 </Modal.Description>
                 <Form>
                     <p>How would you rate this course in general?</p>
-                    <Rating icon='star' defaultRating={0} maxRating={5} size='large' /> 
-                    <p>How good of a job has this course done in teaching you the topics it said it would?</p> 
-                    <Rating icon='star' defaultRating={0} maxRating={5} size='large'/>                     
-                    
+                    <Rating id="rating" icon='star' defaultRating={0} maxRating={5} size='large' />         
                 </Form>
                 <TreeAnimation></TreeAnimation>
             </Modal.Content>
             <Modal.Actions>
-                <Button color='green' onClick={closeModal}>
+                <Button color='green' onClick={(e) => {
+                    closeModal()
+                }}>
                     Continue
                 </Button>
             </Modal.Actions>
@@ -33,4 +37,4 @@ import TreeAnimation from '../home/animations/TreeAnimation';
 
 )}}
 
-export default ProfileEditor
+export default CourseRater

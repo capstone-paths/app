@@ -28,6 +28,9 @@ export default class LerntApi {
     static updateCourseStatus(userId, courseId, status){
         return axios.post('/api/courses/'+ courseId + '/' + userId + '/' + status);
     }
+    static reviewCourse(userId, courseId, review){
+        return axios.post('/api/courses/review/' + courseId + '/' + userId, review)
+    }
     getUser(id) {
         return axios.get('/api/users/' + id)
     }
