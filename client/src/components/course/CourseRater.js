@@ -1,5 +1,6 @@
 import React, {Component}from 'react'
-import { Button, Form, Header, Icon,  Modal, Rating } from 'semantic-ui-react'
+import { Button, Form, Header,  Modal, Rating } from 'semantic-ui-react'
+import TreeAnimation from '../home/animations/TreeAnimation';
 
   class ProfileEditor extends Component {
     render (){
@@ -12,7 +13,7 @@ import { Button, Form, Header, Icon,  Modal, Rating } from 'semantic-ui-react'
             <div>
             <Modal.Content>
                 <Modal.Description>
-                    <Header>Course Review</Header>
+                    <Header>Congrats on your progress</Header>
                 </Modal.Description>
                 <Form>
                     <p>How would you rate this course in general?</p>
@@ -21,13 +22,11 @@ import { Button, Form, Header, Icon,  Modal, Rating } from 'semantic-ui-react'
                     <Rating icon='star' defaultRating={0} maxRating={5} size='large'/>                     
                     
                 </Form>
+                <TreeAnimation></TreeAnimation>
             </Modal.Content>
             <Modal.Actions>
-                <Button color='red' onClick={closeModal}>
-                    <Icon name='remove' /> Cancel
-                </Button>
                 <Button color='green' onClick={closeModal}>
-                    <Icon name='checkmark' /> I'm done rating!
+                    Continue
                 </Button>
             </Modal.Actions>
             </div>

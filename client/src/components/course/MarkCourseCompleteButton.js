@@ -9,6 +9,7 @@ export default class MarkCourseCompleteButton extends Component {
         this.api = new LerntApi();
         this.course = props.course;
         this.state = {course : props.course};
+        this.reviewModal = props.reviewModal
     }
 
     buttonText(){
@@ -37,7 +38,9 @@ export default class MarkCourseCompleteButton extends Component {
             //todo we need to update with proper user status
             LerntApi.updateCourseStatus('2', this.state.course.courseID, status).then((response) => {
                 //TODO improve on the need for full page refresh on course status update
-                window.location.reload();
+                // window.location.reload();
+                console.log(this.reviewModal);
+                this.reviewModal.current.openModal();
             });
         }
         return <Button size='mini' color={this.buttonColor()} onClick={toggleStatus}>
