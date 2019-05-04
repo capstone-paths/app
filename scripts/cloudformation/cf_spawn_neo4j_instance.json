@@ -3,7 +3,7 @@
 
   "Description" : "AWS CloudFormation Template to create an Amazon EC2 instance running bitnami certified Neo4j Database instance.
   This can be deployed in US-EAST-1 only as the AMI used is from this region.
-  This example creates an EC2 security group for the instance to give you SSH access.",
+  This example creates an EC2 security group for the instance to give you SSH access and also a required role",
 
   "Parameters" : {
     "KeyName": {
@@ -13,9 +13,9 @@
     },
 
     "RoleName": {
-      "Description" : "Lernt Neo4j EC2 Role",
+      "Description" : "Lernt Neo4j EC2 Role created within cloud formation itself",
       "Type" : "String",
-      "Default" : "Lernt_EC2_Neo4j_Role",
+      "Default" : "CF_Lernt_Neo4j_EC2_Role",
       "ConstraintDescription" : "Must be a valid IAM Role"
     },
 
@@ -58,6 +58,45 @@
   },
 
   "Resources" : {
+    "CFLerntNeo4jEC2Role": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "CF_Lernt_Neo4j_EC2_Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "ec2.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM",
+          "arn:aws:iam::aws:policy/AmazonS3FullAccess",
+          "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+        ]
+      }
+    },
+    "CFNeo4jEC2RoleInstanceProfile" : {
+                      "Type" : "AWS::IAM::InstanceProfile",
+                      "Properties" : {
+                        "Path" : "/",
+                        "Roles" : [
+                          {
+                            "Ref" : "CFLerntNeo4jEC2Role"
+                          }
+                        ]
+                      }
+                    },
     "EC2Instance" : {
       "Type" : "AWS::EC2::Instance",
       "Properties" : {
@@ -67,7 +106,7 @@
             {"Key" : "Name", "Value" : "Neo4j-CF-EC2"}
         ],
         "KeyName" : { "Ref" : "KeyName" },
-         "IamInstanceProfile"  : { "Ref" : "RoleName" },
+        "IamInstanceProfile"  : { "Ref" : "CFNeo4jEC2RoleInstanceProfile" },
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
         "UserData":{  "Fn::Base64" : {
@@ -87,6 +126,9 @@
       "Content-Transfer-Encoding: 7bit\n",
       "Content-Disposition: attachment; filename=\"userdata.txt\"\n",
       "#!/bin/bash\n",
+      "#add in parameter to track status of EC2 user data script execution\n",
+      "/usr/bin/aws ssm delete-parameter --name \"CF_PS_EC2_USERDATA_STATUS\" --region us-east-1\n",
+      "/usr/bin/aws ssm put-parameter --name \"CF_PS_EC2_USERDATA_STATUS\" --value \"RUNNING\" --type String --tier Standard --region us-east-1 --overwrite\n",
       "#stop neo4j database\n",
       "/opt/bitnami/neo4j/bin/neo4j stop &\n",
       "/bin/echo \"Stopping Neo4j Database\"\n",
@@ -147,6 +189,8 @@
       "wait\n",
       "#start database\n",
       "/opt/bitnami/neo4j/bin/neo4j start\n",
+      "#Implies user data execution is complete\n",
+      "/usr/bin/aws ssm put-parameter --name \"CF_PS_EC2_USERDATA_STATUS\" --value \"DONE\" --type String --tier Standard --region us-east-1 --overwrite\n",
       "--//\n"
 
   ]]}}
