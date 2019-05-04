@@ -17,9 +17,7 @@ class CourseDetailsMini extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.api = new LerntApi();
         if(this.state.course === undefined || this.state.course.courseID !== this.props.courseId){
-            //todo replace with real user context when available 
-            let userId = "2";
-            this.api.getCourse(userId, this.props.courseId)
+            this.api.getCourse(this.props.courseId)
                 .then((response) => {
                     this.setState({ loaded: true, course: response.data })
                 });

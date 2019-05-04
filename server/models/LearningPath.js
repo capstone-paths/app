@@ -48,7 +48,7 @@ class LearningPath {
       pathID = uuidv1()
     }
     await session.run(query, { userID, pathID, name, relationships, firstNext });
-    return this.findById(session, pathID);
+    return this.findById(session, pathID, userID);
   }
 
   /**
