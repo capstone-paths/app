@@ -28,10 +28,10 @@ def lambda_handler(event, context):
     job_id = event["CodePipeline.job"]["id"]
 
     try:
-        s3.meta.client.copy(code_zip_file, dest_bucket_name, dest_file_name
+        s3.meta.client.copy(code_zip_file, dest_bucket_name, dest_file_name)
         codepipeline.put_job_success_result(jobId = job_id)
-    except e:
-        codepipeline.put_job_failure_result(jobId = job_id, failureDetails = {'message': e, 'type': 'JobFailed'})
+    except:
+        codepipeline.put_job_failure_result(jobId = job_id, failureDetails = {'message': "code movement to s3 failed", 'type': 'JobFailed'})
 
 
     message = "File moved to S3 Bucket : " + dest_bucket_name + "/" + dest_file_name
