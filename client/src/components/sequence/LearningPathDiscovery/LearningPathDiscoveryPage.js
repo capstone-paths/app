@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Grid, Accordion, Icon, Menu, Header } from 'semantic-ui-react';
+import { Form, Grid, Accordion, Icon, Menu, Header, Segment } from 'semantic-ui-react';
 import CourseNetworkVis from '../CourseNetworkVis/CourseNetworkVis';
 import LerntApi from '../../../LerntApi';
 import LearningPathList from './LearningPathList';
@@ -148,7 +148,8 @@ class LearningPathDiscoveryPage extends Component {
             }
             value={this.state.searchInput}
             onChange={e => this.setState({ searchInput: e.target.value })}
-            onSelect={value => {
+            onSelect={(value, item) => {
+              this.setState({ searchInput: item.label });
               this.getLearningPathList(value);
               this.getSystemRecommendation(value);
             }}
@@ -211,9 +212,19 @@ class LearningPathDiscoveryPage extends Component {
     const { activeResultView } = this.state;
     if (activeResultView === resultViews.PULSE) {
       return (
-        <CourseNetworkVis
-          sequenceData={this.state.recommendationData}
-        />
+        <div>
+          <h4>
+            This is a system-generated Learning Path representation of some of the most
+            popular courses in the chosen category. Take a look around
+            and see if you find anything that tickles your fancy!
+          </h4>
+          <Segment style={{height: "66vh", overflow: "hidden"}}>
+            <CourseNetworkVis
+              sequenceData={this.state.recommendationData}
+            />
+          </Segment>
+
+        </div>
       )
     }
     else {
