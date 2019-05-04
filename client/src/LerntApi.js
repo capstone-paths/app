@@ -28,10 +28,10 @@ export default class LerntApi {
         return axios.get('/api/courses/')
     }
     static updateCourseStatus(courseId, status){
-        return axios.post('/api/courses/'+ courseId + '/' + status);
+        return axios.post('/api/courses/update-status/'+ courseId + '/' + status);
     }
-    static reviewCourse(userId, courseId, review){
-        return axios.post('/api/courses/review/' + courseId + '/' + userId, review)
+    static reviewCourse(courseId, review){
+        return axios.post('/api/courses/review/' + courseId, review)
     }
     getUser(id) {
         return axios.get('/api/users/' + id)

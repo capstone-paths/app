@@ -50,7 +50,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 //update course status
-router.post('/:id/:status', (req, res, next) => {
+router.post('/update-status/:id/:status', (req, res, next) => {
   if (!req.params.id) {
     res.status(400);
   }
@@ -67,5 +67,21 @@ router.post('/:id/:status', (req, res, next) => {
     .catch(next)
 });
 
+router.post('/review/:id', (req, res, next) => {
+  if (!req.params.id) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  Course
+    .reviewCourse(session, req.params.id, req.get('User'), req.body)
+    .then((result) => {
+      if (!result) {
+        res.status(400);
+      }
+      res.json(result);
+    })
+    .catch(next)
+});
 
 module.exports = router;

@@ -38,8 +38,11 @@ export default class MarkCourseCompleteButton extends Component {
             LerntApi.updateCourseStatus(this.state.course.courseID, status).then((response) => {
                 //TODO improve on the need for full page refresh on course status update
                 // window.location.reload();
-                console.log(this.reviewModal);
-                this.reviewModal.current.openModal();
+                if(status === 'completed'){
+                    this.reviewModal.current.openModal();
+                }else{
+                    window.location.reload();
+                }
             });
         }
         return <Button size='mini' color={this.buttonColor()} onClick={toggleStatus}>
