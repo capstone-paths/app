@@ -6,12 +6,7 @@
     position: relative !important;
     height: calc(100vh - 180px);
     background: rgb(6,110,226);
-    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(6,110,226,1) 0%, rgba(30,184,214,1) 100%);
-    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(75,145,214,1) 0%, rgba(93,227,222,1) 100%);
-    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(96,155,214,1) 0%, rgba(100,199,219,1) 62%, rgba(102,227,223,1) 100%);
-    background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(96,155,214,1) 0%, rgba(110,188,228,1) 62%, rgba(119,209,237,1) 100%);
     background: url("https://www.transparenttextures.com/patterns/back-pattern.png"), linear-gradient(170deg, rgba(86,150,214,1) 0%, rgba(111,199,220,1) 66%, rgba(125,227,224,1) 100%);
-
 }
 
 .hero-text {
