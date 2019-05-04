@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Grid, Accordion, Icon, Menu, Header } from 'semantic-ui-react'
+import { Form, Grid, Accordion, Icon, Menu, Header } from 'semantic-ui-react';
+import CourseNetworkVis from '../CourseNetworkVis/CourseNetworkVis';
 import LerntApi from '../../../LerntApi';
 import LearningPathList from './LearningPathList';
 import ReactAutocomplete from 'react-autocomplete';
@@ -166,7 +167,7 @@ class LearningPathDiscoveryPage extends Component {
     return element;
   };
 
-
+  // TODO: Abstract as its own component
   ResultsList = () => {
     let element;
 
@@ -204,6 +205,21 @@ class LearningPathDiscoveryPage extends Component {
     this.setState({ activeResultView: name });
   };
 
+  renderResults = () => {
+    console.log('renderResults called');
+    const { activeResultView } = this.state;
+    if (activeResultView === resultViews.PULSE) {
+      return (
+        <CourseNetworkVis
+          sequenceData={this.state.recommendationData}
+        />
+      )
+    }
+    else {
+      return this.ResultsList();
+    }
+  };
+
   render() {
     // We only consider the page renderable once the search component works
     // If error in fetching the track data, but we still have learning
@@ -214,7 +230,6 @@ class LearningPathDiscoveryPage extends Component {
 
     const { activeIndex, activeResultView } = this.state;
 
-    let resList = this.ResultsList();
 
     return <Grid celled='internally'>
       <Grid.Row>
@@ -266,7 +281,7 @@ class LearningPathDiscoveryPage extends Component {
               <Header as="h3">Lerners' Pulse</Header>
             </Menu.Item>
           </Menu>
-          {resList}
+          {this.renderResults()}
         </Grid.Column>
       </Grid.Row>
     </Grid>
