@@ -26,30 +26,30 @@ router.get('/', (req, res, next) => {
     .catch(next)
 });
 
-/**
- * @route  GET /api/learning-paths/:id
- * @access Public
- * @desc   Retrieves a learning path by id
- * @param  id (in-path, mandatory, id)
- */
-router.get('/:id/:userId', (req, res, next) => {
-  console.log('learning-paths called, id: ', req.params.id);
-
-  if (!req.params.id) {
-    res.status(400);
-  }
-
-  const session = utils.getDBSession(req);
-  LearningPath
-    .findById(session, req.params.id, req.params.userId)
-    .then((result) => {
-      if (!result) {
-        res.status(400);
-      }
-      res.json(result);
-    })
-    .catch(next)
-});
+// /**
+//  * @route  GET /api/learning-paths/:id
+//  * @access Public
+//  * @desc   Retrieves a learning path by id
+//  * @param  id (in-path, mandatory, id)
+//  */
+// router.get('/:id/:userId', (req, res, next) => {
+//   console.log('learning-paths called, id: ', req.params.id);
+//
+//   if (!req.params.id) {
+//     res.status(400);
+//   }
+//
+//   const session = utils.getDBSession(req);
+//   LearningPath
+//     .findById(session, req.params.id, req.params.userId)
+//     .then((result) => {
+//       if (!result) {
+//         res.status(400);
+//       }
+//       res.json(result);
+//     })
+//     .catch(next)
+// });
 
 /**
  * @route  GET /api/learning-paths/subscribe/:sequenceID/:userID
