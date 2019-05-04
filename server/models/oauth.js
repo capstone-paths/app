@@ -6,16 +6,16 @@ const jwtDecode = require('jwt-decode');
 
 //Define the AWS Cognito Service region, credentials, target User Pool and target client ID
 // Visit https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/ for the AWS SDK APi documentation
-AWS.config.region = process.env.PS_COG_REGION;
-AWS.config.credentials = new AWS.Credentials(process.env.PS_COG_ACCESS_KEY_ID, process.env.PS_COG_SECRET_ACCESS_KEY);
+AWS.config.region = 'us-east-1';
+AWS.config.credentials = new AWS.Credentials('AKIAZIUGCNIW6ZX63CE2', '/kO55wjeWewz9qX2BVtYZx7dTu6ZY9Rd4tfGqVGt');
 const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
-const user_pool_id = process.env.PS_COG_USER_POOL_ID;
-const client_id = process.env.PS_COG_CLIENT_ID;
+const user_pool_id = 'us-east-1_Aw4rQyygr';
+const client_id = '6u5bpn6m4p59l3st62creu01h4';
 
 //Define the algorithm, key & intialization vector used for the API key encryption
-const algorithm = process.env.PS_COG_ALGORITHM;
-const key = crypto.scryptSync(process.env.PS_COG_KEY_PASSWORD, process.env.PS_COG_KEY_SALT, parseInt(process.env.PS_COG_KEY_LENGTH, 10));
-const iv = Buffer.alloc(parseInt(process.env.PS_COG_IV_SIZE,10), parseInt(process.env.PS_COG_IV_FILL,10));
+const algorithm = 'aes-128-cbc';
+const key = crypto.scryptSync('lernt.io_secret_key', 'salt', 16);
+const iv = Buffer.alloc(16, 0);
 
 //This is the exported object
 const oauth = module.exports = {};
@@ -40,7 +40,7 @@ oauth.signUp = function (name, email, password){
     Username: email,
     ForceAliasCreation: false,
     MessageAction: "SUPPRESS",
-    TemporaryPassword: process.env.PS_COG_TEMP_PASSWORD,
+    TemporaryPassword: '11111111',
     UserAttributes: [
       { Name: 'email_verified', Value: 'true' },
       { Name: 'name', Value: name },
@@ -52,7 +52,7 @@ oauth.signUp = function (name, email, password){
         AuthFlow: 'ADMIN_NO_SRP_AUTH',
         ClientId: client_id,
         UserPoolId: user_pool_id,
-        AuthParameters: {'USERNAME': email,'PASSWORD': process.env.PS_COG_TEMP_PASSWORD}
+        AuthParameters: {'USERNAME': email,'PASSWORD': '11111111'}
       };
       return cognitoidentityserviceprovider.adminInitiateAuth(params).promise();
     })
@@ -221,7 +221,7 @@ function VerifyAPIKey(apikey){
   let verify = {};
 
   //checks for the expected key length
-  if (apikey.length != (parseInt(process.env.PS_COG_KEY_LENGTH, 10) * 8)){
+  if (apikey.length != (16 * 8)){
     verify.error = 'Invalid API Key';
     return verify; // if the API Key length is wrong, returns with error
   }
@@ -235,7 +235,7 @@ function VerifyAPIKey(apikey){
   let date_now = new Date();
 
   // checks to ensure that the API key is modified or expired
-  if (date_created == 'Invalid Date' || (date_now - date_created) > parseInt(process.env.PS_COG_MAX_VALID_TIME)){
+  if (date_created == 'Invalid Date' || (date_now - date_created) > 86400000){
     verify.error = 'Invalid API Key';
     return verify;// if the API key is modified or expired, returns with error
   }
