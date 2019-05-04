@@ -103,6 +103,7 @@ class LearningPathDiscoveryPage extends Component {
         this.setState({
           recommendationData: res.data,
           recommendationDataState: netState.LOADED,
+          activeResultView: resultViews.LEARNING_PATHS,
         });
       })
       .catch(e => {
@@ -220,6 +221,12 @@ class LearningPathDiscoveryPage extends Component {
     }
   };
 
+  isRecommendationLoaded = () => {
+    const { recommendationData, recommendationDataState } = this.state;
+    return recommendationDataState === netState.LOADED
+      && Object.keys(recommendationData).length >= 0;
+  };
+
   render() {
     // We only consider the page renderable once the search component works
     // If error in fetching the track data, but we still have learning
@@ -273,13 +280,16 @@ class LearningPathDiscoveryPage extends Component {
             >
               <Header as="h3">Learning Paths</Header>
             </Menu.Item>
-            <Menu.Item
-              name={resultViews.PULSE}
-              active={activeResultView === resultViews.PULSE}
-              onClick={this.handleMenuViewClick}
-            >
-              <Header as="h3">Lerners' Pulse</Header>
-            </Menu.Item>
+            {
+              this.isRecommendationLoaded() &&
+              <Menu.Item
+                name={resultViews.PULSE}
+                active={activeResultView === resultViews.PULSE}
+                onClick={this.handleMenuViewClick}
+              >
+                <Header as="h3">Lerners' Pulse</Header>
+              </Menu.Item>
+            }
           </Menu>
           {this.renderResults()}
         </Grid.Column>
