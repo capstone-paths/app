@@ -18,3 +18,10 @@ const clearTestData = (done) => {
 
 beforeEach(populateDatabase);
 afterEach(clearTestData);
+
+describe('GET /api/learning-paths/:id', () => {
+  it('should get a learning path', (done) => {
+    request(app)
+      .get('/api/learning-paths/')
+  })
+})
