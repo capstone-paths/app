@@ -14,7 +14,6 @@ class User {
   }
 
   async signup(session) {
-    console.log('this: ', this);
     const { userID, firstname, lastname, username, email, bio } = this;
 
     const idValidQuery = 'MATCH (u: User { userID: $userID }) RETURN u';
