@@ -1,4 +1,4 @@
-const ValidationError = require('./ValidationError');
+const ValidationError = require('./validation/ValidationError');
 const uuid = require('uuid/v4');
 
 class User {
@@ -13,7 +13,7 @@ class User {
     this.bio = bio;
   }
 
-  async save(session) {
+  async signup(session) {
     const { userID, firstname, lastname, username, email, bio } = this;
 
     const idValidQuery = 'MATCH (u: User { userID: $userID })';

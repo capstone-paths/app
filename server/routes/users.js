@@ -83,5 +83,16 @@ router.post('/:id', (req, res, next) => {
 });
 
 
+router.post('/signup-test', (req, res, next) => {
+
+  const user = new User(req.body);
+  const session = utils.getDBSession(req);
+
+  user
+    .signup(session)
+    .then(result => res.json('Test user created: ', user))
+    .catch(next);
+})
+
  
   module.exports = router;
