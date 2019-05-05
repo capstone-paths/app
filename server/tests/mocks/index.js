@@ -1,6 +1,6 @@
 module.exports.setInitState = `
   CREATE (t001 :Track :TestNode { trackID: 'ST_Track1', name: 'ST_Track1' }) 
-  CREATE (c001 :Course :TestNode { courseID: 'ST_Course1', name: 'ST_Course1' })
+  CREATE (c001 :Course :TestNode { courseID: 'ST_Course1', name: 'ST_Course1', subject: 'TestCat', category: 'TestCat', tags: ['one', 'two'] })
   CREATE (p001 :PathStart :TestNode { pathID: 'ST_Path1', name: 'ST_Path1' })
   
   CREATE 

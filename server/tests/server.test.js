@@ -41,6 +41,30 @@ describe('GET /api/learning-paths/:id', () => {
         if (err) return done(err);
         done();
       });
-  })
+  });
 });
 
+
+describe('GET /api/learning-paths/system-recommendation/:id', () => {
+  it('should get a system-generated learning-path', (done) => {
+    request(app)
+      .get('/api/learning-paths/system-recommendation/ST_Track1')
+      .set('User', '2')
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('should return 400 for non-existing trackIDs', (done) => {
+    request(app)
+      .get('/api/learning-paths/system-recommendation/-1000')
+      .set('User', '2')
+      .expect(400)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
