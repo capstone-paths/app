@@ -113,7 +113,7 @@ class CourseNetworkVis extends Component {
       height: '100%',
 
       manipulation: {
-        enabled: true,
+        enabled: this.props.useAutoComplete,
         addNode: false
       },
       layout: {

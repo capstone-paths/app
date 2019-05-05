@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Grid, Accordion, Icon, Menu, Header, Segment } from 'semantic-ui-react';
+import { Form, Grid, Accordion, Icon, Menu, Header, Segment, Button } from 'semantic-ui-react';
 import CourseNetworkVis from '../CourseNetworkVis/CourseNetworkVis';
 import LerntApi from '../../../LerntApi';
 import LearningPathList from './LearningPathList';
@@ -219,6 +219,13 @@ class LearningPathDiscoveryPage extends Component {
             and see if you find anything that tickles your fancy!
           </h4>
           <Segment style={{height: "66vh", overflow: "hidden"}}>
+          <Button
+                    color="green"
+                    style={{ float: 'right' }}
+                    onClick={this.saveSequence}>
+                    Remix
+                    <Icon name='right chevron' />
+                  </Button>
             <CourseNetworkVis
               sequenceData={this.state.recommendationData}
             />
