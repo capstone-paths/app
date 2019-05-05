@@ -26,8 +26,7 @@ class SequencePage extends Component {
     const { sequenceId } = this.props.match.params;
     if(sequenceId !== 'new'){
       LerntApi
-      //todo user context
-        .getSequence(sequenceId, '2')
+        .getSequence(sequenceId)
         .then(response => {
           this.setState({ loaded: true, sequenceData: response.data });
         })
@@ -51,7 +50,7 @@ class SequencePage extends Component {
     state.currentCourse = course.selectedCourse;
     this.setState(state);
     LerntApi
-      .getSequenceCourseRecommendation('2', pathID, selectedCourse)
+      .getSequenceCourseRecommendation(pathID, selectedCourse)
       .then(response => {
         this.setState({ courseRecommendations: response.data });
       });

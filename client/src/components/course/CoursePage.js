@@ -9,8 +9,7 @@ class CoursePage extends Component {
         this.state = { loaded: false };
         
         this.api = new LerntApi();
-        //todo figure out user context
-        this.api.getCourse('2', props.match.params.courseId)
+        this.api.getCourse(props.match.params.courseId)
             .then((response) => {
                 this.setState({ loaded: true, course: response.data })
             });

@@ -87,6 +87,22 @@ class Course {
     await session.run(query, { courseId, userId });
     return true;
   }
+  static async reviewCourse(session, courseId, userId, review) {
+    const query = `
+    MATCH (u: User {userID: $userId})
+    MATCH (c: Course {courseID: $courseId})
+    MERGE (u)-[:RATED {value : $rating}]->(c)`
+
+
+    const removeOldReview = `
+    MATCH (u: User {userID: $userId})-[r:RATED]->(c: Course {courseID: $courseId})
+    DELETE r
+    `;
+    var rating = review.rating;
+    await session.run(removeOldReview, { courseId, userId });
+    await session.run(query, { courseId, userId, rating});
+    return true;
+  }
 }
 
 module.exports = Course;

@@ -26,30 +26,30 @@ router.get('/', (req, res, next) => {
     .catch(next)
 });
 
-// /**
-//  * @route  GET /api/learning-paths/:id
-//  * @access Public
-//  * @desc   Retrieves a learning path by id
-//  * @param  id (in-path, mandatory, id)
-//  */
-// router.get('/:id/:userId', (req, res, next) => {
-//   console.log('learning-paths called, id: ', req.params.id);
-//
-//   if (!req.params.id) {
-//     res.status(400);
-//   }
-//
-//   const session = utils.getDBSession(req);
-//   LearningPath
-//     .findById(session, req.params.id, req.params.userId)
-//     .then((result) => {
-//       if (!result) {
-//         res.status(400);
-//       }
-//       res.json(result);
-//     })
-//     .catch(next)
-// });
+/**
+ * @route  GET /api/learning-paths/:id
+ * @access Public
+ * @desc   Retrieves a learning path by id
+ * @param  id (in-path, mandatory, id)
+ */
+router.get('/:id', (req, res, next) => {
+  console.log('learning-paths called, id: ', req.params.id);
+
+  if (!req.params.id) {
+    res.status(400);
+  }
+
+  const session = utils.getDBSession(req);
+  LearningPath
+    .findById(session, req.params.id, req.get('User'))
+    .then((result) => {
+      if (!result) {
+        res.status(400);
+      }
+      res.json(result);
+    })
+    .catch(next)
+});
 
 /**
  * @route  GET /api/learning-paths/subscribe/:sequenceID/:userID
@@ -57,14 +57,14 @@ router.get('/', (req, res, next) => {
  * @desc   Retrieves whether a learning path is subscribed to by user id
  * @param  id (in-path, mandatory, id)
  */
-router.get('/is-subscribed/:sequenceID/:userID', (req, res, next) => {
-  if ((!req.params.sequenceID) || (!req.params.userID)) {
+router.get('/is-subscribed/:sequenceID', (req, res, next) => {
+  if ((!req.params.sequenceID) || (!req.get('User'))) {
     res.status(400);
   }
 
   const session = utils.getDBSession(req);
   LearningPath
-    .isSubscribed(session, req.params.sequenceID, req.params.userID)
+    .isSubscribed(session, req.params.sequenceID, req.get('User'))
     .then((result) => {
       res.json(result);
     })
@@ -76,14 +76,14 @@ router.get('/is-subscribed/:sequenceID/:userID', (req, res, next) => {
  * @desc   Subscribes or unsubscribes from the sequence
  * @param  id (in-path, mandatory, id)
  */
-router.post('/toggle-subscribe/:sequenceID/:userID', (req, res, next) => {
-  if ((!req.params.sequenceID) || (!req.params.userID)) {
+router.post('/toggle-subscribe/:sequenceID', (req, res, next) => {
+  if ((!req.params.sequenceID) || (!req.get('User'))) {
     res.status(400);
   }
 
   const session = utils.getDBSession(req);
   LearningPath
-    .toggleSubscribe(session, req.params.sequenceID, req.params.userID)
+    .toggleSubscribe(session, req.params.sequenceID, req.get('User'))
     .then((result) => {
       res.json(result);
     })
@@ -114,14 +114,14 @@ router.post('/', (req, res, next) => {
  * @desc   Suggests a new node for the learning path
  * @param  id (in-path, mandatory, id)
  */
-router.get('/recommendations/:sequenceID/:userID/:courseID', (req, res, next) => {
-  if ((!req.params.sequenceID) || (!req.params.userID)) {
+router.get('/recommendations/:sequenceID/:courseID', (req, res, next) => {
+  if ((!req.params.sequenceID)) {
     res.status(400);
   }
 
   const session = utils.getDBSession(req);
   LearningPath
-    .findRecommendations(session,  req.params.userID, req.params.sequenceID, req.params.courseID)
+    .findRecommendations(session, req.get('User'), req.params.sequenceID, req.params.courseID)
     .then((result) => {
       res.json(result);
     })

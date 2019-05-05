@@ -9,9 +9,7 @@ export default class SubscribeToSequenceButton extends Component {
         this.state = { loaded: false};
         this.api = new LerntApi();
         this.sequenceId = props.sequenceID;
-        //TODO adjust once we have context of user
-        this.userId = 2;
-        this.api.isSubscribed(this.userId, this.sequenceId).then((response) => {
+        this.api.isSubscribed(this.sequenceId).then((response) => {
             var state = this.state;
             state.isSubscribed = response.data;
             this.setState(
@@ -35,7 +33,7 @@ export default class SubscribeToSequenceButton extends Component {
     }
     render() {
         let toggleSubscribe = () => {
-            this.api.toggleSubscribe(this.userId, this.sequenceId).then((response) => {
+            this.api.toggleSubscribe(this.sequenceId).then((response) => {
                 var state = this.state;
                 state.isSubscribed = response.data;
                 this.setState(

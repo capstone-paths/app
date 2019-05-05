@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import {Modal, Table } from 'semantic-ui-react';
-import CourseRater from '../profile/CourseRater'
+import { Table } from 'semantic-ui-react';
 
 class CourseTable extends Component {
     constructor(props) {
         super(props);
         this.courses = props.courses;
     }
-    state = {openModal:false,
+    state = {
             courses: [{
                 id: "6af67908-3910-4742-90cd-bede5fc1c0ff",
                 name: "Machine Learning for Data Science and Analytics",
@@ -55,7 +54,6 @@ class CourseTable extends Component {
         
     }
     render() {
-        const {openModal} = this.state
         // const courses = this.state.courses;
         function getLink(id){
             return '/course/'+id;
@@ -90,11 +88,7 @@ class CourseTable extends Component {
                 })}
               
             </Table.Body>
-            <Modal 
-                open={openModal}
-                onClose={this.close}>
-               <CourseRater onFinish={this.onFinish} user={this.state.user} closeModal={this.closeModal}/>
-            </Modal>
+          
           </Table>
         )
     }

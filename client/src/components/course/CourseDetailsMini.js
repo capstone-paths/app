@@ -3,11 +3,13 @@ import LerntApi from '../../LerntApi'
 import { Icon } from 'semantic-ui-react'
 import { Header, Grid, List } from 'semantic-ui-react'
 import MarkCourseCompleteButton from './MarkCourseCompleteButton'
+import CourseReviewModal from './CourseReviewModal';
 
 class CourseDetailsMini extends Component {
     constructor(props) {
         super(props);
         this.state = { loaded: false };
+        this.modalRef = React.createRef();
     }
     shouldComponentUpdate(nextProps, nextState) {
      return true;
@@ -15,9 +17,7 @@ class CourseDetailsMini extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.api = new LerntApi();
         if(this.state.course === undefined || this.state.course.courseID !== this.props.courseId){
-            //todo replace with real user context when available 
-            let userId = "2";
-            this.api.getCourse(userId, this.props.courseId)
+            this.api.getCourse(this.props.courseId)
                 .then((response) => {
                     this.setState({ loaded: true, course: response.data })
                 });
@@ -30,7 +30,7 @@ class CourseDetailsMini extends Component {
                 <Grid.Row columns={1}>
                     <Grid.Column >
                         <Header>{this.state.course.name}</Header>
-                        <MarkCourseCompleteButton course={this.state.course}  />
+                        <MarkCourseCompleteButton course={this.state.course} reviewModal ={this.modalRef} />
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={1}>
@@ -71,6 +71,7 @@ class CourseDetailsMini extends Component {
         return (
             <div >
                 {courseHeader}
+                <CourseReviewModal ref={this.modalRef} course ={this.state.course} ></CourseReviewModal>
             </div>
         );
     }

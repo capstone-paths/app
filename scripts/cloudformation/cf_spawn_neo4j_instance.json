@@ -103,7 +103,7 @@
         "InstanceType" : { "Ref" : "InstanceType" },
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
         "Tags" : [
-            {"Key" : "Name", "Value" : "Neo4j-CF-EC2"}
+            {"Key" : "Name", "Value" : "Lernt-Neo4j-CF-EC2"}
         ],
         "KeyName" : { "Ref" : "KeyName" },
         "IamInstanceProfile"  : { "Ref" : "CFNeo4jEC2RoleInstanceProfile" },
