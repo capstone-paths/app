@@ -8,7 +8,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
     "start": "node index.js",
-    "watch": "nodemon index.js"
+    "watch": "nodemon index.js",
+    "test": "mocha */*.test.js --exit"
   },
   "dependencies": {
     "aws-sdk": "^2.441.0",
