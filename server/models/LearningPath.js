@@ -83,8 +83,9 @@ class LearningPath {
     const query = `
       MATCH (s: PathStart {pathID: $id})
       MATCH ()-[rel :NEXT {pathID: $id}]->(c: Course)
+      OPTIONAL MATCH (user: User{userID: $userId})-[created :CREATED]->(s)
       OPTIONAL MATCH (user: User{userID: $userId})-[completed :COMPLETED]->(c)
-      with s, rel, c, count(completed) as completed
+      with s, rel, c, count(completed) as completed, count(created) as created
       OPTIONAL MATCH (user: User{userID: $userId})-[inProgress :IN_PROGRESS]->(c)
       WITH apoc.map.merge(
         PROPERTIES(c),
@@ -94,9 +95,15 @@ class LearningPath {
                       WHEN count(inProgress) >= 1 THEN 'inprogress'
                       ELSE 'unstarted' END
           }
-        ) as course, s, rel
+        ) as course,
+        apoc.map.merge(
+          PROPERTIES(s),
+          {
+            owner: CASE WHEN created >=1 THEN true ELSE false END
+          }
+        ) as sequence, rel
       RETURN { 
-          sequence : PROPERTIES(s),
+          sequence : sequence,
           courseNodes : COLLECT(DISTINCT(
             course
             )),
