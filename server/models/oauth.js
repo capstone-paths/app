@@ -7,7 +7,7 @@ const jwtDecode = require('jwt-decode');
 //Define the AWS Cognito Service region, credentials, target User Pool and target client ID
 // Visit https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/ for the AWS SDK APi documentation
 AWS.config.region = 'us-east-1';
-AWS.config.credentials = new AWS.Credentials('AKIAZIUGCNIW6ZX63CE2', '/kO55wjeWewz9qX2BVtYZx7dTu6ZY9Rd4tfGqVGt');
+AWS.config.credentials = new AWS.Credentials(process.env.PS_COG_ACCESS_KEY_ID, process.env.PS_COG_SECRET_ACCESS_KEY);
 const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 const user_pool_id = 'us-east-1_Aw4rQyygr';
 const client_id = '6u5bpn6m4p59l3st62creu01h4';
