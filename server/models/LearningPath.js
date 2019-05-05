@@ -33,6 +33,7 @@ class LearningPath {
       MERGE (start: PathStart {pathID: {pathID} })
       SET start.name = {name}
       MERGE (author)-[:CREATED]->(start) 
+      MERGE (author)-[:SUBSCRIBED]->(start) 
       WITH start, author 
       MATCH(firstCourse: Course {courseID: {firstNext}})
       MERGE (start)-[:NEXT { pathID: {pathID} }]->(firstCourse)
