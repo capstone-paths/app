@@ -1,8 +1,34 @@
+const ValidationError = require('./ValidationError');
+const uuid = require('uuid/v4');
+
 class User {
-  constructor(properties) {
-    const { id, name } = properties;
-    this.id = id;
-    this.name = name;
+  constructor(userData) {
+    const { userID, firstname, lastname, username, email, bio } = userData;
+    // User id can be provided on creation or can be provided
+    this.userID = userID || uuid();
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.username = username;
+    this.email = email;
+    this.bio = bio;
+  }
+
+  async save(session) {
+    const { userID, firstname, lastname, username, email, bio } = this;
+
+    const idValidQuery = 'MATCH (u: User { userID: $userID })';
+    const idValid = await session.run(idValidQuery, { userID });
+    if (idValid.records.length > 0) {
+      throw new ValidationError('User validation error: id exists: ', userID);
+    }
+
+    const saveQuery = `
+      CREATE (:User { userID: $userID, email: $email, firstname: $firstname, 
+                      lastname: $lastname, bio: $bio })
+    `;
+
+    await session.run(saveQuery, { userID, firstname, lastname,
+                                   username, email, bio });
   }
 
   static async findAll(session) {
