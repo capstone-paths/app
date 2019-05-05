@@ -16,7 +16,7 @@ class User {
   async signup(session) {
     const { userID, firstname, lastname, username, email, bio } = this;
 
-    const idValidQuery = 'MATCH (u: User { userID: $userID })';
+    const idValidQuery = 'MATCH (u: User { userID: $userID }) RETURN u';
     const idValid = await session.run(idValidQuery, { userID });
     if (idValid.records.length > 0) {
       throw new ValidationError('User validation error: id exists: ', userID);
@@ -24,7 +24,7 @@ class User {
 
     const saveQuery = `
       CREATE (:User { userID: $userID, email: $email, firstname: $firstname, 
-                      lastname: $lastname, bio: $bio })
+                      username: $username, lastname: $lastname, bio: $bio })
     `;
 
     await session.run(saveQuery, { userID, firstname, lastname,
