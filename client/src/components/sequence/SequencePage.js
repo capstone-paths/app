@@ -80,13 +80,20 @@ class SequencePage extends Component {
     });
     let sequence = {
       pathID : this.state.sequenceData !== undefined ? this.state.sequenceData.sequence.pathID : null,
-      name :  document.getElementById('nameInput').value,
+      name :  this.isOwner() ? document.getElementById('nameInput').value : null,
       rels : rels,
       //todo replace with context of user
       userID: '2'
     };
-    LerntApi.saveSequence(sequence)
-    .then(response=>{
+    var request;
+    if(this.isOwner()){
+      request = LerntApi.saveSequence(sequence)
+    }else{
+      console.log(sequence);
+      request = LerntApi.remixSequence(sequence)
+    }
+    
+    request.then(response=>{
       this.setState({ loaded: true, sequenceData: response.data });
       this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
     })
@@ -110,8 +117,16 @@ class SequencePage extends Component {
     )
   };
 
+  isOwner(){
+    return ((this.state.sequenceData !== undefined && this.state.sequenceData.sequence.owner) || ( this.props.match.params.sequenceId === 'new'));
+  }
   render() {
     let vis;
+
+    // let isOwner = () => {
+    //   return ((this.state.sequenceData !== undefined && this.state.sequenceData.sequence.owner) || ( this.props.match.params.sequenceId === 'new'));
+    // }
+
     let countCoursesInStatus = status => {
       if(this.state.sequenceData === undefined) return 0;
        
@@ -128,6 +143,7 @@ class SequencePage extends Component {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
     }
 
+    
    return (
       <div style={{ fontSize: '2em'}}>
 
@@ -143,13 +159,19 @@ class SequencePage extends Component {
               <Grid.Column width={16} style={{ padding: "0.8em" }}>
 
                 <Header as='h1'>
-                  <Input
-                    id="nameInput"
-                    style={{ width:'66%' }}
-                    className="syllabus-name-input"
-                    defaultValue={this.state.loaded ?
-                      this.state.sequenceData.sequence.name : ''}
-                  />
+                  {this.isOwner() &&
+                    <Input
+                      id="nameInput"
+                      style={{ width:'66%' }}
+                      className="syllabus-name-input"
+                      defaultValue={this.state.loaded ?
+                        this.state.sequenceData.sequence.name : ''}
+                    />
+                  }
+                  {!this.isOwner() &&
+                    this.state.loaded ?
+                    this.state.sequenceData.sequence.name : ''
+                  }
                   <SubscribeToSequenceButton
                     sequenceID={this.props.match.params.sequenceId}
                   />
@@ -157,7 +179,7 @@ class SequencePage extends Component {
                     color="green"
                     style={{ float: 'right' }}
                     onClick={this.saveSequence}>
-                    Save
+                    {this.isOwner() ? 'Save' : 'Remix'}
                     <Icon name='right chevron' />
                   </Button>
                 </Header>
@@ -189,17 +211,19 @@ class SequencePage extends Component {
                     <p><pre style={{color:'#E6AF0C', display: 'inline', fontWeight: 'bold', fontSize: '1.5em'}}>{countCoursesInStatus('inprogress')} </pre>inprogress</p>
                     <p><pre style={{color:'#16AB39', display: 'inline', fontWeight: 'bold', fontSize: '1.5em'}}>{countCoursesInStatus('completed')} </pre>completed</p>
                   </Menu.Item>
+                  {this.isOwner() &&
+                  <div>
+                    <Menu.Item>
+                      <Header as='h4'>Search Courses</Header>
+                      <AddCourseSearch />
+                    </Menu.Item>
 
-                  <Menu.Item>
-                    <Header as='h4'>Search Courses</Header>
-                    <AddCourseSearch />
-                  </Menu.Item>
-
-                  <Menu.Item>
-                    <Header as='h4'>Recommended Courses</Header>
-                    {this.getCourseRecommendations()}
-                  </Menu.Item>
-
+                    <Menu.Item>
+                      <Header as='h4'>Recommended Courses</Header>
+                      {this.getCourseRecommendations()}
+                    </Menu.Item>
+                    </div>
+                  }
                
                   <Menu.Item>
                     {this.getCourseDetails()}

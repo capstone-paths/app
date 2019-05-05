@@ -43,13 +43,38 @@ class LearningPath {
       MERGE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
       RETURN author, start
     `;
-  
+    
     if(pathID === null){
       pathID = uuidv1()
     }
     await session.run(query, { userID, pathID, name, relationships, firstNext });
     return this.findById(session, pathID, userID);
   }
+
+
+  static async remix(session, userID, pathID, relationships) {
+    await checkIfAllCoursesExist(session, relationships);
+    let newPathID =  uuidv1();
+
+    const getOldNameQuery = `
+      MATCH(ps: PathStart {pathID:$pathID})
+      MATCH(u: User {userID:$userID})
+      return ps.name as pathName, u.username as userName
+    ` 
+    let result = await session.run(getOldNameQuery, { pathID, userID});
+    let record = result.records[0];
+    let path = this.save(session, userID, newPathID, record.get('userName') + '\'s remix: ' +record.get('pathName') , relationships)
+ 
+    const query = `
+      MERGE (newPath :PathStart{pathID: $newPathID})-[r :REMIXED]->(original :PathStart{pathID: $pathID})
+      return *
+    `
+    
+    await session.run(query, { pathID, newPathID});
+
+    return path;
+  }
+
 
   /**
     * Finds all paths

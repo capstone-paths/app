@@ -7,7 +7,10 @@ export default class LerntApi {
         return axios.get('/api/learning-paths/' + id)
     }
     static saveSequence(sequence) {
-        return axios.post('/api/learning-paths/', sequence)
+        return axios.post('/api/learning-paths/save/', sequence)
+    }
+    static remixSequence(sequence) {
+        return axios.post('/api/learning-paths/remix/', sequence)
     }
     getSequences() {
         return axios.get('/api/learning-paths/')
