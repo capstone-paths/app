@@ -4,11 +4,11 @@ module.exports.setInitState = `
   CREATE (p001 :PathStart :TestNode { pathID: 'ST_Path1', name: 'ST_Path1' })
   
   CREATE 
-    (p001)-[:NEXT]->(c001),
-    (c001)-[:NEXT]->(t001)
+    (p001)-[:NEXT { pathID: 'ST_Path1' }]->(c001),
+    (c001)-[:NEXT { pathID: 'ST_Path1' }]->(t001)
 `;
 
 module.exports.wipeMockData = `
-  MATCH (n: TestEntity)
+  MATCH (n: TestNode)
   DETACH DELETE n
 `;
