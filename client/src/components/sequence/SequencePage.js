@@ -132,7 +132,7 @@ class SequencePage extends Component {
               ref={this.visRef}
               sequenceData={this.state.sequenceData}
               onCourseSelect={this.onCourseSelect}
-              useAutoComplete
+              useAutoComplete={this.isOwner()}
             />
     } else {
       vis = <div>Loading ... <Icon loading name='spinner' /></div>;
