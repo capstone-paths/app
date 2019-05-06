@@ -13,8 +13,8 @@ def neo4j_ec2_param_object():
     print("Please make sure you have")
     print("1. name of existing EC2 Keypair you have access to handy before proceeding")
     print("2. Your IP address to open up SSH access to that particular IP [example : 87.246.142.83/32]")
-    input()
-    ec2_key = input("Input name of an existing EC2 KeyPair to enable SSH access to the AWS Elastic Beanstalk instance : ")
+    input("Press any key to continue.")
+    ec2_key = input("Input name of an existing EC2 KeyPair (Region : US-EAST-1 only) to enable SSH access to the AWS Elastic Beanstalk instance : ")
     param_dict1 = dict()
     param_dict1['ParameterKey'] = 'KeyName'
     param_dict1['ParameterValue'] = ec2_key
@@ -36,8 +36,8 @@ def node_ec2_param_object():
 
     print("Please make sure you have")
     print("1. name of existing EC2 Keypair you have access to handy before proceeding")
-    input()
-    ec2_key = input("Input name of an existing EC2 KeyPair to enable SSH access to the AWS Elastic Beanstalk instance : ")
+    input("Press any key to continue.")
+    ec2_key = input("Input name of an existing EC2 KeyPair(Region : US-EAST-1 only) to enable SSH access to the AWS Elastic Beanstalk instance : ")
     param_dict1 = dict()
     param_dict1['ParameterKey'] = 'KeyName'
     param_dict1['ParameterValue'] = ec2_key
@@ -53,6 +53,7 @@ def create_stack(client_cf, stack_name, cf_template_url, stack_params):
         StackName=stack_name,
         TemplateURL=cf_template_url,
         Parameters=stack_params,
+        OnFailure='DELETE',
         Capabilities=['CAPABILITY_NAMED_IAM']
         )
 
@@ -76,6 +77,49 @@ def reset_param_store_variable(ssm_client):
     Type='String',
     Overwrite=True
     )
+
+
+
+# function updates ec2 parameter store to save the required cognito user p
+def set_cognito_param_store_variable(ssm_client):
+    print("Setting up Cognito User Access & Secret Keys")
+
+    # delete parameter if exists
+    print('Deleting existing parameters in AWS EC2 Parameter Store(ff any)')
+    par_list = ['COG_ACCESS_KEY_ID','COG_SECRET_ACCESS_KEY','COG_ALGORITHM','COG_CLIENT_ID','COG_IV_FILL','COG_KEY_LENGTH','COG_IV_SIZE','COG_KEY_SALT','COG_MAX_VALID_TIME','COG_REGION','COG_KEY_PASSWORD','COG_TEMP_PASSWORD','COG_USER_POOL_ID']
+
+    for param in par_list:
+        try:
+            print("delete system parameter : ", param)
+            ssm_client.delete_parameter(Name=param)
+        except:
+            print('No parameter : {0} to delete'.format(param))
+
+    for i, param in enumerate(par_list):
+        if (i<2):
+            param_value = input("Enter Cognito User Parameter for {0} : ".format(param))
+
+            # setting parameter
+            ssm_client.put_parameter(
+            Name=param,
+            Description='Cognito User Parameter : ' + param,
+            Value=param_value,
+            Type='String',
+            Overwrite=True
+            )
+        else:
+            # setting parameter
+            ssm_client.put_parameter(
+            Name=param,
+            Description='Cognito User Parameter : ' + param,
+            Value='Not_Set',
+            Type='String',
+            Overwrite=True
+            )
+
+
+    return
+
 
 
 def check_status_ec2_user_script(ssm_client):
@@ -106,10 +150,13 @@ def main():
     # get required parameters from user
     stack_params = neo4j_ec2_param_object()
 
-    node_ec2_param_object
-
-    # reset variable to track user data script execution
+    # parameter store client
     ssm_client = boto3.client('ssm', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY, region_name='us-east-1')
+
+    # save credentials to cognito user to allow accessing the user Pool
+    set_cognito_param_store_variable(ssm_client)
+
+    # setting cognito user variable
     reset_param_store_variable(ssm_client)
 
     #get neo4j CF template of github
