@@ -21,7 +21,7 @@ class SequenceList extends Component {
                             </Item.Meta>
                             <Item.Extra>
                             <Button color='yellow' floated='right' as={ Link } to={courseLink}>
-                                Edit Sequence
+                                View
                                 <Icon name='right chevron' />
                             </Button>
                             </Item.Extra>
