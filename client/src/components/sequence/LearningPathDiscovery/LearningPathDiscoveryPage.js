@@ -116,7 +116,21 @@ class LearningPathDiscoveryPage extends Component {
         });
       });
   }
-
+  remixSystemRecommendation(){
+      //TODO this is duped from the sequence page save button. Not ideal
+      var edges = this.state.recommendationData.rels;
+      edges = edges.filter(e => {return e.start !== this.state.trackId && e.end !== this.state.trackId});
+      let sequence = {
+        pathID : null,
+        name : null,
+        rels : edges,
+        //todo replace with context of user
+        userID: '2'
+      };
+      LerntApi.remixSequence(sequence).then(response => {
+        this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+      })
+  }
 
   handleClick = (e, titleProps) => {
     const { index } = titleProps;
@@ -222,7 +236,9 @@ class LearningPathDiscoveryPage extends Component {
           <Button
                     color="green"
                     style={{ float: 'right' }}
-                    onClick={this.saveSequence}>
+                    onClick={(e) => {
+                      this.remixSystemRecommendation();
+                    }}>
                     Remix
                     <Icon name='right chevron' />
                   </Button>

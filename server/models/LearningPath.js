@@ -56,23 +56,24 @@ class LearningPath {
   static async remix(session, userID, pathID, relationships) {
     await checkIfAllCoursesExist(session, relationships);
     let newPathID =  uuidv1();
-
     const getOldNameQuery = `
-      MATCH(ps: PathStart {pathID:$pathID})
       MATCH(u: User {userID:$userID})
+      OPTIONAL MATCH(ps: PathStart {pathID:$pathID})
       return ps.name as pathName, u.username as userName
     ` 
     let result = await session.run(getOldNameQuery, { pathID, userID});
     let record = result.records[0];
-    let path = this.save(session, userID, newPathID, record.get('userName') + '\'s remix: ' +record.get('pathName') , relationships)
+    let name = record.get('userName') + '\'s remix: ' + (record.get('pathName') !== null ?  record.get('pathName') : '');
+    let path = this.save(session, userID, newPathID, name, relationships)
  
-    const query = `
-      MERGE (newPath :PathStart{pathID: $newPathID})-[r :REMIXED]->(original :PathStart{pathID: $pathID})
-      return *
-    `
-    
-    await session.run(query, { pathID, newPathID});
-
+    if(pathID !== null){
+      const query = `
+        MERGE (newPath :PathStart{pathID: $newPathID})-[r :REMIXED]->(original :PathStart{pathID: $pathID})
+        return *
+      `
+      
+      await session.run(query, { pathID, newPathID});
+    }
     return path;
   }
 
