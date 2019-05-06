@@ -89,7 +89,6 @@ class SequencePage extends Component {
     if(this.isOwner()){
       request = LerntApi.saveSequence(sequence)
     }else{
-      console.log(sequence);
       request = LerntApi.remixSequence(sequence)
     }
     
@@ -122,10 +121,6 @@ class SequencePage extends Component {
   }
   render() {
     let vis;
-
-    // let isOwner = () => {
-    //   return ((this.state.sequenceData !== undefined && this.state.sequenceData.sequence.owner) || ( this.props.match.params.sequenceId === 'new'));
-    // }
 
     let countCoursesInStatus = status => {
       if(this.state.sequenceData === undefined) return 0;
