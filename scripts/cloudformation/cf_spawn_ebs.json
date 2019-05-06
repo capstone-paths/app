@@ -81,7 +81,7 @@
       "Properties" : {
         "ApplicationName" : { "Ref" : "LerntApplication" },
         "Description" : "SSH access to Node.JS Application",
-        "SolutionStackName" : "64bit Amazon Linux 2018.03 v4.8.2 running Node.js",
+        "SolutionStackName" : "64bit Amazon Linux 2018.03 v4.8.3 running Node.js",
         "OptionSettings" : [{
           "Namespace" : "aws:autoscaling:launchconfiguration",
           "OptionName" : "EC2KeyName",

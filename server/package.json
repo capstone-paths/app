@@ -8,7 +8,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint \"**/*.js\"",
     "start": "node index.js",
-    "watch": "nodemon index.js"
+    "watch": "nodemon index.js",
+    "test": "mocha */*.test.js --exit"
   },
   "dependencies": {
     "aws-sdk": "^2.441.0",
@@ -16,10 +17,13 @@
     "compression": "^1.7.3",
     "dotenv": "^6.2.0",
     "eslint": "5.12.0",
+    "expect": "^24.7.1",
     "express": "^4.16.4",
     "joi": "^14.3.1",
     "jwt-decode": "^2.2.0",
+    "mocha": "^6.1.4",
     "neo4j-driver": "^1.7.3",
+    "supertest": "^4.0.2",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
   },

@@ -58,6 +58,18 @@ router.get('/:id', (req, res, next) => {
   });
 
 
+router.post('/signup-test', (req, res, next) => {
+  console.log('req.body', req.body);
+
+  const user = new User(req.body);
+  const session = utils.getDBSession(req);
+
+  user
+    .signup(session)
+    .then(result => res.status(200).json(user))
+    .catch(next);
+});
+
   /**
  * @route  POST /api/users/:id
  * @access Public
@@ -83,5 +95,5 @@ router.post('/:id', (req, res, next) => {
 });
 
 
- 
+
   module.exports = router;
