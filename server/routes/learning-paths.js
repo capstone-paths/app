@@ -96,7 +96,7 @@ router.post('/toggle-subscribe/:sequenceID', (req, res, next) => {
  * @desc     Saves a learning path
  * @param    data (in-body, mandatory, LearningPath)
  */
-router.post('/', (req, res, next) => {
+router.post('/save/', (req, res, next) => {
   const { userID, pathID, name, rels} = req.body;
   
   const session = utils.getDBSession(req);
@@ -107,6 +107,16 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
+router.post('/remix/', (req, res, next) => {
+  const { userID, pathID, name, rels} = req.body;
+  
+  const session = utils.getDBSession(req);
+
+  LearningPath
+    .remix(session, userID, pathID, rels)
+    .then(response => res.json(response))
+    .catch(next);
+});
 
 /**
  * @route  GET /api/learning-paths/:id/recommendation

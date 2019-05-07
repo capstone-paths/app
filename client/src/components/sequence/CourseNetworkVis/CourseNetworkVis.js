@@ -113,7 +113,7 @@ class CourseNetworkVis extends Component {
       height: '100%',
 
       manipulation: {
-        enabled: true,
+        enabled: this.props.useAutoComplete,
         addNode: false
       },
       layout: {
@@ -189,12 +189,14 @@ class CourseNetworkVis extends Component {
     if (this.props.useAutoComplete) {
       var input = document.getElementById("awesomplete");
       //TODO figure out a better way to get value from child component
-      input.addEventListener('awesomplete-selectcomplete',
-        e => {
-          let course = e.text.value;
-          this.addNode(course);
-        },
-        false);
+      if(input !== null){
+        input.addEventListener('awesomplete-selectcomplete',
+          e => {
+            let course = e.text.value;
+            this.addNode(course);
+          },
+          false);
+      }
     }
   }
 
