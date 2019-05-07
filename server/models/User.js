@@ -54,6 +54,7 @@ class User {
     	  userID : u.userID,
         username : u.username,
         bio : u.bio,
+        email: u.email,
         interest: collect(DISTINCT  PROPERTIES(interested_skills)), 
         experience: collect(DISTINCT PROPERTIES(experienced_skills)),
         learningType: collect(DISTINCT PROPERTIES(learning_style)),
@@ -73,6 +74,27 @@ class User {
     if(user.learningPaths[0].pathID == null){
       user.learningPaths = []; 
     }
+    return user;
+  }
+
+  static async findByEmail(session, email) {
+    const query = `
+    MATCH (u: User {email: $email})
+    WITH {
+    	  userID : u.userID,
+        email: u.email
+        } as returnUser
+    RETURN returnUser as user
+    `;
+    const results = await session.run(query, { email });
+    const records = results.records;
+    if (records.length === 0) {
+      return undefined;
+    }
+    let result = records[0];
+    var user =  result.get('user');
+    console.log(user);
+    //todo there is likely a better way around this. Not sure how to null check in cypher
     return user;
   }
 

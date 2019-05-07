@@ -57,6 +57,25 @@ router.get('/:id', (req, res, next) => {
       .catch(next)
   });
 
+  /**
+ * @route  GET /api/users/email/:email
+ * @access Public
+ * @desc   Retrieves a user by email
+ * @param  email 
+ */
+router.get('/email/:email', (req, res, next) => {
+    const session = utils.getDBSession(req);
+    User
+      .findByEmail(session, req.params.email)
+      .then((result) => {
+        if (!result) {
+          res.status(400);
+        }
+        res.json(result);
+      })
+      .catch(next)
+  });
+
 
 router.post('/signup-test', (req, res, next) => {
   console.log('req.body', req.body);

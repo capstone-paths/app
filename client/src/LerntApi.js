@@ -36,6 +36,10 @@ export default class LerntApi {
     getUser(id) {
         return axios.get('/api/users/' + id)
     }
+    getUserByEmail(email) {
+        console.log(email);
+        return axios.get('/api/users/email/' + email)
+    }
     saveUser(user) {
         return axios.post('/api/users/' + user.userID, user)
     }

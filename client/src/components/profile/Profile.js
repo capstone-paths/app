@@ -15,13 +15,19 @@ import LerntApi from '../../LerntApi'
 class Profile extends Component {
     constructor(props) {
         super(props);
-        this.state = { loaded: false };
-        this.api = new LerntApi();
-        this.api.getUser(props.match.params.userId)
-            .then((response) => {
-                var user = response.data; 
-                this.setState({ loaded: true, user: user })
-            });
+        window.refreshNav();
+        this.state = { 
+            loaded: false,
+            authorized: false };
+        if (window.currentUser === props.match.params.userId) {
+            this.api = new LerntApi();
+            this.api.getUser(props.match.params.userId)
+                .then((response) => {
+                    var user = response.data; 
+                    console.log(user);
+                    this.setState({ loaded: true, user: user, authorized: true })
+                });
+        }
     }
     state = { openModal: false }
     closeModal = () => this.setState({ openModal: false })
@@ -35,7 +41,10 @@ class Profile extends Component {
             });
     }
     render() {
-        const { openModal } = this.state
+        const { openModal, authorized } = this.state
+        if (!authorized){
+            return <div>You are not authorized to view this page </div>
+        }
         if (this.state.loaded) {
             return (
                 <Grid >

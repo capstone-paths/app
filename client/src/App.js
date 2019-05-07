@@ -7,6 +7,7 @@ import Nav from './components/nav/Nav';
 import HomePage from './components/home/HomePage';
 import Profile from './components/profile/Profile';
 import LoginForm from './components/login/LoginForm';
+import SignupForm from './components/login/SignupForm';
 import SequencePage from './components/sequence/SequencePage';
 import { Container } from 'semantic-ui-react';
 import CoursePage from './components/course/CoursePage';
@@ -29,6 +30,7 @@ class App extends Component {
         paddingTop: '8em',
       }}>
         <Route exact path="/login" component={LoginForm}/>
+        <Route exact path="/signup" component={SignupForm}/>
         <Route exact path="/profile/:userId" component={Profile}/>
         <Route
           path="/learning-path-discovery/:trackId?"
