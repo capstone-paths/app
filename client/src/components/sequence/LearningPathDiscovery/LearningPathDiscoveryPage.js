@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Grid, Accordion, Icon, Menu, Header, Segment } from 'semantic-ui-react';
+import { Form, Grid, Accordion, Icon, Menu, Header, Segment, Button } from 'semantic-ui-react';
 import CourseNetworkVis from '../CourseNetworkVis/CourseNetworkVis';
 import LerntApi from '../../../LerntApi';
 import LearningPathList from './LearningPathList';
@@ -116,7 +116,31 @@ class LearningPathDiscoveryPage extends Component {
         });
       });
   }
-
+  remixSystemRecommendation(){
+      //TODO this is duped from the sequence page save button. Not ideal
+      var edges = this.state.recommendationData.rels;
+      //remap -1s to null values.
+      edges = edges.map(e => {
+        if(e.start === '-1'){
+          e.start = null; 
+        }
+        if(e.end === '-1'){
+          e.end = null;
+        }
+        return e;
+      })
+      edges = edges.filter(e => e.start !== this.state.trackId && e.end !== this.state.trackId);
+      let sequence = {
+        pathID : null,
+        name : null,
+        rels : edges,
+        //todo replace with context of user
+        userID: '2'
+      };
+      LerntApi.remixSequence(sequence).then(response => {
+        this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+      })
+  }
 
   handleClick = (e, titleProps) => {
     const { index } = titleProps;
@@ -219,6 +243,15 @@ class LearningPathDiscoveryPage extends Component {
             and see if you find anything that tickles your fancy!
           </h4>
           <Segment style={{height: "66vh", overflow: "hidden"}}>
+          <Button
+                    color="green"
+                    style={{ float: 'right' }}
+                    onClick={(e) => {
+                      this.remixSystemRecommendation();
+                    }}>
+                    Remix
+                    <Icon name='right chevron' />
+                  </Button>
             <CourseNetworkVis
               sequenceData={this.state.recommendationData}
             />

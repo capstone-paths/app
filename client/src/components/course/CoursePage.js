@@ -61,7 +61,7 @@ class CoursePage extends Component {
                             </List.Item>
                             <List.Item>
                                 <List.Header>Instructors</List.Header>
-                               {this.state.course.instructors.join(', ')}
+                                {Array.isArray(this.state.course.instructors) ? this.state.course.instructors.join(', '): this.state.course.instructors}
                             </List.Item>
                             <List.Item>
                                 <List.Header>Course Website</List.Header>

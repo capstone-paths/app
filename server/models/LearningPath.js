@@ -33,6 +33,7 @@ class LearningPath {
       MERGE (start: PathStart {pathID: {pathID} })
       SET start.name = {name}
       MERGE (author)-[:CREATED]->(start) 
+      MERGE (author)-[:SUBSCRIBED]->(start) 
       WITH start, author 
       MATCH(firstCourse: Course {courseID: {firstNext}})
       MERGE (start)-[:NEXT { pathID: {pathID} }]->(firstCourse)
@@ -43,13 +44,39 @@ class LearningPath {
       MERGE (c1)-[:NEXT { pathID: {pathID} }]->(c2)
       RETURN author, start
     `;
-  
+    
     if(pathID === null){
       pathID = uuidv1()
     }
     await session.run(query, { userID, pathID, name, relationships, firstNext });
     return this.findById(session, pathID, userID);
   }
+
+
+  static async remix(session, userID, pathID, relationships) {
+    await checkIfAllCoursesExist(session, relationships);
+    let newPathID =  uuidv1();
+    const getOldNameQuery = `
+      MATCH(u: User {userID:$userID})
+      OPTIONAL MATCH(ps: PathStart {pathID:$pathID})
+      return ps.name as pathName, u.username as userName
+    ` 
+    let result = await session.run(getOldNameQuery, { pathID, userID});
+    let record = result.records[0];
+    let name = record.get('userName') + '\'s remix: ' + (record.get('pathName') !== null ?  record.get('pathName') : '');
+    let path = this.save(session, userID, newPathID, name, relationships)
+ 
+    if(pathID !== null){
+      const query = `
+        MERGE (newPath :PathStart{pathID: $newPathID})-[r :REMIXED]->(original :PathStart{pathID: $pathID})
+        return *
+      `
+      
+      await session.run(query, { pathID, newPathID});
+    }
+    return path;
+  }
+
 
   /**
     * Finds all paths
@@ -83,8 +110,9 @@ class LearningPath {
     const query = `
       MATCH (s: PathStart {pathID: $id})
       MATCH ()-[rel :NEXT {pathID: $id}]->(c: Course)
+      OPTIONAL MATCH (user: User{userID: $userId})-[created :CREATED]->(s)
       OPTIONAL MATCH (user: User{userID: $userId})-[completed :COMPLETED]->(c)
-      with s, rel, c, count(completed) as completed
+      with s, rel, c, count(completed) as completed, count(created) as created
       OPTIONAL MATCH (user: User{userID: $userId})-[inProgress :IN_PROGRESS]->(c)
       WITH apoc.map.merge(
         PROPERTIES(c),
@@ -94,9 +122,15 @@ class LearningPath {
                       WHEN count(inProgress) >= 1 THEN 'inprogress'
                       ELSE 'unstarted' END
           }
-        ) as course, s, rel
+        ) as course,
+        apoc.map.merge(
+          PROPERTIES(s),
+          {
+            owner: CASE WHEN created >=1 THEN true ELSE false END
+          }
+        ) as sequence, rel
       RETURN { 
-          sequence : PROPERTIES(s),
+          sequence : sequence,
           courseNodes : COLLECT(DISTINCT(
             course
             )),
@@ -167,7 +201,6 @@ class LearningPath {
      * @param {Integer} id 
      */
   static async findRecommendations(session, userId, pathId, courseId) {
-    //todo expand on this. This is a most popular search
     const similarQuery = `
     MATCH (p1:User {userID: $userId})-[:EXPERIENCED]->(skill1)
     WITH p1, collect(id(skill1)) AS p1Skill
@@ -176,7 +209,7 @@ class LearningPath {
     WITH p1, p1Skill, p2, collect(id(skill2)) AS p2Skill
     WHERE algo.similarity.jaccard(p1Skill, p2Skill) > $similarityThreshold 
     MATCH (p2)-[:SUBSCRIBED]->(paths: PathStart)
-    MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse)
+    MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse: Course)
     WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
     WITH PROPERTIES(nextCourse) as nextCourse,
            count(course) as similarCount

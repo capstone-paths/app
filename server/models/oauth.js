@@ -34,6 +34,7 @@ it returns an object comprising email, api_key, access_token and status attribut
 oauth.signUp = function (name, email, password){
   let user = {}; // the "user" object to return upon successful signUp
   user.username = email;
+  user.name = name;
 
   let params = {
     UserPoolId: user_pool_id,
@@ -74,6 +75,7 @@ oauth.signUp = function (name, email, password){
       user.apikey = GenAPIKey(user_data.sub); // encrypts and persists the user id as a dated API key
       user.status = 'new user'; // persists the status of the authenticated user
       user.access_token = token_data.AuthenticationResult.AccessToken;
+      user.id = user_data.sub
       return user; //returns the user object
     })
 }
