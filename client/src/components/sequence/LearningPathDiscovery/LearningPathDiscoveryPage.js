@@ -119,8 +119,8 @@ class LearningPathDiscoveryPage extends Component {
   remixSystemRecommendation(){
       //TODO this is duped from the sequence page save button. Not ideal
       var edges = this.state.recommendationData.rels;
-      edges = edges.filter(e => {return e.start !== this.state.trackId && e.end !== this.state.trackId 
-        && e.start !== -1 && e.end !== -1});
+      edges = edges.filter(e => e.start !== this.state.trackId && e.end !== this.state.trackId 
+        && e.start !== -1 && e.end !== -1);
       let sequence = {
         pathID : null,
         name : null,
