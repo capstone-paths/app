@@ -201,7 +201,6 @@ class LearningPath {
      * @param {Integer} id 
      */
   static async findRecommendations(session, userId, pathId, courseId) {
-    //todo expand on this. This is a most popular search
     const similarQuery = `
     MATCH (p1:User {userID: $userId})-[:EXPERIENCED]->(skill1)
     WITH p1, collect(id(skill1)) AS p1Skill
@@ -210,7 +209,7 @@ class LearningPath {
     WITH p1, p1Skill, p2, collect(id(skill2)) AS p2Skill
     WHERE algo.similarity.jaccard(p1Skill, p2Skill) > $similarityThreshold 
     MATCH (p2)-[:SUBSCRIBED]->(paths: PathStart)
-    MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse)
+    MATCH (course: Course {courseID : $courseId})-[:NEXT{pathID: paths.pathID}]->(nextCourse: Course)
     WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
     WITH PROPERTIES(nextCourse) as nextCourse,
            count(course) as similarCount
