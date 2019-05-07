@@ -1,6 +1,8 @@
-const oauth = require('../models/oauth')
-const express = require('express')
-const router = express.Router()
+const oauth = require('../models/oauth');
+const express = require('express');
+const router = express.Router();
+const utils = require('../utils');
+const User = require('../models/User');
 
 
 router.use((req, res, next)=>{
@@ -20,7 +22,20 @@ router.use((req, res, next)=>{
 router.post('/signup',(req, res)=>{
   oauth.signUp(req.body.name, req.body.email, req.body.password)
     .then((user)=>{
-      res.status(201).json(user)
+
+      let params = {
+        userID: user.id,
+        firstname: '',
+        lastname: '',
+        username: user.name,
+        email: user.username,
+        bio: ''
+      }
+      const neo4j_user = new User(params);
+      const session = utils.getDBSession(req);
+      neo4j_user.signup(session);
+
+      res.status(201).json(user);
     })
     .catch((err)=>{
       res.status(400).json({error: err.message})
