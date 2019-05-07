@@ -15,11 +15,11 @@ import LerntApi from '../../LerntApi'
 class Profile extends Component {
     constructor(props) {
         super(props);
-        window.refreshNav();
         this.state = { 
             loaded: false,
             authorized: false };
         if (window.currentUser === props.match.params.userId) {
+            window.refreshNav();
             this.api = new LerntApi();
             this.api.getUser(props.match.params.userId)
                 .then((response) => {

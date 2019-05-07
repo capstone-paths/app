@@ -10,7 +10,6 @@ import {
 
 
 class ProfileSidebar extends Component {
-    
     render (){
         return (
             

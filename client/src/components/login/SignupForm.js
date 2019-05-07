@@ -1,9 +1,52 @@
 import React, { Component }from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
+import LerntApi from '../../LerntApi'
 
 class SignupForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email:'',
+      password:'',
+      first:'',
+      last:''
+    };
+  }
+
+  handleChange = (event) =>{
+    console.log(event.target)
+    this.setState({[event.target.name]:event.target.value});
+  }
+
+  handleSubmit = () => {
+    // We allow a blank password for now
+    if( this.state.email !== ''){
+      const userData = { 
+        firstname: this.state.first,
+        lastname: this.state.last,
+        username: `${this.state.first}_${this.state.last}`,
+        email: this.state.email,
+        bio:'' };
+      this.api = new LerntApi();
+      this.api.signUp(userData)
+            .then((response) => {
+                var user = response.data; 
+                console.log(user);
+                window.currentUser = user.userID;
+                this.props.history.push(`/profile/${user.userID}`);
+            });
+    }
+  };
+
   render() {
+    const {
+      email,
+      password,
+      first,
+      last
+    } = this.state;
+    console.log(this.state);
     return(
       <div className='login-form'>
         <style>{`
@@ -19,20 +62,40 @@ class SignupForm extends Component {
             <Header as='h2' color='yellow' textAlign='center'>
               Sign up to access your learning space
             </Header>
-            <Form size='large'>
+            <Form size='large' onSubmit={this.handleSubmit}>
               <Segment stacked>
-                <Form.Input fluid icon='envelope' iconPosition='left' placeholder='E-mail address' />
-                <Form.Input fluid icon='user' iconPosition='left' placeholder='First Name' />
-                <Form.Input fluid icon='user' iconPosition='left' placeholder='Last Name' />
+                <Form.Input
+                  fluid icon='envelope'
+                  iconPosition='left'
+                  placeholder='E-mail address'
+                  name='email'
+                  value={email}
+                  onChange={this.handleChange} />
+                <Form.Input
+                  fluid icon='user'
+                  iconPosition='left'
+                  placeholder='First Name'
+                  name='first'
+                  value={first}
+                  onChange={this.handleChange}/>
+                <Form.Input
+                  fluid icon='user'
+                  iconPosition='left'
+                  placeholder='Last Name'
+                  name='last'
+                  value={last}
+                  onChange={this.handleChange}/>
                 <Form.Input
                   fluid
                   icon='lock'
                   iconPosition='left'
                   placeholder='Password'
                   type='password'
+                  name='password'
+                  value={password}
+                  onChange={this.handleChange}
                 />
-               {/* TODO Make the link to profile dynamic on the context of currently signed in user */}
-                <Button color='yellow' fluid size='large' as={ Link } to="/profile/2">
+                <Button color='yellow' fluid size='large'>
                   Signup
                 </Button>
               </Segment>

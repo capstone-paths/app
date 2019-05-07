@@ -93,8 +93,6 @@ class User {
     }
     let result = records[0];
     var user =  result.get('user');
-    console.log(user);
-    //todo there is likely a better way around this. Not sure how to null check in cypher
     return user;
   }
 

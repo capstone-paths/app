@@ -77,7 +77,7 @@ router.get('/email/:email', (req, res, next) => {
   });
 
 
-router.post('/signup-test', (req, res, next) => {
+router.post('/signup', (req, res, next) => {
   console.log('req.body', req.body);
 
   const user = new User(req.body);
