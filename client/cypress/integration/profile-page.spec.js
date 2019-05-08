@@ -2,6 +2,7 @@ describe('Profile Page', () => {
     before(() => {
         cy.server();
         cy.route('GET', '/sockjs-node/**', {});
+        localStorage.setItem('currentUser', 2)
     });
     it('Should load the page', () => {
         cy.fixture('get-user').then((json) => {
@@ -25,17 +26,17 @@ describe('Profile Page', () => {
     });
 
     it('Should have the learning style', () => {
-        cy.get('#root > div > div.ui.container > div > div.six.wide.column > div > div:nth-child(5) > div:nth-child(2)')
+        cy.get('#root > div > div.ui.container > div > div.six.wide.column > div > div:nth-child(6) > div:nth-child(2)')
             .should('have.text', ' Theorist ');
     });
 
     it('Should have the interests', () => {
-        cy.get('#root > div > div.ui.container > div > div.six.wide.column > div > div:nth-child(5) > div:nth-child(5)')
+        cy.get('#root > div > div.ui.container > div > div.six.wide.column > div > div:nth-child(6) > div:nth-child(5)')
             .should('have.text', ' Javascript ');
     });
     
     it('Should have the experiences', () => {
-        cy.get('div.content:nth-child(6) > div:nth-child(2)')
+        cy.get('#root > div > div.ui.container > div > div.six.wide.column > div > div:nth-child(7) > div:nth-child(2)')
             .should('have.text', ' HTML ');
     });
 });
