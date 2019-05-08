@@ -223,7 +223,7 @@ class LearningPath {
     var courses = similarResults.records.map(r => r.get('nextCourse'));
 
     const popularQuery = `
-    MATCH (course: Course {courseID : $courseId})-[next :NEXT]->(nextCourse)
+    MATCH (course: Course {courseID : $courseId})-[next :NEXT]->(nextCourse: Course)
     WHERE NOT exists(()-[:NEXT{pathID : $pathId}]->(nextCourse))
     WITH PROPERTIES(nextCourse) as nextCourse,
            count(course) as count
