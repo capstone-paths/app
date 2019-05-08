@@ -105,6 +105,7 @@ oauth.signIn = function (username, password){
       user.apikey = GenAPIKey(user_data.sub);// encrypts and persists the user id as a dated API key
       user.status = 'returning user'; //persists the status of the authenticated user
       user.access_token = token_data.AuthenticationResult.AccessToken;
+      user.id = user_data.sub
       return user;//returns the user object
     })
 }

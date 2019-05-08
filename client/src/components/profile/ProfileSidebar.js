@@ -16,13 +16,13 @@ class ProfileSidebar extends Component {
         <Card>
             {get_gravatar(this.props.user.email,250)}
             <br></br>
-                <Button 
-                    id="editButton" 
-                    floated='right' 
-                    color='black'
-                    onClick={this.props.modalControl}
-                    content='Update your profile'> 
-                </Button>
+            <Button 
+                id="editButton" 
+                floated='right' 
+                color='black'
+                onClick={this.props.modalControl}
+                content='Update your profile'> 
+            </Button>
                 
             <Card.Content>
                 <Card.Header>{this.props.user.username}</Card.Header>
@@ -32,9 +32,9 @@ class ProfileSidebar extends Component {
                 <Card.Description> {this.props.user.bio} </Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Icon name='map outline' /> 2 Active Paths
+                <Icon name='map outline' /> {this.props.user.learningPaths.length} Active Paths
                 <br></br>
-                <Icon name='certificate' /> 1 Path Completed
+                <Icon name='certificate' /> {this.props.user.currentCourses.length} Active Courses
             </Card.Content>
             <Card.Content >
                 <Header as='h3'>Learning Style </Header>

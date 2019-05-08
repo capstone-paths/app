@@ -95,13 +95,14 @@ class SequencePage extends Component {
     request.then(response=>{
       this.setState({ loaded: true, sequenceData: response.data });
       this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+      this.visRef.current.runAnimation();
     })
   };
 
   getCourseRecommendations = () => {
     const { courseRecommendations } = this.state;
-    if (!courseRecommendations) {
-      return '';
+    if (!courseRecommendations || courseRecommendations.length === 0) {
+      return <Menu.Item>None</Menu.Item>;
     }
 
     return (
