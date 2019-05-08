@@ -18,7 +18,7 @@ class Profile extends Component {
         this.state = { 
             loaded: false,
             authorized: false };
-        if (window.currentUser === props.match.params.userId) {
+        if (window.localStorage.getItem('currentUser') === props.match.params.userId) {
             window.refreshNav();
             this.api = new LerntApi();
             this.api.getUser(props.match.params.userId)

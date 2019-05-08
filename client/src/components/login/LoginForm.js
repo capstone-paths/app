@@ -6,7 +6,7 @@ import LerntApi from '../../LerntApi'
 class LoginForm extends Component {
   constructor(props) {
     super(props);
-    window.currentUser = '';
+    window.localStorage.setItem('currentUser', '');
     window.refreshNav();
     this.state = {
       email:'',
@@ -27,13 +27,14 @@ class LoginForm extends Component {
       this.api.signIn(oathParams)
       .then((response) => {
         var user = response.data; 
+        console.log(user);
         // TODO: Use Guard function
-        this.api.getUserByEmail(user.username)
-          .then((response) => {
-            var id = response.data.userID; 
-            window.currentUser = id;
-            this.props.history.push(`/profile/${id}`);     
-          });
+        // this.api.getUserByEmail(user.username)
+        //   .then((response) => {
+        //     var id = response.data.userID; 
+        //     window.localStorage.setItem('currentUser', id);
+        //     this.props.history.push(`/profile/${id}`);     
+        //   });
       });
     }
   };

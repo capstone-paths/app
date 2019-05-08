@@ -38,7 +38,7 @@ class SignupForm extends Component {
             .then((response) => {
                 var user = response.data; 
                 console.log(user);
-                window.currentUser = user.id;
+                window.localStorage.setItem('currentUser', user.id);
                 this.props.history.push(`/profile/${user.id}`);
             });
     }

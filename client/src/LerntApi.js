@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default class LerntApi {
     constructor(){
-        axios.defaults.headers.common['User'] = window.currentUser;
+        axios.defaults.headers.common['User'] = window.localStorage.getItem('currentUser');
     }
     getSequence(id) {
         return axios.get('/api/learning-paths/' + id)

@@ -17,8 +17,8 @@ export default class Nav extends Component {
   }
   render() {
     window.refreshNav=this.refresh;
-      if (window.currentUser) {
-        const profileLink = `/profile/${window.currentUser}`;
+      if (window.localStorage.getItem('currentUser')) {
+        const profileLink = `/profile/${window.localStorage.getItem('currentUser')}`;
         return ( <Menu inverted fixed='top' style={{
           fontSize: '1.25em',
           fontWeight: 'normal',
