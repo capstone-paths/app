@@ -45,11 +45,12 @@ class User {
   static async findById(session, id) {
     const query = `
     MATCH (u: User {userID: $id})
-    OPTIONAL MATCH (User {userID: $id})-[:INTERESTED]->(interested_skills: Skill)
-    OPTIONAL MATCH (User {userID: $id})-[:EXPERIENCED]->(experienced_skills: Skill)
-    OPTIONAL MATCH (User {userID: $id})-[:LEARNS_BY]->(learning_style: LearningStyle)
-    OPTIONAL MATCH (User {userID: $id})-[:IN_PROGRESS]->(current_courses: Course)
-    OPTIONAL MATCH (User {userID: $id})-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
+    WITH u
+    OPTIONAL MATCH (u)-[:INTERESTED]->(interested_skills: Skill)
+    OPTIONAL MATCH (u)-[:EXPERIENCED]->(experienced_skills: Skill)
+    OPTIONAL MATCH (u)-[:LEARNS_BY]->(learning_style: LearningStyle)
+    OPTIONAL MATCH (u)-[:IN_PROGRESS]->(current_courses: Course)
+    OPTIONAL MATCH (u)-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
     WITH {
     	  userID : u.userID,
         username : u.username,
