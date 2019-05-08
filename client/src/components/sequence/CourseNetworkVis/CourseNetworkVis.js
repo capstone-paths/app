@@ -10,7 +10,7 @@ function findLevel(nodeId, edges) {
   const edge = edges.filter(edge => {
     return edge.to === nodeId
   }).pop();
-  if (edge.from == null || edge.from === '-1') {
+  if (edge ===  undefined || edge.from == null || edge.from === '-1') {
     return 1;
   } else {
     edges = edges.filter(e => {
