@@ -137,7 +137,7 @@ class LearningPathDiscoveryPage extends Component {
         //todo replace with context of user
         userID: window.currentUser || '2'
       };
-      LerntApi.remixSequence(sequence).then(response => {
+      (new LerntApi()).remixSequence(sequence).then(response => {
         this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
       })
   }

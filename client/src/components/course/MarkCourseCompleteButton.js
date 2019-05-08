@@ -35,7 +35,7 @@ export default class MarkCourseCompleteButton extends Component {
             if(this.state.course.status === 'inprogress'){
                 status = 'completed';
             }
-            LerntApi.updateCourseStatus(this.state.course.courseID, status).then((response) => {
+            this.api.updateCourseStatus(this.state.course.courseID, status).then((response) => {
                 //TODO improve on the need for full page refresh on course status update
                 // window.location.reload();
                 if(status === 'completed'){

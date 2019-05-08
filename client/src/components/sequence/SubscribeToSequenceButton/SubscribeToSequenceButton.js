@@ -9,7 +9,7 @@ export default class SubscribeToSequenceButton extends Component {
         this.state = { loaded: false};
         this.api = new LerntApi();
         this.sequenceId = props.sequenceID;
-        this.api.isSubscribed(this.sequenceId, window.currentUser).then((response) => {
+        this.api.isSubscribed(this.sequenceId).then((response) => {
             var state = this.state;
             state.isSubscribed = response.data;
             this.setState(

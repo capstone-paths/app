@@ -1,26 +1,27 @@
 import axios from 'axios';
-//TODO adjust to pull the proper user from context. Consider also doing this in a constructor for LerntAPI
-axios.defaults.headers.common['User'] = '2';
 
 export default class LerntApi {
-    static getSequence(id) {
+    constructor(){
+        axios.defaults.headers.common['User'] = window.currentUser;
+    }
+    getSequence(id) {
         return axios.get('/api/learning-paths/' + id)
     }
-    static saveSequence(sequence) {
+    saveSequence(sequence) {
         return axios.post('/api/learning-paths/save/', sequence)
     }
-    static remixSequence(sequence) {
+    remixSequence(sequence) {
         return axios.post('/api/learning-paths/remix/', sequence)
     }
     getSequences() {
         return axios.get('/api/learning-paths/')
     }
-    static getSequenceCourseRecommendation(sequenceId, courseId) {
+    getSequenceCourseRecommendation(sequenceId, courseId) {
         return axios.get('/api/learning-paths/recommendations/' + sequenceId + '/' + courseId)
     }
     isSubscribed(sequenceId, user) {
          console.log(user);
-        return axios.get('/api/learning-paths/is-subscribed/' + sequenceId, user)
+        return axios.get('/api/learning-paths/is-subscribed/' + sequenceId)
     }
     toggleSubscribe(sequenceId) {
         return axios.post('/api/learning-paths/toggle-subscribe/' + sequenceId )
@@ -31,10 +32,10 @@ export default class LerntApi {
     getCourses() {
         return axios.get('/api/courses/')
     }
-    static updateCourseStatus(courseId, status){
+    updateCourseStatus(courseId, status){
         return axios.post('/api/courses/update-status/'+ courseId + '/' + status);
     }
-    static reviewCourse(courseId, review){
+    reviewCourse(courseId, review){
         return axios.post('/api/courses/review/' + courseId, review)
     }
     getUser(id) {

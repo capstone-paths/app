@@ -25,7 +25,7 @@ class SequencePage extends Component {
   componentDidMount() {
     const { sequenceId } = this.props.match.params;
     if(sequenceId !== 'new'){
-      LerntApi
+      (new LerntApi())
         .getSequence(sequenceId)
         .then(response => {
           this.setState({ loaded: true, sequenceData: response.data });
@@ -49,7 +49,7 @@ class SequencePage extends Component {
     var state = this.state;
     state.currentCourse = course.selectedCourse;
     this.setState(state);
-    LerntApi
+    (new LerntApi())
       .getSequenceCourseRecommendation(pathID, selectedCourse)
       .then(response => {
         this.setState({ courseRecommendations: response.data });
@@ -87,9 +87,9 @@ class SequencePage extends Component {
     };
     var request;
     if(this.isOwner()){
-      request = LerntApi.saveSequence(sequence)
+      request = (new LerntApi()).saveSequence(sequence)
     }else{
-      request = LerntApi.remixSequence(sequence)
+      request = (new LerntApi()).remixSequence(sequence)
     }
     
     request.then(response=>{

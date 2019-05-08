@@ -18,7 +18,7 @@ class CourseReviewModal extends Component {
             this.setState(state);
         }
         this.closeModal = (review) => {
-            LerntApi.reviewCourse(this.state.course.courseID, review).then(response=>{
+            (new LerntApi()).reviewCourse(this.state.course.courseID, review).then(response=>{
                 // var state = this.state;
                 // state.openModal = false;
                 // this.setState(state);
