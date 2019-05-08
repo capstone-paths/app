@@ -27,14 +27,9 @@ class LoginForm extends Component {
       this.api.signIn(oathParams)
       .then((response) => {
         var user = response.data; 
-        console.log(user);
         // TODO: Use Guard function
-        // this.api.getUserByEmail(user.username)
-        //   .then((response) => {
-        //     var id = response.data.userID; 
-        //     window.localStorage.setItem('currentUser', id);
-        //     this.props.history.push(`/profile/${id}`);     
-        //   });
+        window.localStorage.setItem('currentUser', user.id);
+        this.props.history.push(`/profile/${user.id}`);     
       });
     }
   };
