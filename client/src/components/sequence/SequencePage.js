@@ -101,8 +101,8 @@ class SequencePage extends Component {
 
   getCourseRecommendations = () => {
     const { courseRecommendations } = this.state;
-    if (!courseRecommendations) {
-      return '';
+    if (!courseRecommendations || courseRecommendations.length == 0) {
+      return <Menu.Item>None</Menu.Item>;
     }
 
     return (
