@@ -49,11 +49,11 @@ class Profile extends Component {
                                     <Card.Header>Current Courses</Card.Header>
                                     <CourseTable courses={this.state.user.currentCourses}/>
                                 </Card.Content>
-                                <Card.Content extra>
+                                {/* <Card.Content extra>
                                     <Button color='yellow' fluid size='large' as={Link} to="/profile">
                                         View All Courses
                                     </Button>
-                                </Card.Content>
+                                </Card.Content> */}
                             </Card>
                         </Grid.Row>
                         <Grid.Row>
