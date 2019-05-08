@@ -98,7 +98,29 @@ class CourseNetworkVis extends Component {
       this.network.body.data.edges.add(edgeData);
     }
   }
-
+  runAnimation(){
+         // Zoom out so that we can do a nice zoom in next
+         this.network.moveTo({
+          scale: 0.3,
+        });
+        // Compute the y-pos of the first node, center the view on that
+        // baseline, then pan up by half of the canvas container size, to get a
+        // nice aligned view of the graph along the top
+        const first = this.state.nodes.filter(n => n.level === 1).map(n => n.id)[0];
+        if (first !== undefined) {
+          const firstY = this.network.getPositions(first)[first].y;
+          const h = document.getElementById('course-sequence').clientHeight;
+  
+          this.network.moveTo({
+            position: { x: 0, y: firstY + h / 2 },
+            scale: 0.8,
+            animation: {
+              duration: 1500,
+              easingFunction: 'easeInOutCubic'
+            }
+          });
+        }
+  }
   componentDidMount() {
     var nodes = new vis.DataSet(this.state.nodes);
     var edges = new vis.DataSet(this.state.edges);
@@ -149,31 +171,9 @@ class CourseNetworkVis extends Component {
     };
     this.network = new vis.Network(container, data, options);
     this.network.enableEditMode();
-    // Zoom out so that we can do a nice zoom in next
-    this.network.once('initRedraw', () => {
-      this.network.moveTo({
-        scale: 0.3,
-      });
-    });
 
     this.network.once('initRedraw', () => {
-      // Compute the y-pos of the first node, center the view on that
-      // baseline, then pan up by half of the canvas container size, to get a
-      // nice aligned view of the graph along the top
-      const first = this.state.nodes.filter(n => n.level === 1).map(n => n.id)[0];
-      if (first !== undefined) {
-        const firstY = this.network.getPositions(first)[first].y;
-        const h = document.getElementById('course-sequence').clientHeight;
-
-        this.network.moveTo({
-          position: { x: 0, y: firstY + h / 2 },
-          scale: 0.8,
-          animation: {
-            duration: 1500,
-            easingFunction: 'easeInOutCubic'
-          }
-        });
-      }
+      this.runAnimation()
     });
 
     // TODO: This should be decoupled from the vis module

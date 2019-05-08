@@ -95,6 +95,7 @@ class SequencePage extends Component {
     request.then(response=>{
       this.setState({ loaded: true, sequenceData: response.data });
       this.props.history.push('/learning-path/' +  response.data.sequence.pathID)
+      this.visRef.current.runAnimation();
     })
   };
 
