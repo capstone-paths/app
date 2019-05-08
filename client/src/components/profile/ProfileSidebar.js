@@ -32,9 +32,9 @@ class ProfileSidebar extends Component {
                             <Card.Description> {this.props.user.bio} </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <Icon name='map outline' /> 2 Active Paths
+                            <Icon name='map outline' /> {this.props.user.learningPaths.length} Active Paths
                             <br></br>
-                            <Icon name='certificate' /> 1 Path Completed
+                            <Icon name='certificate' /> {this.props.user.currentCourses.length} Active Courses
                         </Card.Content>
                         <Card.Content >
                             <Header as='h3'>Learning Style </Header>
