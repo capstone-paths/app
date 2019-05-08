@@ -64,9 +64,6 @@ class CourseTable extends Component {
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Source</Table.HeaderCell>
-                <Table.HeaderCell>Rating</Table.HeaderCell>
-                <Table.HeaderCell>What are you learning?</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
         
@@ -75,13 +72,7 @@ class CourseTable extends Component {
                     return (
                         <Table.Row>
                             <Table.Cell><a href={getLink(course.courseID)}>{course.name}</a></Table.Cell>
-                            <Table.Cell>{course.provider}</Table.Cell>
-                            <Table.Cell>N/A</Table.Cell>
-                            <Table.Cell>N/A</Table.Cell>
-                            <Table.Cell >
-                                N/A
-                            {/* <Checkbox name={course.courseID} checked={course.completed} onClick={this.toggle}/> */}
-                            </Table.Cell>
+                            <Table.Cell>{course.provider}</Table.Cell>  
                         </Table.Row>
                     )
 

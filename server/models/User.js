@@ -45,15 +45,17 @@ class User {
   static async findById(session, id) {
     const query = `
     MATCH (u: User {userID: $id})
-    OPTIONAL MATCH (User {userID: $id})-[:INTERESTED]->(interested_skills: Skill)
-    OPTIONAL MATCH (User {userID: $id})-[:EXPERIENCED]->(experienced_skills: Skill)
-    OPTIONAL MATCH (User {userID: $id})-[:LEARNS_BY]->(learning_style: LearningStyle)
-    OPTIONAL MATCH (User {userID: $id})-[:IN_PROGRESS]->(current_courses: Course)
-    OPTIONAL MATCH (User {userID: $id})-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
+    WITH u
+    OPTIONAL MATCH (u)-[:INTERESTED]->(interested_skills: Skill)
+    OPTIONAL MATCH (u)-[:EXPERIENCED]->(experienced_skills: Skill)
+    OPTIONAL MATCH (u)-[:LEARNS_BY]->(learning_style: LearningStyle)
+    OPTIONAL MATCH (u)-[:IN_PROGRESS]->(current_courses: Course)
+    OPTIONAL MATCH (u)-[:SUBSCRIBED]->(path_start: PathStart)<-[:CREATED]-(path_creator: User)
     WITH {
     	  userID : u.userID,
         username : u.username,
         bio : u.bio,
+        email: u.email,
         interest: collect(DISTINCT  PROPERTIES(interested_skills)), 
         experience: collect(DISTINCT PROPERTIES(experienced_skills)),
         learningType: collect(DISTINCT PROPERTIES(learning_style)),
@@ -73,6 +75,25 @@ class User {
     if(user.learningPaths[0].pathID == null){
       user.learningPaths = []; 
     }
+    return user;
+  }
+
+  static async findByEmail(session, email) {
+    const query = `
+    MATCH (u: User {email: $email})
+    WITH {
+    	  userID : u.userID,
+        email: u.email
+        } as returnUser
+    RETURN returnUser as user
+    `;
+    const results = await session.run(query, { email });
+    const records = results.records;
+    if (records.length === 0) {
+      return undefined;
+    }
+    let result = records[0];
+    var user =  result.get('user');
     return user;
   }
 

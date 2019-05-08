@@ -58,13 +58,13 @@ router.get('/:id', (req, res, next) => {
  * @param  id (in-path, mandatory, id)
  */
 router.get('/is-subscribed/:sequenceID', (req, res, next) => {
-  if ((!req.params.sequenceID) || (!req.get('User'))) {
+  if (!req.params.sequenceID) {
     res.status(400);
   }
 
   const session = utils.getDBSession(req);
   LearningPath
-    .isSubscribed(session, req.params.sequenceID, req.get('User'))
+  .isSubscribed(session, req.params.sequenceID, req.get('User'))
     .then((result) => {
       res.json(result);
     })
