@@ -83,7 +83,7 @@ class SequencePage extends Component {
       name :  this.isOwner() ? document.getElementById('nameInput').value : null,
       rels : rels,
       //todo replace with context of user
-      userID: '2'
+      userID: window.currentUser || '2'
     };
     var request;
     if(this.isOwner()){

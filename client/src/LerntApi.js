@@ -18,8 +18,9 @@ export default class LerntApi {
     static getSequenceCourseRecommendation(sequenceId, courseId) {
         return axios.get('/api/learning-paths/recommendations/' + sequenceId + '/' + courseId)
     }
-    isSubscribed(sequenceId) {
-        return axios.get('/api/learning-paths/is-subscribed/' + sequenceId)
+    isSubscribed(sequenceId, user) {
+         console.log(user);
+        return axios.get('/api/learning-paths/is-subscribed/' + sequenceId, user)
     }
     toggleSubscribe(sequenceId) {
         return axios.post('/api/learning-paths/toggle-subscribe/' + sequenceId )
@@ -43,7 +44,10 @@ export default class LerntApi {
         return axios.get('/api/users/email/' + email)
     }
     signUp(user){
-        return axios.post('/api/users/signup', user )
+        return axios.post('/auth/signup', user )
+    }
+    signIn(user){
+        return axios.post('/auth/signin', user )
     }
     saveUser(user) {
         return axios.post('/api/users/' + user.userID, user)

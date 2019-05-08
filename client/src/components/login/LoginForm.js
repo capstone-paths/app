@@ -15,21 +15,26 @@ class LoginForm extends Component {
   }
 
   handleChange = (event) =>{
-    console.log(event.target)
     this.setState({[event.target.name]:event.target.value});
   }
   handleSubmit = () => {
-    // We allow a blank password for now
     if( this.state.email !== ''){
-      // this.api = new LerntApi();
+      const oathParams = {
+        username: this.state.email,
+        password: this.state.password
+      }
       this.api = new LerntApi();
-        this.api.getUserByEmail(this.state.email)
-            .then((response) => {
-                var user = response.data; 
-                console.log(user);
-                window.currentUser = user.userID;
-                this.props.history.push(`/profile/${user.userID}`);
-            });
+      this.api.signIn(oathParams)
+      .then((response) => {
+        var user = response.data; 
+        // TODO: Use Guard function
+        this.api.getUserByEmail(user.username)
+          .then((response) => {
+            var id = response.data.userID; 
+            window.currentUser = id;
+            this.props.history.push(`/profile/${id}`);     
+          });
+      });
     }
   };
 

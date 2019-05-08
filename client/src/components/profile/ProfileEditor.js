@@ -63,6 +63,7 @@ class ProfileEditor extends Component {
                         <Modal.Description>
                             <Header>Introduce Yourself</Header>
                         </Modal.Description>
+                        To update your profile pic, register for a <a target="_blank" href='http://en.gravatar.com/' rel="noopener noreferrer">gravatar</a> with the same email address.  
                         <Form>
                             <p>What should we call you?</p>
                             <Input name='username' value={this.state.user.username} onChange={handleChange} />

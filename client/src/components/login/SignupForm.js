@@ -22,19 +22,24 @@ class SignupForm extends Component {
   handleSubmit = () => {
     // We allow a blank password for now
     if( this.state.email !== ''){
-      const userData = { 
-        firstname: this.state.first,
-        lastname: this.state.last,
-        username: `${this.state.first}_${this.state.last}`,
+      // const userData = { 
+      //   firstname: this.state.first,
+      //   lastname: this.state.last,
+      //   username: `${this.state.first}_${this.state.last}`,
+      //   email: this.state.email,
+      //   bio:'' };
+      const oathParams = {
+        name: `${this.state.first} ${this.state.last}`,
         email: this.state.email,
-        bio:'' };
+        password: this.state.password
+      }
       this.api = new LerntApi();
-      this.api.signUp(userData)
+      this.api.signUp(oathParams)
             .then((response) => {
                 var user = response.data; 
                 console.log(user);
-                window.currentUser = user.userID;
-                this.props.history.push(`/profile/${user.userID}`);
+                window.currentUser = user.id;
+                this.props.history.push(`/profile/${user.id}`);
             });
     }
   };
