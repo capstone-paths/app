@@ -10,7 +10,8 @@ class LoginForm extends Component {
     window.refreshNav();
     this.state = {
       email:'',
-      password:''
+      password:'',
+      errorMsg:''
     };
   }
 
@@ -30,6 +31,9 @@ class LoginForm extends Component {
         // TODO: Use Guard function
         window.localStorage.setItem('currentUser', user.id);
         this.props.history.push(`/profile/${user.id}`);     
+      }).catch( err => {
+        console.log(err);
+        this.setState({errorMsg:'Something went wrong. Please make sure all fields are correct.'})
       });
     }
   };
@@ -37,9 +41,13 @@ class LoginForm extends Component {
   render() {
     const {
       email,
-      password
+      password,
+      errorMsg
     } = this.state;
-    console.log(this.state);
+
+    const red = {
+      color: 'red'
+    };
 
     return(
       <div className='login-form'>
@@ -76,7 +84,7 @@ class LoginForm extends Component {
                   placeholder='Password'
                   type='password'
                 />
-               {/* TODO Make the link to profile dynamic on the context of currently signed in user */}
+                {errorMsg ? <p style={red}>{errorMsg}</p>:''}
                 <Button color='yellow' fluid size='large' >
                   Login
                 </Button>

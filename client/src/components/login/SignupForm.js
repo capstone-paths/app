@@ -10,7 +10,8 @@ class SignupForm extends Component {
       email:'',
       password:'',
       first:'',
-      last:''
+      last:'',
+      errorMsg:''
     };
   }
 
@@ -22,12 +23,6 @@ class SignupForm extends Component {
   handleSubmit = () => {
     // We allow a blank password for now
     if( this.state.email !== ''){
-      // const userData = { 
-      //   firstname: this.state.first,
-      //   lastname: this.state.last,
-      //   username: `${this.state.first}_${this.state.last}`,
-      //   email: this.state.email,
-      //   bio:'' };
       const oathParams = {
         name: `${this.state.first} ${this.state.last}`,
         email: this.state.email,
@@ -36,11 +31,15 @@ class SignupForm extends Component {
       this.api = new LerntApi();
       this.api.signUp(oathParams)
             .then((response) => {
+
                 var user = response.data; 
                 console.log(user);
                 window.localStorage.setItem('currentUser', user.id);
                 this.props.history.push(`/profile/${user.id}`);
-            });
+            }).catch( err => {
+              console.log(err);
+              this.setState({errorMsg:'Something went wrong. Please make sure all fields are correct.'})
+            })
     }
   };
 
@@ -49,9 +48,13 @@ class SignupForm extends Component {
       email,
       password,
       first,
-      last
+      last, 
+      errorMsg
     } = this.state;
-    console.log(this.state);
+
+    const red = {
+      color: 'red'
+    };
     return(
       <div className='login-form'>
         <style>{`
@@ -100,6 +103,7 @@ class SignupForm extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
+                {errorMsg ? <p style={red}>{errorMsg}</p>:''}
                 <Button color='yellow' fluid size='large'>
                   Signup
                 </Button>
