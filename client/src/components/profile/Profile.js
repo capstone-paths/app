@@ -53,6 +53,12 @@ class Profile extends Component {
                     </Grid.Column>
                     <Grid.Column width={10} >
                         <Grid.Row >
+                        <h2>Welcome, {this.state.user.username}</h2>
+                        <p>
+                            Your profile is the place to keep track of all your learning activity! Manage your in-progress courses and subscribed paths below. 
+                            <br></br>Keeping your profile information up to date not only helps us generate recommendations, 
+                            but it also reminds you of where you are, where you came from, and where you want to be! 
+                        </p>
                             <Card style={{ width: '100%', marginBottom: '2em' }} >
                                 <Card.Content>
                                     <Card.Header>Current Courses</Card.Header>
