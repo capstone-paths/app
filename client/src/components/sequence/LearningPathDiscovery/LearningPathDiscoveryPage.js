@@ -217,9 +217,9 @@ class LearningPathDiscoveryPage extends Component {
 
       default:
         element = (
-          <p>
+          <h4>
             Nothing here. Search for a track to see available Learning Paths.
-          </p>
+          </h4>
         );
     }
 
@@ -238,12 +238,12 @@ class LearningPathDiscoveryPage extends Component {
       return (
         <div>
           <h4>
-            This is a system-generated Learning Path representation of some of the most
+            This is a system-generated recommended Learning Path representation of some of the most
             popular courses in the chosen category. Take a look around
             and see if you find anything that tickles your fancy!
           </h4>
           <Segment style={{height: "66vh", overflow: "hidden"}}>
-          <Button
+          {window.localStorage.currentUser ? <Button
                     color="green"
                     style={{ float: 'right' }}
                     onClick={(e) => {
@@ -251,7 +251,8 @@ class LearningPathDiscoveryPage extends Component {
                     }}>
                     Remix
                     <Icon name='right chevron' />
-                  </Button>
+            </Button> : ''}
+          
             <CourseNetworkVis
               sequenceData={this.state.recommendationData}
             />
@@ -261,7 +262,11 @@ class LearningPathDiscoveryPage extends Component {
       )
     }
     else {
-      return this.ResultsList();
+      return (
+        <div>
+          {this.ResultsList()}
+        </div>
+      ); 
     }
   };
 
@@ -288,10 +293,10 @@ class LearningPathDiscoveryPage extends Component {
         <Grid.Column width={4} >
           <Form>
             <Form.Field>
-              <label>Search By Category</label>
+              <label>What do you want to learn?</label>
               {this.getSearchInputElement()}
             </Form.Field>
-            <Form.Button >Search</Form.Button>
+            <Form.Button >Search Paths</Form.Button>
             {
               this.state.learningPathList.length > 0 &&
               <Accordion>
@@ -316,6 +321,12 @@ class LearningPathDiscoveryPage extends Component {
           </Form>
         </Grid.Column>
         <Grid.Column width={12}>
+        <h2>Learning Path Search</h2>
+        <p>
+            Where a school might have a syllabus, or a set of tasks might have a sequence, Lernt.io deals in Learning Paths as we're all about the journey!
+            <br></br><br></br>Use the input to the left to to select a topic of interest. Below, we'll show you paths used by other Lerners to learn within that topic! 
+            <br></br><br></br>If there is enough Lerner activity around a topic to produce a recommended learning path, you'll see a 'Lerner's Pulse' tab to explore. Good luck on your paths!
+          </p><br></br>
           <Menu tabular>
             <Menu.Item
               name={resultViews.LEARNING_PATHS}

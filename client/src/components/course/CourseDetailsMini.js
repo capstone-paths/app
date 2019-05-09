@@ -30,7 +30,8 @@ class CourseDetailsMini extends Component {
                 <Grid.Row columns={1}>
                     <Grid.Column >
                         <Header>{this.state.course.name}</Header>
-                        <MarkCourseCompleteButton course={this.state.course} reviewModal ={this.modalRef} />
+                        {window.localStorage.currentUser ? 
+                        <MarkCourseCompleteButton course={this.state.course} reviewModal ={this.modalRef} /> :''}
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={1}>

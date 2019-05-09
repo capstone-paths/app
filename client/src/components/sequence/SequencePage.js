@@ -168,16 +168,19 @@ class SequencePage extends Component {
                     this.state.loaded ?
                     this.state.sequenceData.sequence.name : ''
                   }
-                  <SubscribeToSequenceButton
-                    sequenceID={this.props.match.params.sequenceId}
-                  />
-                  <Button
-                    color="green"
-                    style={{ float: 'right' }}
-                    onClick={this.saveSequence}>
-                    {this.isOwner() ? 'Save' : 'Remix'}
-                    <Icon name='right chevron' />
-                  </Button>
+                  {window.localStorage.currentUser ? 
+                  (<span>
+                    <SubscribeToSequenceButton
+                      sequenceID={this.props.match.params.sequenceId}
+                    />
+                    <Button
+                      color="green"
+                      style={{ float: 'right' }}
+                      onClick={this.saveSequence}>
+                      {this.isOwner() ? 'Save' : 'Remix'}
+                      <Icon name='right chevron' />
+                    </Button>
+                  </span>) : ''}
                 </Header>
 
               </Grid.Column>
