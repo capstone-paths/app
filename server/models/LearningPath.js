@@ -234,6 +234,12 @@ class LearningPath {
 
     const popularResults =  await session.run(popularQuery, { courseId, pathId });
     courses.push(...popularResults.records.map(r=>r.get('nextCourse')));
+    var unique = new Set(courses.map(item => item.courseID));
+    courses = courses.filter(course => { 
+      var keep = unique.has(course.courseID);
+      unique.delete(course.courseID)
+      return keep;
+    });
     return courses.slice(0,3);
   }
 
