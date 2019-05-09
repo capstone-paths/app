@@ -119,6 +119,19 @@ class User {
     MERGE(u)-[:LEARNS_BY]->(s)
     `
 
+    const clearPrevious =`
+    MATCH (u: User {userID: $id})
+    WITH u
+    OPTIONAL MATCH(u)-[interest :INTERESTED]->(s)
+    WITH *
+    OPTIONAL MATCH(u)-[experience :EXPERIENCED]->(s1)
+    WITH *
+    OPTIONAL MATCH(u)-[learns :LEARNS_BY]->(s2)
+    WITH *
+    delete interest, experience, learns
+    `
+    await session.run(clearPrevious, { id: user.userID});
+
     await session.run(updateUserNode, { id: user.userID, username: user.username, bio: user.bio });
 
     for (var skill of user.experience) {
